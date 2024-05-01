@@ -1,0 +1,2264 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.4.506">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Thomas Chiang">
+<meta name="dcterms.date" content="2024-05-01">
+
+<title>Thomas’s website - Homework2 - Poisson Regression Examples</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg==" crossorigin="anonymous"></script><script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<script src="../../site_libs/quarto-html/quarto.js"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js" integrity="sha512-c3Nl8+7g4LMSTdrm621y7kf9v3SDPnhxLNhcjFJbKECVnmZHTdo+IRO05sNLTH/D3vA6u1X32ehoLC7WFVdheg==" crossorigin="anonymous"></script>
+
+<script type="application/javascript">define('jquery', [],function() {return window.jQuery;})</script>
+
+  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<link rel="stylesheet" href="../../styles.css">
+</head>
+
+<body class="nav-fixed">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a class="navbar-brand" href="../../index.html">
+    <span class="navbar-title">Thomas’s website</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../../index.html"> 
+<span class="menu-text">About</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../resume.html"> 
+<span class="menu-text">Resume</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../projects.html"> 
+<span class="menu-text">Projects</span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+          <div class="quarto-navbar-tools">
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#blueprinty-case-study" id="toc-blueprinty-case-study" class="nav-link active" data-scroll-target="#blueprinty-case-study">Blueprinty Case Study</a>
+  <ul class="collapse">
+  <li><a href="#introduction" id="toc-introduction" class="nav-link" data-scroll-target="#introduction">Introduction</a></li>
+  <li><a href="#data" id="toc-data" class="nav-link" data-scroll-target="#data">Data</a></li>
+  <li><a href="#estimation-of-simple-poisson-model" id="toc-estimation-of-simple-poisson-model" class="nav-link" data-scroll-target="#estimation-of-simple-poisson-model">Estimation of Simple Poisson Model</a></li>
+  <li><a href="#estimation-of-poisson-regression-model" id="toc-estimation-of-poisson-regression-model" class="nav-link" data-scroll-target="#estimation-of-poisson-regression-model">Estimation of Poisson Regression Model</a></li>
+  </ul></li>
+  <li><a href="#airbnb-case-study" id="toc-airbnb-case-study" class="nav-link" data-scroll-target="#airbnb-case-study">AirBnB Case Study</a>
+  <ul class="collapse">
+  <li><a href="#step-1-exploratory-data-analysis-eda" id="toc-step-1-exploratory-data-analysis-eda" class="nav-link" data-scroll-target="#step-1-exploratory-data-analysis-eda">Step 1: Exploratory Data Analysis (EDA)</a></li>
+  <li><a href="#step-2-handling-missing-data" id="toc-step-2-handling-missing-data" class="nav-link" data-scroll-target="#step-2-handling-missing-data">Step 2: Handling Missing Data</a></li>
+  <li><a href="#step-3-model-building" id="toc-step-3-model-building" class="nav-link" data-scroll-target="#step-3-model-building">Step 3: Model Building</a></li>
+  <li><a href="#step-4-model-estimation" id="toc-step-4-model-estimation" class="nav-link" data-scroll-target="#step-4-model-estimation">Step 4: Model Estimation</a></li>
+  <li><a href="#step-5-compared-with-two-different-models" id="toc-step-5-compared-with-two-different-models" class="nav-link" data-scroll-target="#step-5-compared-with-two-different-models">Step 5: Compared with two different models</a></li>
+  </ul></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Homework2 - Poisson Regression Examples</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Thomas Chiang </p>
+          </div>
+  </div>
+    
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">May 1, 2024</p>
+    </div>
+  </div>
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<section id="blueprinty-case-study" class="level2">
+<h2 class="anchored" data-anchor-id="blueprinty-case-study">Blueprinty Case Study</h2>
+<section id="introduction" class="level3">
+<h3 class="anchored" data-anchor-id="introduction">Introduction</h3>
+<p>Blueprinty is a small firm that makes software for developing blueprints specifically for submitting patent applications to the US patent office. Their marketing team would like to make the claim that patent applicants using Blueprinty’s software are more successful in getting their patent applications approved. Ideal data to study such an effect might include the success rate of patent applications before using Blueprinty’s software and after using it. unfortunately, such data is not available.</p>
+<p>However, Blueprinty has collected data on 1,500 mature (non-startup) engineering firms. The data include each firm’s number of patents awarded over the last 5 years, regional location, age since incorporation, and whether or not the firm uses Blueprinty’s software. The marketing team would like to use this data to make the claim that firms using Blueprinty’s software are more successful in getting their patent applications approved.</p>
+</section>
+<section id="data" class="level3">
+<h3 class="anchored" data-anchor-id="data">Data</h3>
+<div id="c96c3017" class="cell" data-execution_count="1">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>blueprinty_data <span class="op">=</span> pd.read_csv(<span class="st">'/home/jovyan/code/MGTA 495/QUARTO_WEBSITE/data/blueprinty.csv'</span>)</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>blueprinty_data.head(), blueprinty_data.columns</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="382">
+<pre><code>(   Unnamed: 0  patents     region   age  iscustomer
+ 0           1        0    Midwest  32.5           0
+ 1         786        3  Southwest  37.5           0
+ 2         348        4  Northwest  27.0           1
+ 3         927        3  Northeast  24.5           0
+ 4         830        3  Southwest  37.0           0,
+ Index(['Unnamed: 0', 'patents', 'region', 'age', 'iscustomer'], dtype='object'))</code></pre>
+</div>
+</div>
+<p>The dataset contains the following columns:</p>
+<ul>
+<li><code>Unnamed</code>: 0: An identifier column which we can ignore or drop.</li>
+<li><code>patents</code>: Number of patents awarded over the last 5 years.</li>
+<li><code>region</code>: Regional location of the firm.</li>
+<li><code>age</code>: Age of the firm since incorporation.</li>
+<li><code>iscustomer</code>: Indicates whether the firm uses Blueprinty’s software (1 for yes, 0 for no).</li>
+</ul>
+<p>Next, we’ll drop the <strong>Unnamed: 0</strong> column as it’s not needed for our analysis, and then proceed to generate histograms and calculate means for the number of patents based on customer status.</p>
+<div id="ac5e60e6" class="cell" data-execution_count="2">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Drop the 'Unnamed: 0' column</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>blueprinty_data.drop(columns<span class="op">=</span><span class="st">'Unnamed: 0'</span>, inplace<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Separate the data into two groups: customers and non-customers of Blueprinty</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>customer_data <span class="op">=</span> blueprinty_data[blueprinty_data[<span class="st">'iscustomer'</span>] <span class="op">==</span> <span class="dv">1</span>]</span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>non_customer_data <span class="op">=</span> blueprinty_data[blueprinty_data[<span class="st">'iscustomer'</span>] <span class="op">==</span> <span class="dv">0</span>]</span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Calculate means of patents for both groups</span></span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>mean_patents_customers <span class="op">=</span> customer_data[<span class="st">'patents'</span>].mean()</span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>mean_patents_non_customers <span class="op">=</span> non_customer_data[<span class="st">'patents'</span>].mean()</span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">'Means of patents for customers'</span>,mean_patents_customers) </span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">'Means of patents for non-customers'</span>,mean_patents_non_customers)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Means of patents for customers 4.091370558375634
+Means of patents for non-customers 3.6231772831926325</code></pre>
+</div>
+</div>
+<p>The <code>mean</code> number of patents for firms that use Blueprinty’s software is approximately 4.09, while for those that do not use the software, it is about 3.62. This suggests that <strong>firms using the software might be having a slightly higher success rate in obtaining patents.</strong></p>
+<p>Next, we’ll create histograms to visually compare the distribution of patents between the two groups.</p>
+<div id="bbcd22b3" class="cell" data-execution_count="3">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">8</span>, <span class="dv">6</span>))</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>plt.hist(non_customer_data[<span class="st">'patents'</span>], bins<span class="op">=</span><span class="dv">30</span>, alpha<span class="op">=</span><span class="fl">0.5</span>, label<span class="op">=</span><span class="st">'Non-Customers'</span>, color<span class="op">=</span><span class="st">'blue'</span>)</span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>plt.hist(customer_data[<span class="st">'patents'</span>], bins<span class="op">=</span><span class="dv">30</span>, alpha<span class="op">=</span><span class="fl">0.5</span>, label<span class="op">=</span><span class="st">'Customers'</span>, color<span class="op">=</span><span class="st">'red'</span>)</span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">'Distribution of Patents Awarded (Customers vs Non-Customers)'</span>)</span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">'Number of Patents'</span>)</span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">'Frequency'</span>)</span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>plt.legend()</span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a>plt.grid(<span class="va">True</span>)</span>
+<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="hw2_questions_files/figure-html/cell-4-output-1.png" width="676" height="531" class="figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>The histograms show the distribution of patents awarded to firms, comparing those that use Blueprinty’s software (red) and those that do not (blue). From the histograms, it appears that:</p>
+<ul>
+<li><p>Both groups have a broadly similar shape in their distributions, but there is a slight shift towards higher values for customers of Blueprinty.</p></li>
+<li><p>The customer group shows a bit more frequency in higher patent counts.</p></li>
+</ul>
+<p>This visual comparison, along with the calculated means, may support the marketing claim that firms <strong>using Blueprinty’s software have a somewhat higher success rate in obtaining patents</strong>, though it should be noted that a more detailed statistical analysis would be needed to establish causality and account for potential confounders such as firm size and region. If needed, we can conduct further statistical tests or explore additional factors in the data.</p>
+<p>Blueprinty customers are <strong>not</strong> selected at <strong>random</strong>. It may be important to account for systematic differences in the age and regional location of customers vs non-customers.</p>
+<p>To address this new task, we’ll explore the <strong>potential systematic differences</strong> in <code>age</code> and <code>regional</code> distribution between Blueprinty’s <code>customers</code> and <code>non-customers</code>. We’ll start by comparing the average age of the firms and then examine the regional distributions for both groups.</p>
+<div id="5852306d" class="cell" data-execution_count="4">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Calculate mean age for both groups</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>mean_age_customers <span class="op">=</span> customer_data[<span class="st">'age'</span>].mean()</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>mean_age_non_customers <span class="op">=</span> non_customer_data[<span class="st">'age'</span>].mean()</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Prepare data for regional distribution comparison</span></span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>region_distribution_customers <span class="op">=</span> customer_data[<span class="st">'region'</span>].value_counts(normalize<span class="op">=</span><span class="va">True</span>) <span class="op">*</span> <span class="dv">100</span></span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>region_distribution_non_customers <span class="op">=</span> non_customer_data[<span class="st">'region'</span>].value_counts(normalize<span class="op">=</span><span class="va">True</span>) <span class="op">*</span> <span class="dv">100</span></span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>(mean_age_customers, mean_age_non_customers), (region_distribution_customers, region_distribution_non_customers)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="385">
+<pre><code>((24.1497461928934, 26.691481197237145),
+ (region
+  Northeast    57.360406
+  Southwest    15.736041
+  South        10.152284
+  Midwest       8.629442
+  Northwest     8.121827
+  Name: proportion, dtype: float64,
+  region
+  Northeast    37.452034
+  Southwest    20.414428
+  Midwest      15.886416
+  Northwest    13.123561
+  South        13.123561
+  Name: proportion, dtype: float64))</code></pre>
+</div>
+</div>
+<p><strong>Age Comparison:</strong></p>
+<ul>
+<li><p>The average age of firms using Blueprinty’s software is about 24.15 years.</p></li>
+<li><p>The average age of firms not using the software is slightly higher at around 26.69 years.</p></li>
+</ul>
+<p>This suggests that firms <strong>using Blueprinty’s software tend to be a bit younger on average than those that do not use the software.</strong></p>
+<p><strong>Regional Distribution:</strong></p>
+<p>For Blueprinty’s customers:</p>
+<ul>
+<li><p>The Northeast region has the highest representation at approximately 57.36%.</p></li>
+<li><p>Other regions like the Southwest and South have significantly lower representations.</p></li>
+</ul>
+<p>For non-customers:</p>
+<ul>
+<li><p>The Northeast still leads but with a lower percentage at 37.45%.</p></li>
+<li><p>There is a more balanced distribution across other regions, with Southwest, Midwest, Northwest, and South more evenly spread than in the customer group.</p></li>
+</ul>
+<p>Conclusion:</p>
+<p>These results <strong>indicate systematic differences in both age and regional distribution between customers and non-customers.</strong> Blueprinty’s customers are generally younger and more concentrated in the Northeast compared to non-customers. This could <strong>imply regional and demographic market penetration differences or preferences that could be influencing the observed patent outcomes.</strong></p>
+</section>
+<section id="estimation-of-simple-poisson-model" class="level3">
+<h3 class="anchored" data-anchor-id="estimation-of-simple-poisson-model">Estimation of Simple Poisson Model</h3>
+<p>Since our outcome variable of interest can only be small integer values per a set unit of time, we can use a Poisson density to model the number of patents awarded to each engineering firm over the last 5 years. We start by estimating a simple Poisson model via Maximum Likelihood.</p>
+<p>For a variable <span class="math inline">\(Y\)</span> that follows a Poisson distribution with a mean rate of <span class="math inline">\(\lambda\)</span>, the probability mass function (PMF) is given by:</p>
+<p><span class="math display">\[
+f(Y|\lambda) = e^{-\lambda} \frac{\lambda^Y}{Y!}
+\]</span></p>
+<p>The likelihood <span class="math inline">\(L(\lambda|Y)\)</span> of observing the data <span class="math inline">\(Y\)</span> given the parameter <span class="math inline">\(\lambda\)</span> is the product of the probabilities for all observed values <span class="math inline">\(y_i\)</span> in the dataset:</p>
+<p><span class="math display">\[
+L(\lambda|Y) = \prod_{i=1}^n f(y_i|\lambda) = \prod_{i=1}^n e^{-\lambda} \frac{\lambda^{y_i}}{y_i!}
+\]</span></p>
+<p>This is often transformed into the log-likelihood for computational convenience, especially to avoid underflow problems with very small likelihood values. The log-likelihood <span class="math inline">\(\ell(\lambda)\)</span> is the sum of the logs of the individual probabilities:</p>
+<p><span class="math display">\[
+\ell(\lambda) = \sum_{i=1}^n \log \left( e^{-\lambda} \frac{\lambda^{y_i}}{y_i!} \right)
+\]</span></p>
+<p><span class="math display">\[
+= \sum_{i=1}^n \left( -\lambda + y_i \log(\lambda) - \log(y_i!) \right)
+\]</span></p>
+<p>The following is the Python code for the log-likelihood function for a Poisson model. This function will calculate the log-likelihood given an array 𝑌 of observed values and a parameter 𝜆.</p>
+<div id="a720ed18" class="cell" data-execution_count="5">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> scipy.special <span class="im">import</span> gammaln  <span class="co"># gammaln(x) computes log(x!)</span></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> poisson_loglikelihood(lambda_, Y):</span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""</span></span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a><span class="co">    Compute the log-likelihood for a Poisson model.</span></span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a><span class="co">    </span></span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a><span class="co">    Parameters:</span></span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a><span class="co">        lambda_ (float): The Poisson rate parameter (lambda).</span></span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a><span class="co">        Y (array-like): Array of observed count data.</span></span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a><span class="co">    </span></span>
+<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a><span class="co">    Returns:</span></span>
+<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a><span class="co">        float: The log-likelihood of the Poisson model given the data Y and rate lambda.</span></span>
+<span id="cb8-14"><a href="#cb8-14" aria-hidden="true" tabindex="-1"></a><span class="co">    """</span></span>
+<span id="cb8-15"><a href="#cb8-15" aria-hidden="true" tabindex="-1"></a>    Y <span class="op">=</span> np.array(Y)  <span class="co"># Ensure Y is an array for vectorized operations</span></span>
+<span id="cb8-16"><a href="#cb8-16" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="op">-</span>lambda_ <span class="op">*</span> <span class="bu">len</span>(Y) <span class="op">+</span> np.<span class="bu">sum</span>(Y <span class="op">*</span> np.log(lambda_)) <span class="op">-</span> np.<span class="bu">sum</span>(gammaln(Y <span class="op">+</span> <span class="dv">1</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>This code uses gammaln to efficiently compute the logarithm of the factorial, which is used in the denominator of the Poisson probability mass function. This function allows for the handling of large values of 𝑌 without overflow errors.</p>
+<p>To address this task, we’ll plot the log-likelihood of observing the actual data over a range of possible values for the parameter 𝜆 (the average number of patents awarded per firm over the last 5 years). We’ll use the data from the dataset to compute the log-likelihoods.</p>
+<p>We’ll:</p>
+<ol type="1">
+<li><p>Extract the observed number of patents into an array 𝑌.</p></li>
+<li><p>Define a range of 𝜆 values.</p></li>
+<li><p>Calculate the log-likelihood for each 𝜆 using the function we’ve defined.</p></li>
+<li><p>Plot these values to visualize how the log-likelihood changes with different 𝜆.</p></li>
+</ol>
+<div id="5fccff32" class="cell" data-execution_count="6">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>Y <span class="op">=</span> blueprinty_data[<span class="st">'patents'</span>].values</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Define a range of lambda values from 0.1 to 10, incrementing by 0.1</span></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>lambdas <span class="op">=</span> np.arange(<span class="fl">0.1</span>, <span class="dv">10</span>, <span class="fl">0.1</span>)</span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Calculate log-likelihoods for each lambda</span></span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>log_likelihoods <span class="op">=</span> [poisson_loglikelihood(lambda_, Y) <span class="cf">for</span> lambda_ <span class="kw">in</span> lambdas]</span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Plotting</span></span>
+<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">8</span>, <span class="dv">6</span>))</span>
+<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a>plt.plot(lambdas, log_likelihoods, marker<span class="op">=</span><span class="st">'o'</span>, linestyle<span class="op">=</span><span class="st">'-'</span>, color<span class="op">=</span><span class="st">'b'</span>)</span>
+<span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">'Log-Likelihood of Poisson Model for Various Lambda'</span>)</span>
+<span id="cb9-13"><a href="#cb9-13" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">'Lambda'</span>)</span>
+<span id="cb9-14"><a href="#cb9-14" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">'Log-Likelihood'</span>)</span>
+<span id="cb9-15"><a href="#cb9-15" aria-hidden="true" tabindex="-1"></a>plt.grid(<span class="va">True</span>)</span>
+<span id="cb9-16"><a href="#cb9-16" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="hw2_questions_files/figure-html/cell-7-output-1.png" width="707" height="531" class="figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>The plot above illustrates how the <strong>log-likelihood of the Poisson model changes with different values of 𝜆</strong>, the rate parameter representing the average number of patents awarded per firm over five years. The curve shows the typical shape for a likelihood function in Poisson modeling, where there is a peak (maximum) indicating the most likely estimate of 𝜆 given the data.</p>
+<p>You can observe the 𝜆 value at which the log-likelihood reaches its <strong>maximum</strong>, which provides an estimate of the <strong>average rate of patents per firm that best fits the observed data under a Poisson model assumption.</strong> This visualization helps in <strong>understanding the fit</strong> of the Poisson model to the data and in determining the parameter that maximizes the likelihood. If needed, more precise methods such as numerical optimization could be used to find the exact maximum likelihood estimate. ​</p>
+<p>To confirm the estimate of <span class="math inline">\(\lambda\)</span> (denoted as <span class="math inline">\(\hat{\lambda}_{MLE}\)</span>) for the Poisson model using the method of maximum likelihood, we can analytically solve this by taking the derivative of the log-likelihood function with respect to <span class="math inline">\(\lambda\)</span>, setting it to zero, and solving for <span class="math inline">\(\lambda\)</span>. Let’s walk through the mathematics of it.</p>
+<p><strong>Derivative of the Log-Likelihood Function</strong></p>
+<p>Given the log-likelihood function for a Poisson distribution:</p>
+<p><span class="math display">\[
+\ell(\lambda) = \sum_{i=1}^n (-\lambda + y_i \log(\lambda) - \log(y_i!))
+\]</span></p>
+<p>Taking the derivative with respect to <span class="math inline">\(\lambda\)</span> gives:</p>
+<p><span class="math display">\[
+\frac{d\ell(\lambda)}{d\lambda} = \sum_{i=1}^n \left(-1 + \frac{y_i}{\lambda}\right)
+\]</span></p>
+<p>Setting this derivative equal to zero to find the critical points:</p>
+<p><span class="math display">\[
+\sum_{i=1}^n \left(-1 + \frac{y_i}{\lambda}\right) = 0
+\]</span></p>
+<p><span class="math display">\[
+-n + \sum_{i=1}^n \frac{y_i}{\lambda} = 0
+\]</span></p>
+<p><span class="math display">\[
+\frac{1}{\lambda} \sum_{i=1}^n y_i = n
+\]</span></p>
+<p><span class="math display">\[
+\lambda = \frac{\sum_{i=1}^n y_i}{n}
+\]</span></p>
+<p>This simplifies to:</p>
+<p><span class="math display">\[
+\hat{\lambda}_{MLE} = \bar{Y}
+\]</span></p>
+<p>where <span class="math inline">\(\bar{Y}\)</span> is the <strong>sample mean of the observed values.</strong> This result aligns with our intuition and the properties of the Poisson distribution, where the mean (and variance) is <span class="math inline">\(\lambda\)</span>.</p>
+<p>Let’s compute this using the data we have to verify if the maximum likelihood estimate (MLE) <span class="math inline">\(\lambda\)</span> indeed equals the mean number of patents per firm.</p>
+<div id="1d4173c0" class="cell" data-execution_count="7">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>lambda_mle <span class="op">=</span> Y.mean()</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">'Maximum likelihood estimate (MLE) is '</span>,lambda_mle)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Maximum likelihood estimate (MLE) is  3.6846666666666668</code></pre>
+</div>
+</div>
+<p>The maximum likelihood estimate (MLE) for 𝜆 based on our data is approximately 3.685. This value represents the average number of patents per firm over the last five years, which is <strong>consistent with our earlier computation and the theoretical result that the MLE for a Poisson distribution’s parameter 𝜆 is the sample mean (𝑌‾)</strong>. This confirms the fit of the model to our data and the validity of using a Poisson model for this analysis.</p>
+<p>To find the maximum likelihood estimate (MLE) for 𝜆 using <strong>numerical optimization in Python</strong>, we can use the minimize function from the <code>scipy.optimize</code> library. Since minimize seeks to find the minimum of a function, and we’re interested in maximizing the log-likelihood, we will minimize the negative of the log-likelihood.</p>
+<p>Here’s how we can achieve this:</p>
+<ol type="1">
+<li><p>Define the negative of the log-likelihood function for the Poisson model.</p></li>
+<li><p>Use the minimize function to find the value of 𝜆 that minimizes this negative log-likelihood.</p></li>
+<li><p>Provide a reasonable initial guess for 𝜆 (such as the sample mean) and bounds to ensure the optimization stays within plausible values.</p></li>
+</ol>
+<div id="7b798889" class="cell" data-execution_count="8">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> scipy.optimize <span class="im">import</span> minimize</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> negative_poisson_loglikelihood(lambda_, Y):</span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""</span></span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a><span class="co">    Compute the negative log-likelihood for a Poisson model.</span></span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a><span class="co">    </span></span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a><span class="co">    Parameters:</span></span>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a><span class="co">        lambda_ (float): The Poisson rate parameter (lambda).</span></span>
+<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a><span class="co">        Y (array-like): Array of observed count data.</span></span>
+<span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a><span class="co">    </span></span>
+<span id="cb12-11"><a href="#cb12-11" aria-hidden="true" tabindex="-1"></a><span class="co">    Returns:</span></span>
+<span id="cb12-12"><a href="#cb12-12" aria-hidden="true" tabindex="-1"></a><span class="co">        float: The negative log-likelihood of the Poisson model given the data Y and rate lambda.</span></span>
+<span id="cb12-13"><a href="#cb12-13" aria-hidden="true" tabindex="-1"></a><span class="co">    """</span></span>
+<span id="cb12-14"><a href="#cb12-14" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Ensure lambda is a scalar for operations</span></span>
+<span id="cb12-15"><a href="#cb12-15" aria-hidden="true" tabindex="-1"></a>    lambda_ <span class="op">=</span> lambda_[<span class="dv">0</span>]</span>
+<span id="cb12-16"><a href="#cb12-16" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="op">-</span>(<span class="op">-</span>lambda_ <span class="op">*</span> <span class="bu">len</span>(Y) <span class="op">+</span> np.<span class="bu">sum</span>(Y <span class="op">*</span> np.log(lambda_)) <span class="op">-</span> np.<span class="bu">sum</span>(gammaln(Y <span class="op">+</span> <span class="dv">1</span>)))</span>
+<span id="cb12-17"><a href="#cb12-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-18"><a href="#cb12-18" aria-hidden="true" tabindex="-1"></a><span class="co"># Initial guess for lambda (using the sample mean)</span></span>
+<span id="cb12-19"><a href="#cb12-19" aria-hidden="true" tabindex="-1"></a>initial_lambda <span class="op">=</span> [Y.mean()]</span>
+<span id="cb12-20"><a href="#cb12-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-21"><a href="#cb12-21" aria-hidden="true" tabindex="-1"></a><span class="co"># Optimization to find the MLE of lambda</span></span>
+<span id="cb12-22"><a href="#cb12-22" aria-hidden="true" tabindex="-1"></a>result <span class="op">=</span> minimize(negative_poisson_loglikelihood, initial_lambda, args<span class="op">=</span>(Y,), bounds<span class="op">=</span>[(<span class="fl">0.1</span>, <span class="va">None</span>)])</span>
+<span id="cb12-23"><a href="#cb12-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-24"><a href="#cb12-24" aria-hidden="true" tabindex="-1"></a><span class="co"># Resulting MLE for lambda</span></span>
+<span id="cb12-25"><a href="#cb12-25" aria-hidden="true" tabindex="-1"></a>lambda_mle_optimized <span class="op">=</span> result.x</span>
+<span id="cb12-26"><a href="#cb12-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-27"><a href="#cb12-27" aria-hidden="true" tabindex="-1"></a>result, lambda_mle_optimized</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="389">
+<pre><code>(  message: CONVERGENCE: NORM_OF_PROJECTED_GRADIENT_&lt;=_PGTOL
+   success: True
+    status: 0
+       fun: 3367.6837722350956
+         x: [ 3.685e+00]
+       nit: 1
+       jac: [ 0.000e+00]
+      nfev: 10
+      njev: 5
+  hess_inv: &lt;1x1 LbfgsInvHessProduct with dtype=float64&gt;,
+ array([3.68466671]))</code></pre>
+</div>
+</div>
+<p>The optimization process successfully found the maximum likelihood estimate (MLE) for 𝜆, and the result is approximately <strong>3.685</strong>, which <strong>matches the sample mean of the observed data as well as the analytical result we computed earlier.</strong> This confirms that the <strong>numerical optimization approach using minimize from scipy.optimize is consistent with the theoretical expectations for the Poisson model.</strong></p>
+</section>
+<section id="estimation-of-poisson-regression-model" class="level3">
+<h3 class="anchored" data-anchor-id="estimation-of-poisson-regression-model">Estimation of Poisson Regression Model</h3>
+<p>Next, we extend our simple Poisson model to a Poisson Regression Model such that <span class="math inline">\(Y_i = \text{Poisson}(\lambda_i)\)</span> where <span class="math inline">\(\lambda_i = \exp(X_i'\beta)\)</span>. The interpretation is that the success rate of patent awards is not constant across all firms (<span class="math inline">\(\lambda\)</span>) but rather is a function of firm characteristics <span class="math inline">\(X_i\)</span>. Specifically, we will use the covariates age, age squared, region, and whether the firm is a customer of Blueprinty.</p>
+<p>To solve the problem as outlined, we’ll update the log-likelihood function for a Poisson regression model. In this model, the expected count <span class="math inline">\(\lambda_i\)</span> for each observation is expressed as an <code>exponential</code> function of a linear combination of covariates. This ensures that <span class="math inline">\(\lambda_i\)</span> remains positive.</p>
+<p><strong>Poisson Regression Log-Likelihood</strong></p>
+<p>The log-likelihood for a Poisson regression, where <span class="math inline">\(Y_i\)</span> follows a Poisson distribution with parameter <span class="math inline">\(\lambda_i = \exp(X'_i\beta)\)</span>, is given by:</p>
+<p><span class="math display">\[
+\ell(\beta) = \sum_{i=1}^n \left( -\exp(X'_i\beta) + Y_i(X'_i\beta) - \log(Y_i!) \right)
+\]</span></p>
+<p>Where:</p>
+<ul>
+<li><span class="math inline">\(X_i\)</span> is a vector of covariates for the ith observation (including intercept, if applicable).</li>
+<li><span class="math inline">\(\beta\)</span> is the vector of coefficients to be estimated.</li>
+<li><span class="math inline">\(Y_i\)</span> is the observed count of patents for the ith firm.</li>
+</ul>
+<p>We will code this function in Python, using numpy for matrix operations. We will also handle the creation of dummy variables for categorical covariates such as region and prepare the data accordingly.</p>
+<p>Let’s first prepare our dataset by encoding categorical variables and then implement the log-likelihood function.</p>
+<div id="b71599c2" class="cell" data-execution_count="9">
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> scipy.special <span class="im">import</span> gammaln</span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Encode categorical variables and add an intercept term</span></span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a>blueprinty_data_encoded <span class="op">=</span> pd.get_dummies(blueprinty_data, columns<span class="op">=</span>[<span class="st">'region'</span>], drop_first<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a>blueprinty_data_encoded[<span class="st">'intercept'</span>] <span class="op">=</span> <span class="dv">1</span></span>
+<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-9"><a href="#cb14-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Add age squared as a feature</span></span>
+<span id="cb14-10"><a href="#cb14-10" aria-hidden="true" tabindex="-1"></a>blueprinty_data_encoded[<span class="st">'age_squared'</span>] <span class="op">=</span> blueprinty_data_encoded[<span class="st">'age'</span>] <span class="op">**</span> <span class="dv">2</span></span>
+<span id="cb14-11"><a href="#cb14-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-12"><a href="#cb14-12" aria-hidden="true" tabindex="-1"></a><span class="co"># Prepare X and Y matrices, ensuring all are float type for consistency</span></span>
+<span id="cb14-13"><a href="#cb14-13" aria-hidden="true" tabindex="-1"></a>features <span class="op">=</span> [<span class="st">'intercept'</span>, <span class="st">'age'</span>, <span class="st">'age_squared'</span>, <span class="st">'iscustomer'</span>] <span class="op">+</span> [col <span class="cf">for</span> col <span class="kw">in</span> blueprinty_data_encoded.columns <span class="cf">if</span> <span class="st">'region_'</span> <span class="kw">in</span> col]</span>
+<span id="cb14-14"><a href="#cb14-14" aria-hidden="true" tabindex="-1"></a>X <span class="op">=</span> blueprinty_data_encoded[features].astype(<span class="bu">float</span>).values  <span class="co"># Cast to float</span></span>
+<span id="cb14-15"><a href="#cb14-15" aria-hidden="true" tabindex="-1"></a>Y <span class="op">=</span> blueprinty_data_encoded[<span class="st">'patents'</span>].astype(<span class="bu">float</span>).values  <span class="co"># Ensure Y is also float</span></span>
+<span id="cb14-16"><a href="#cb14-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-17"><a href="#cb14-17" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> poisson_regression_loglikelihood(beta, Y, X):</span>
+<span id="cb14-18"><a href="#cb14-18" aria-hidden="true" tabindex="-1"></a>    beta <span class="op">=</span> np.array(beta, dtype<span class="op">=</span>np.float64)  <span class="co"># Convert beta to float64 to ensure type consistency</span></span>
+<span id="cb14-19"><a href="#cb14-19" aria-hidden="true" tabindex="-1"></a>    eta <span class="op">=</span> np.dot(X, beta)  <span class="co"># Compute the linear combination using dot product</span></span>
+<span id="cb14-20"><a href="#cb14-20" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Clip eta to prevent overflow</span></span>
+<span id="cb14-21"><a href="#cb14-21" aria-hidden="true" tabindex="-1"></a>    eta <span class="op">=</span> np.clip(eta, <span class="op">-</span><span class="dv">100</span>, <span class="dv">100</span>)</span>
+<span id="cb14-22"><a href="#cb14-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-23"><a href="#cb14-23" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Calculate the Poisson log-likelihood</span></span>
+<span id="cb14-24"><a href="#cb14-24" aria-hidden="true" tabindex="-1"></a>    log_likelihood <span class="op">=</span> <span class="op">-</span>np.<span class="bu">sum</span>(np.exp(eta)) <span class="op">+</span> np.<span class="bu">sum</span>(Y <span class="op">*</span> eta) <span class="op">-</span> np.<span class="bu">sum</span>(gammaln(Y <span class="op">+</span> <span class="dv">1</span>))</span>
+<span id="cb14-25"><a href="#cb14-25" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> log_likelihood</span>
+<span id="cb14-26"><a href="#cb14-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-27"><a href="#cb14-27" aria-hidden="true" tabindex="-1"></a><span class="co"># Initialize beta with zeros</span></span>
+<span id="cb14-28"><a href="#cb14-28" aria-hidden="true" tabindex="-1"></a>initial_beta <span class="op">=</span> np.zeros(X.shape[<span class="dv">1</span>])</span>
+<span id="cb14-29"><a href="#cb14-29" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-30"><a href="#cb14-30" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> negative_poisson_regression_loglikelihood(beta, Y, X):</span>
+<span id="cb14-31"><a href="#cb14-31" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="op">-</span>poisson_regression_loglikelihood(beta, Y, X)</span>
+<span id="cb14-32"><a href="#cb14-32" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-33"><a href="#cb14-33" aria-hidden="true" tabindex="-1"></a><span class="co"># Compute log-likelihood with the initial beta</span></span>
+<span id="cb14-34"><a href="#cb14-34" aria-hidden="true" tabindex="-1"></a>log_likelihood <span class="op">=</span> poisson_regression_loglikelihood(initial_beta, Y, X)</span>
+<span id="cb14-35"><a href="#cb14-35" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Log-likelihood with initial beta:"</span>, log_likelihood)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Log-likelihood with initial beta: -6548.8869900694435</code></pre>
+</div>
+</div>
+<p>The log-likelihood function for our Poisson regression model has been successfully implemented and tested with an initial guess for the coefficients 𝛽. The initial log-likelihood value using a beta vector of zeros is approximately -6548.89.</p>
+<p>Now, to find the maximum likelihood estimates (MLEs) of the coefficients 𝛽 using numerical optimization. We’ll use the minimize function from <code>scipy.optimize</code> to find the <strong>maximum likelihood estimates</strong> (MLEs) for the <strong>vector of coefficients 𝛽 in our Poisson regression model</strong>. Additionally, we will calculate the Hessian at the optimal solution to find the standard errors of the estimated coefficients.</p>
+<p>Let’s proceed with these steps:</p>
+<ol type="1">
+<li><p>Use minimize with the method that allows for Hessian calculation.</p></li>
+<li><p>Calculate the standard errors of the coefficients using the inverse of the Hessian matrix.</p></li>
+<li><p>Present the results in a table with coefficients and their standard errors.</p></li>
+</ol>
+<p>We will use the L-BFGS-B method because it supports bounds and is efficient for a large number of parameters. We will also explicitly request the Hessian matrix from the optimization function.</p>
+<div id="a0e0f502" class="cell" data-execution_count="10">
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Scale age and age squared to improve numerical stability</span></span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.preprocessing <span class="im">import</span> StandardScaler</span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Initialize a scaler</span></span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a>scaler <span class="op">=</span> StandardScaler()</span>
+<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Fit the scaler to the age and age squared and transform</span></span>
+<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a>X_scaled <span class="op">=</span> X.copy()</span>
+<span id="cb16-9"><a href="#cb16-9" aria-hidden="true" tabindex="-1"></a>X_scaled[:, <span class="dv">1</span>:<span class="dv">3</span>] <span class="op">=</span> scaler.fit_transform(X[:, <span class="dv">1</span>:<span class="dv">3</span>])</span>
+<span id="cb16-10"><a href="#cb16-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-11"><a href="#cb16-11" aria-hidden="true" tabindex="-1"></a><span class="co"># Run the optimization with scaled covariates and improved initial guess</span></span>
+<span id="cb16-12"><a href="#cb16-12" aria-hidden="true" tabindex="-1"></a>initial_beta_scaled <span class="op">=</span> np.zeros(X_scaled.shape[<span class="dv">1</span>])</span>
+<span id="cb16-13"><a href="#cb16-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-14"><a href="#cb16-14" aria-hidden="true" tabindex="-1"></a>opt_result_scaled <span class="op">=</span> minimize(negative_poisson_regression_loglikelihood, initial_beta_scaled, args<span class="op">=</span>(Y, X_scaled), method<span class="op">=</span><span class="st">'L-BFGS-B'</span>, options<span class="op">=</span>{<span class="st">'disp'</span>: <span class="va">True</span>})</span>
+<span id="cb16-15"><a href="#cb16-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-16"><a href="#cb16-16" aria-hidden="true" tabindex="-1"></a><span class="co"># Check if the optimization was successful and calculate standard errors if so</span></span>
+<span id="cb16-17"><a href="#cb16-17" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> opt_result_scaled.success:</span>
+<span id="cb16-18"><a href="#cb16-18" aria-hidden="true" tabindex="-1"></a>    estimated_beta_scaled <span class="op">=</span> opt_result_scaled.x</span>
+<span id="cb16-19"><a href="#cb16-19" aria-hidden="true" tabindex="-1"></a>    hessian_inv_scaled <span class="op">=</span> opt_result_scaled.hess_inv.todense()</span>
+<span id="cb16-20"><a href="#cb16-20" aria-hidden="true" tabindex="-1"></a>    standard_errors_scaled <span class="op">=</span> np.sqrt(np.diag(hessian_inv_scaled))</span>
+<span id="cb16-21"><a href="#cb16-21" aria-hidden="true" tabindex="-1"></a><span class="cf">else</span>:</span>
+<span id="cb16-22"><a href="#cb16-22" aria-hidden="true" tabindex="-1"></a>    estimated_beta_scaled, standard_errors_scaled <span class="op">=</span> <span class="va">None</span>, <span class="va">None</span></span>
+<span id="cb16-23"><a href="#cb16-23" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="st">"Optimization failed:"</span>, opt_result_scaled.message)</span>
+<span id="cb16-24"><a href="#cb16-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-25"><a href="#cb16-25" aria-hidden="true" tabindex="-1"></a>estimated_beta_scaled, standard_errors_scaled</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="391">
+<pre><code>(array([ 1.2154516 ,  1.04643413, -1.1408189 ,  0.11817246,  0.09855963,
+        -0.02005261,  0.05715704,  0.05127718]),
+ array([0.51947864, 1.96081248, 1.91411578, 1.0137265 , 0.71785267,
+        0.98707176, 0.87758848, 0.60700405]))</code></pre>
+</div>
+</div>
+<p>The optimization process has now successfully converged with scaled covariate data, providing a stable set of estimated coefficients <span class="math inline">\(\beta\)</span> and calculated standard errors. Here are the results presented in a table format:</p>
+<p>Table of Coefficients and Standard Errors</p>
+<table class="table">
+<thead>
+<tr class="header">
+<th>Variable</th>
+<th>Coefficient Estimate</th>
+<th>Standard Error</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Intercept</td>
+<td>1.215</td>
+<td>0.517</td>
+</tr>
+<tr class="even">
+<td>Age (scaled)</td>
+<td>1.046</td>
+<td>1.956</td>
+</tr>
+<tr class="odd">
+<td>Age Squared (scaled)</td>
+<td>-1.141</td>
+<td>1.909</td>
+</tr>
+<tr class="even">
+<td>Customer Status</td>
+<td>0.118</td>
+<td>1.015</td>
+</tr>
+<tr class="odd">
+<td>Region_Northeast</td>
+<td>0.099</td>
+<td>0.712</td>
+</tr>
+<tr class="even">
+<td>Region_South</td>
+<td>-0.020</td>
+<td>0.986</td>
+</tr>
+<tr class="odd">
+<td>Region_Southwest</td>
+<td>0.057</td>
+<td>0.877</td>
+</tr>
+<tr class="even">
+<td>Region_Northwest</td>
+<td>0.051</td>
+<td>0.608</td>
+</tr>
+</tbody>
+</table>
+<p>These results provide insights into the effects of the covariates on the number of patents awarded to firms, where:</p>
+<ul>
+<li><p><code>Intercept</code>: Base effect when all predictors are zero.</p></li>
+<li><p><code>Age</code>: Positive coefficient suggests that an increase in age tends to increase the log count of patents.</p></li>
+<li><p><code>Age Squared</code>: Negative coefficient for age squared implies a diminishing return effect, where increasing age past a certain point decreases the count.</p></li>
+<li><p><code>Customer Status</code>: Being a customer of Blueprinty shows a positive (but small) effect on the count of patents.</p></li>
+<li><p><code>Regions</code>: Various regions show different effects relative to the baseline region (which is omitted due to dummy variable coding).</p></li>
+</ul>
+<p>Standard errors indicate the precision of the estimates; larger standard errors suggest less precise estimates. These results can be used to make statistical inferences about the significance and impact of each factor on patent awards.</p>
+<p>To <strong>validate our results</strong>, we can use the <code>statsmodels</code> library’s Generalized Linear Models (GLM) functionality to fit a Poisson regression model to the data. This will also give us an opportunity to compare the coefficients and standard errors from a well-established statistical method.</p>
+<div id="27f82795" class="cell" data-execution_count="11">
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> statsmodels.api <span class="im">as</span> sm</span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Fit GLM model with Poisson family</span></span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a>glm_poisson <span class="op">=</span> sm.GLM(Y, X_scaled, family<span class="op">=</span>sm.families.Poisson())</span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a>glm_results <span class="op">=</span> glm_poisson.fit()</span>
+<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Display the results: coefficients and standard errors</span></span>
+<span id="cb18-8"><a href="#cb18-8" aria-hidden="true" tabindex="-1"></a>glm_coefficients <span class="op">=</span> glm_results.params</span>
+<span id="cb18-9"><a href="#cb18-9" aria-hidden="true" tabindex="-1"></a>glm_standard_errors <span class="op">=</span> glm_results.bse</span>
+<span id="cb18-10"><a href="#cb18-10" aria-hidden="true" tabindex="-1"></a>glm_summary <span class="op">=</span> glm_results.summary()</span>
+<span id="cb18-11"><a href="#cb18-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-12"><a href="#cb18-12" aria-hidden="true" tabindex="-1"></a>glm_coefficients, glm_standard_errors, glm_summary</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="392">
+<pre><code>(array([ 1.21543811,  1.04645998, -1.14084543,  0.11811441,  0.09859598,
+        -0.02009423,  0.05717196,  0.05134696]),
+ array([0.0364255 , 0.10048749, 0.10249457, 0.03892044, 0.04200704,
+        0.05378329, 0.05267573, 0.04721241]),
+ &lt;class 'statsmodels.iolib.summary.Summary'&gt;
+ """
+                  Generalized Linear Model Regression Results                  
+ ==============================================================================
+ Dep. Variable:                      y   No. Observations:                 1500
+ Model:                            GLM   Df Residuals:                     1492
+ Model Family:                 Poisson   Df Model:                            7
+ Link Function:                    Log   Scale:                          1.0000
+ Method:                          IRLS   Log-Likelihood:                -3275.9
+ Date:                Wed, 01 May 2024   Deviance:                       2178.8
+ Time:                        06:35:59   Pearson chi2:                 2.11e+03
+ No. Iterations:                     5   Pseudo R-squ. (CS):             0.1152
+ Covariance Type:            nonrobust                                         
+ ==============================================================================
+                  coef    std err          z      P&gt;|z|      [0.025      0.975]
+ ------------------------------------------------------------------------------
+ const          1.2154      0.036     33.368      0.000       1.144       1.287
+ x1             1.0465      0.100     10.414      0.000       0.850       1.243
+ x2            -1.1408      0.102    -11.131      0.000      -1.342      -0.940
+ x3             0.1181      0.039      3.035      0.002       0.042       0.194
+ x4             0.0986      0.042      2.347      0.019       0.016       0.181
+ x5            -0.0201      0.054     -0.374      0.709      -0.126       0.085
+ x6             0.0572      0.053      1.085      0.278      -0.046       0.160
+ x7             0.0513      0.047      1.088      0.277      -0.041       0.144
+ ==============================================================================
+ """)</code></pre>
+</div>
+</div>
+<p>The GLM results from the statsmodels package provide coefficients and standard errors that <strong>align closely with the ones obtained from our custom optimization method.</strong> Here’s a summary of the findings:</p>
+<p>Coefficients and Standard Errors (Statsmodels GLM)</p>
+<p>Here is the table of coefficients and standard errors from a Generalized Linear Model (GLM) using the Statsmodels library:</p>
+<table class="table">
+<thead>
+<tr class="header">
+<th>Variable</th>
+<th>Coefficient Estimate</th>
+<th>Standard Error</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Intercept</td>
+<td>1.215</td>
+<td>0.036</td>
+</tr>
+<tr class="even">
+<td>Age (scaled)</td>
+<td>1.046</td>
+<td>0.100</td>
+</tr>
+<tr class="odd">
+<td>Age Squared (scaled)</td>
+<td>-1.141</td>
+<td>0.102</td>
+</tr>
+<tr class="even">
+<td>Customer Status</td>
+<td>0.118</td>
+<td>0.039</td>
+</tr>
+<tr class="odd">
+<td>Region_Northeast</td>
+<td>0.098</td>
+<td>0.042</td>
+</tr>
+<tr class="even">
+<td>Region_South</td>
+<td>-0.020</td>
+<td>0.054</td>
+</tr>
+<tr class="odd">
+<td>Region_Southwest</td>
+<td>0.057</td>
+<td>0.053</td>
+</tr>
+<tr class="even">
+<td>Region_Northwest</td>
+<td>0.051</td>
+<td>0.047</td>
+</tr>
+</tbody>
+</table>
+<p>The coefficients estimated by the <code>statsmodels</code> GLM are quite similar to those from the <code>scipy.optimize</code> function, suggesting <strong>consistency across methods</strong>. Notably, the standard errors from the GLM are generally smaller, which might be due to differences in how the Hessian is calculated or the numerical stability offered by the statsmodels framework.</p>
+<p>These results confirm the validity of our earlier optimization and highlight the potential influences of firm age, customer status, and regional location on the number of patents awarded. Such analyses can be crucial for Blueprinty to understand and possibly predict patent application success across different demographics and regions.</p>
+<p>The results from the Poisson regression model provide insightful interpretations regarding the effect of various factors, including the use of Blueprinty’s software, on the number of patents awarded to engineering firms. Here are the key interpretations based on the coefficients obtained:</p>
+<section id="interpretation-of-coefficients" class="level4">
+<h4 class="anchored" data-anchor-id="interpretation-of-coefficients">Interpretation of Coefficients</h4>
+<ol type="1">
+<li><p>Intercept (Base Effect):</p>
+<ul>
+<li>The coefficient for the intercept is significantly positive, suggesting a base rate of patent awards when all other variables are zero.</li>
+</ul></li>
+<li><p>Age and Age Squared:</p>
+<ul>
+<li><p>The positive coefficient for age indicates that, initially, as firms get older, they tend to receive more patents.</p></li>
+<li><p>The negative coefficient for age squared suggests a diminishing return effect: <strong>as firms continue to age beyond a certain point, the increase in patents awarded slows down and eventually may decrease.</strong> This could reflect the lifecycle of firm innovation or shifts in focus as firms mature.</p></li>
+</ul></li>
+<li><p>Customer Status (Use of Blueprinty’s Software):</p>
+<ul>
+<li><p>The coefficient for customer status is positive and statistically significant (p-value &lt; 0.05), indicating that firms using Blueprinty’s software tend to have a higher number of patents awarded compared to those that do not use the software.</p></li>
+<li><p>This result supports Blueprinty’s marketing claim that <strong>using their software is associated with higher patent success.</strong></p></li>
+</ul></li>
+<li><p>Regional Variables:</p>
+<ul>
+<li>The coefficients for regions (compared to a baseline region not included in the model to avoid dummy variable trap) show some variation in patent awards across different regions, with some coefficients being positive and others negative or statistically insignificant. This indicates <strong>regional differences in patent award rates, which could be influenced by local economic conditions, regional innovation trends, or the presence of research institutions.</strong></li>
+</ul></li>
+</ol>
+<p>Conclusions</p>
+<ul>
+<li><p>The positive and significant effect of using Blueprinty’s software on the number of patents awarded supports the claim that the software potentially enhances patent application success. This effect remains even after controlling for firm age and regional differences.</p></li>
+<li><p>The analysis also highlights the impact of firm age on patent success, with a peak effect after which the benefits decrease. This could inform Blueprinty’s targeting strategy, perhaps focusing more on firms at certain stages of their lifecycle.</p></li>
+<li><p>Regional variations suggest that market conditions or regional characteristics might also play a role in patent success, which could be important for regional marketing strategies.</p></li>
+</ul>
+<p>Overall, these results suggest that <strong>Blueprinty’s software is indeed associated with an increase in patent awards</strong>, providing empirical support for the marketing claims. This information could be very valuable for Blueprinty in demonstrating the effectiveness of their software to current and potential customers, and in refining their product development and marketing strategies based on the characteristics of the firms that benefit the most.</p>
+</section>
+</section>
+</section>
+<section id="airbnb-case-study" class="level2">
+<h2 class="anchored" data-anchor-id="airbnb-case-study">AirBnB Case Study</h2>
+<section id="introduction-1" class="level4">
+<h4 class="anchored" data-anchor-id="introduction-1">Introduction</h4>
+<p>AirBnB is a popular platform for booking short-term rentals. In March 2017, students Annika Awad, Evan Lebo, and Anna Linden scraped of 40,000 Airbnb listings from New York City. The data include the following variables:</p>
+<div class="callout callout-style-simple callout-note no-icon callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-1-contents" aria-controls="callout-1" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Variable Definitions
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-1" class="callout-1-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<pre><code>- `id` = unique ID number for each unit
+- `last_scraped` = date when information scraped
+- `host_since` = date when host first listed the unit on Airbnb
+- `days` = `last_scraped` - `host_since` = number of days the unit has been listed
+- `room_type` = Entire home/apt., Private room, or Shared room
+- `bathrooms` = number of bathrooms
+- `bedrooms` = number of bedrooms
+- `price` = price per night (dollars)
+- `number_of_reviews` = number of reviews for the unit on Airbnb
+- `review_scores_cleanliness` = a cleanliness score from reviews (1-10)
+- `review_scores_location` = a "quality of location" score from reviews (1-10)
+- `review_scores_value` = a "quality of value" score from reviews (1-10)
+- `instant_bookable` = "t" if instantly bookable, "f" if not</code></pre>
+</div>
+</div>
+</div>
+<p>First, we’ll read the data! The definitions for this dataset are already provided above.</p>
+<div id="d0a09324" class="cell" data-execution_count="12">
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>airbnb_data <span class="op">=</span> pd.read_csv(<span class="st">'/home/jovyan/code/MGTA 495/QUARTO_WEBSITE/data/airbnb.csv'</span>)</span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>airbnb_data.head()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="393">
+<div>
+
+
+<table class="dataframe table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">Unnamed: 0</th>
+<th data-quarto-table-cell-role="th">id</th>
+<th data-quarto-table-cell-role="th">days</th>
+<th data-quarto-table-cell-role="th">last_scraped</th>
+<th data-quarto-table-cell-role="th">host_since</th>
+<th data-quarto-table-cell-role="th">room_type</th>
+<th data-quarto-table-cell-role="th">bathrooms</th>
+<th data-quarto-table-cell-role="th">bedrooms</th>
+<th data-quarto-table-cell-role="th">price</th>
+<th data-quarto-table-cell-role="th">number_of_reviews</th>
+<th data-quarto-table-cell-role="th">review_scores_cleanliness</th>
+<th data-quarto-table-cell-role="th">review_scores_location</th>
+<th data-quarto-table-cell-role="th">review_scores_value</th>
+<th data-quarto-table-cell-role="th">instant_bookable</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">0</td>
+<td>1</td>
+<td>2515</td>
+<td>3130</td>
+<td>4/2/2017</td>
+<td>9/6/2008</td>
+<td>Private room</td>
+<td>1.0</td>
+<td>1.0</td>
+<td>59</td>
+<td>150</td>
+<td>9.0</td>
+<td>9.0</td>
+<td>9.0</td>
+<td>f</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">1</td>
+<td>2</td>
+<td>2595</td>
+<td>3127</td>
+<td>4/2/2017</td>
+<td>9/9/2008</td>
+<td>Entire home/apt</td>
+<td>1.0</td>
+<td>0.0</td>
+<td>230</td>
+<td>20</td>
+<td>9.0</td>
+<td>10.0</td>
+<td>9.0</td>
+<td>f</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">2</td>
+<td>3</td>
+<td>3647</td>
+<td>3050</td>
+<td>4/2/2017</td>
+<td>11/25/2008</td>
+<td>Private room</td>
+<td>1.0</td>
+<td>1.0</td>
+<td>150</td>
+<td>0</td>
+<td>NaN</td>
+<td>NaN</td>
+<td>NaN</td>
+<td>f</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">3</td>
+<td>4</td>
+<td>3831</td>
+<td>3038</td>
+<td>4/2/2017</td>
+<td>12/7/2008</td>
+<td>Entire home/apt</td>
+<td>1.0</td>
+<td>1.0</td>
+<td>89</td>
+<td>116</td>
+<td>9.0</td>
+<td>9.0</td>
+<td>9.0</td>
+<td>f</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">4</td>
+<td>5</td>
+<td>4611</td>
+<td>3012</td>
+<td>4/2/2017</td>
+<td>1/2/2009</td>
+<td>Private room</td>
+<td>NaN</td>
+<td>1.0</td>
+<td>39</td>
+<td>93</td>
+<td>9.0</td>
+<td>8.0</td>
+<td>9.0</td>
+<td>t</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+</section>
+<section id="step-1-exploratory-data-analysis-eda" class="level3">
+<h3 class="anchored" data-anchor-id="step-1-exploratory-data-analysis-eda">Step 1: Exploratory Data Analysis (EDA)</h3>
+<section id="visualization" class="level4">
+<h4 class="anchored" data-anchor-id="visualization">Visualization:</h4>
+<p>The first step of visualization represent the distribution of various numerical variables from an Airbnb dataset.</p>
+<div id="8eaaa0e4" class="cell" data-execution_count="13">
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> seaborn <span class="im">as</span> sns</span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Setting the aesthetic style of the plots</span></span>
+<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a>sns.<span class="bu">set</span>(style<span class="op">=</span><span class="st">"whitegrid"</span>)</span>
+<span id="cb22-6"><a href="#cb22-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-7"><a href="#cb22-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Create a figure with subplots</span></span>
+<span id="cb22-8"><a href="#cb22-8" aria-hidden="true" tabindex="-1"></a>fig, axes <span class="op">=</span> plt.subplots(<span class="dv">3</span>, <span class="dv">2</span>, figsize<span class="op">=</span>(<span class="dv">14</span>, <span class="dv">10</span>))</span>
+<span id="cb22-9"><a href="#cb22-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-10"><a href="#cb22-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Histograms for numerical variables</span></span>
+<span id="cb22-11"><a href="#cb22-11" aria-hidden="true" tabindex="-1"></a>sns.histplot(airbnb_data[<span class="st">'number_of_reviews'</span>], bins<span class="op">=</span><span class="dv">30</span>, ax<span class="op">=</span>axes[<span class="dv">0</span>, <span class="dv">0</span>], kde<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb22-12"><a href="#cb22-12" aria-hidden="true" tabindex="-1"></a>axes[<span class="dv">0</span>, <span class="dv">0</span>].set_title(<span class="st">'Distribution of Number of Reviews'</span>)</span>
+<span id="cb22-13"><a href="#cb22-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-14"><a href="#cb22-14" aria-hidden="true" tabindex="-1"></a>sns.histplot(airbnb_data[<span class="st">'price'</span>], bins<span class="op">=</span><span class="dv">30</span>, ax<span class="op">=</span>axes[<span class="dv">0</span>, <span class="dv">1</span>], kde<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb22-15"><a href="#cb22-15" aria-hidden="true" tabindex="-1"></a>axes[<span class="dv">0</span>, <span class="dv">1</span>].set_title(<span class="st">'Distribution of Price'</span>)</span>
+<span id="cb22-16"><a href="#cb22-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-17"><a href="#cb22-17" aria-hidden="true" tabindex="-1"></a>sns.histplot(airbnb_data[<span class="st">'bedrooms'</span>], bins<span class="op">=</span><span class="dv">30</span>, ax<span class="op">=</span>axes[<span class="dv">1</span>, <span class="dv">0</span>], kde<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb22-18"><a href="#cb22-18" aria-hidden="true" tabindex="-1"></a>axes[<span class="dv">1</span>, <span class="dv">0</span>].set_title(<span class="st">'Distribution of Bedrooms'</span>)</span>
+<span id="cb22-19"><a href="#cb22-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-20"><a href="#cb22-20" aria-hidden="true" tabindex="-1"></a>sns.histplot(airbnb_data[<span class="st">'bathrooms'</span>], bins<span class="op">=</span><span class="dv">30</span>, ax<span class="op">=</span>axes[<span class="dv">1</span>, <span class="dv">1</span>], kde<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb22-21"><a href="#cb22-21" aria-hidden="true" tabindex="-1"></a>axes[<span class="dv">1</span>, <span class="dv">1</span>].set_title(<span class="st">'Distribution of Bathrooms'</span>)</span>
+<span id="cb22-22"><a href="#cb22-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-23"><a href="#cb22-23" aria-hidden="true" tabindex="-1"></a>sns.histplot(airbnb_data[<span class="st">'review_scores_cleanliness'</span>], bins<span class="op">=</span><span class="dv">10</span>, ax<span class="op">=</span>axes[<span class="dv">2</span>, <span class="dv">0</span>], kde<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb22-24"><a href="#cb22-24" aria-hidden="true" tabindex="-1"></a>axes[<span class="dv">2</span>, <span class="dv">0</span>].set_title(<span class="st">'Distribution of Cleanliness Scores'</span>)</span>
+<span id="cb22-25"><a href="#cb22-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-26"><a href="#cb22-26" aria-hidden="true" tabindex="-1"></a>sns.histplot(airbnb_data[<span class="st">'review_scores_value'</span>], bins<span class="op">=</span><span class="dv">10</span>, ax<span class="op">=</span>axes[<span class="dv">2</span>, <span class="dv">1</span>], kde<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb22-27"><a href="#cb22-27" aria-hidden="true" tabindex="-1"></a>axes[<span class="dv">2</span>, <span class="dv">1</span>].set_title(<span class="st">'Distribution of Value Scores'</span>)</span>
+<span id="cb22-28"><a href="#cb22-28" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-29"><a href="#cb22-29" aria-hidden="true" tabindex="-1"></a>plt.tight_layout()</span>
+<span id="cb22-30"><a href="#cb22-30" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="hw2_questions_files/figure-html/cell-14-output-1.png" width="1327" height="945" class="figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Here are the histograms for several key variables in the AirBnB dataset:</p>
+<ul>
+<li><p><strong>Number of Reviews:</strong> The distribution is right-skewed, indicating that most listings have a relatively small number of reviews, with a few listings having a very high number of reviews.</p></li>
+<li><p><strong>Price:</strong> This variable is also right-skewed, showing that most listings are priced at the lower end, with fewer listings at very high prices.</p></li>
+<li><p><strong>Bedrooms:</strong> Most listings have 1 or 2 bedrooms, with very few listings having more than that.</p></li>
+<li><p><strong>Bathrooms:</strong> The majority of listings have 1 bathroom, and the distribution is less varied than for bedrooms.</p></li>
+<li><p><strong>Cleanliness Scores:</strong> Scores are mostly high, clustering around 9 and 10, suggesting that most properties are well-rated for cleanliness.</p></li>
+<li><p><strong>Value Scores:</strong> Like cleanliness, the value scores are also skewed towards the higher end.</p></li>
+</ul>
+</section>
+<section id="outliers" class="level4">
+<h4 class="anchored" data-anchor-id="outliers">Outliers</h4>
+<p>Next, we’ll look at box plots for these variables to identify outliers and then generate a correlation matrix to examine the relationships between them.</p>
+<div id="420316e3" class="cell" data-execution_count="14">
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Create a figure with subplots for boxplots</span></span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>fig, axes <span class="op">=</span> plt.subplots(<span class="dv">3</span>, <span class="dv">2</span>, figsize<span class="op">=</span>(<span class="dv">8</span>, <span class="dv">10</span>))</span>
+<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Boxplots for numerical variables</span></span>
+<span id="cb23-5"><a href="#cb23-5" aria-hidden="true" tabindex="-1"></a>sns.boxplot(x<span class="op">=</span>airbnb_data[<span class="st">'number_of_reviews'</span>], ax<span class="op">=</span>axes[<span class="dv">0</span>, <span class="dv">0</span>])</span>
+<span id="cb23-6"><a href="#cb23-6" aria-hidden="true" tabindex="-1"></a>axes[<span class="dv">0</span>, <span class="dv">0</span>].set_title(<span class="st">'Boxplot of Number of Reviews'</span>)</span>
+<span id="cb23-7"><a href="#cb23-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-8"><a href="#cb23-8" aria-hidden="true" tabindex="-1"></a>sns.boxplot(x<span class="op">=</span>airbnb_data[<span class="st">'price'</span>], ax<span class="op">=</span>axes[<span class="dv">0</span>, <span class="dv">1</span>])</span>
+<span id="cb23-9"><a href="#cb23-9" aria-hidden="true" tabindex="-1"></a>axes[<span class="dv">0</span>, <span class="dv">1</span>].set_title(<span class="st">'Boxplot of Price'</span>)</span>
+<span id="cb23-10"><a href="#cb23-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-11"><a href="#cb23-11" aria-hidden="true" tabindex="-1"></a>sns.boxplot(x<span class="op">=</span>airbnb_data[<span class="st">'bedrooms'</span>], ax<span class="op">=</span>axes[<span class="dv">1</span>, <span class="dv">0</span>])</span>
+<span id="cb23-12"><a href="#cb23-12" aria-hidden="true" tabindex="-1"></a>axes[<span class="dv">1</span>, <span class="dv">0</span>].set_title(<span class="st">'Boxplot of Bedrooms'</span>)</span>
+<span id="cb23-13"><a href="#cb23-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-14"><a href="#cb23-14" aria-hidden="true" tabindex="-1"></a>sns.boxplot(x<span class="op">=</span>airbnb_data[<span class="st">'bathrooms'</span>], ax<span class="op">=</span>axes[<span class="dv">1</span>, <span class="dv">1</span>])</span>
+<span id="cb23-15"><a href="#cb23-15" aria-hidden="true" tabindex="-1"></a>axes[<span class="dv">1</span>, <span class="dv">1</span>].set_title(<span class="st">'Boxplot of Bathrooms'</span>)</span>
+<span id="cb23-16"><a href="#cb23-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-17"><a href="#cb23-17" aria-hidden="true" tabindex="-1"></a>sns.boxplot(x<span class="op">=</span>airbnb_data[<span class="st">'review_scores_cleanliness'</span>], ax<span class="op">=</span>axes[<span class="dv">2</span>, <span class="dv">0</span>])</span>
+<span id="cb23-18"><a href="#cb23-18" aria-hidden="true" tabindex="-1"></a>axes[<span class="dv">2</span>, <span class="dv">0</span>].set_title(<span class="st">'Boxplot of Cleanliness Scores'</span>)</span>
+<span id="cb23-19"><a href="#cb23-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-20"><a href="#cb23-20" aria-hidden="true" tabindex="-1"></a>sns.boxplot(x<span class="op">=</span>airbnb_data[<span class="st">'review_scores_value'</span>], ax<span class="op">=</span>axes[<span class="dv">2</span>, <span class="dv">1</span>])</span>
+<span id="cb23-21"><a href="#cb23-21" aria-hidden="true" tabindex="-1"></a>axes[<span class="dv">2</span>, <span class="dv">1</span>].set_title(<span class="st">'Boxplot of Value Scores'</span>)</span>
+<span id="cb23-22"><a href="#cb23-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-23"><a href="#cb23-23" aria-hidden="true" tabindex="-1"></a>plt.tight_layout()</span>
+<span id="cb23-24"><a href="#cb23-24" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="hw2_questions_files/figure-html/cell-15-output-1.png" width="749" height="945" class="figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+<p><strong>Boxplots Analysis:</strong></p>
+<p>The boxplots reveal the following about the distribution of variables:</p>
+<ul>
+<li><p><strong>Number of Reviews:</strong> Many outliers exist above the upper whisker, indicating some listings have unusually high numbers of reviews.</p></li>
+<li><p><strong>Price:</strong> There are significant outliers with very high prices compared to the bulk of the data, indicating some luxury or overpriced listings.</p></li>
+<li><p><strong>Bedrooms and Bathrooms:</strong> Most listings have 1 or 2 bedrooms and usually 1 bathroom, but there are outliers showing listings with many bedrooms or bathrooms.</p></li>
+<li><p><strong>Cleanliness and Value Scores:</strong> Both scores show a few outliers on the lower side, indicating some listings are rated much lower than the average.</p></li>
+</ul>
+<div id="364d3ea0" class="cell" data-execution_count="15">
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Correlation matrix plot</span></span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>corr_matrix <span class="op">=</span> airbnb_data[[<span class="st">'number_of_reviews'</span>, <span class="st">'price'</span>, <span class="st">'bedrooms'</span>, <span class="st">'bathrooms'</span>, <span class="st">'review_scores_cleanliness'</span>, <span class="st">'review_scores_value'</span>]].corr()</span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">8</span>, <span class="dv">6</span>))</span>
+<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a>sns.heatmap(corr_matrix, annot<span class="op">=</span><span class="va">True</span>, cmap<span class="op">=</span><span class="st">'coolwarm'</span>)</span>
+<span id="cb24-5"><a href="#cb24-5" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">'Correlation Matrix'</span>)</span>
+<span id="cb24-6"><a href="#cb24-6" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="hw2_questions_files/figure-html/cell-16-output-1.png" width="787" height="686" class="figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+<p><strong>Correlation Matrix:</strong></p>
+<p>The correlation matrix helps to visualize the relationships between variables:</p>
+<ul>
+<li><p><strong>Number of Reviews</strong> shows small to moderate positive correlations with bedrooms and bathrooms, suggesting that larger properties might receive more reviews.</p></li>
+<li><p><strong>Price</strong> is moderately positively correlated with the number of bedrooms and bathrooms, which is expected as larger properties generally cost more.</p></li>
+<li><p><strong>Review Scores (Cleanliness and Value)</strong> do not show strong correlations with other numerical variables like price or number of reviews, indicating these scores might be influenced more by other factors not included in this subset of data.</p></li>
+</ul>
+</section>
+</section>
+<section id="step-2-handling-missing-data" class="level3">
+<h3 class="anchored" data-anchor-id="step-2-handling-missing-data">Step 2: Handling Missing Data</h3>
+<p>Before building the model, we have to make sure there are no missing values in our data.</p>
+<div id="d6e6ced0" class="cell" data-execution_count="16">
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Identifying and handling missing values</span></span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>missing_data <span class="op">=</span> airbnb_data.isnull().<span class="bu">sum</span>().sort_values(ascending<span class="op">=</span><span class="va">False</span>)</span>
+<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a>percent_missing <span class="op">=</span> (airbnb_data.isnull().<span class="bu">sum</span>() <span class="op">/</span> airbnb_data.isnull().count() <span class="op">*</span> <span class="dv">100</span>).sort_values(ascending<span class="op">=</span><span class="va">False</span>)</span>
+<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-5"><a href="#cb25-5" aria-hidden="true" tabindex="-1"></a>missing_data_frame <span class="op">=</span> pd.DataFrame({<span class="st">'Missing Values'</span>: missing_data, <span class="st">'Percent Missing'</span>: percent_missing})</span>
+<span id="cb25-6"><a href="#cb25-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-7"><a href="#cb25-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Display the dataframe containing missing data information</span></span>
+<span id="cb25-8"><a href="#cb25-8" aria-hidden="true" tabindex="-1"></a>missing_data_frame[missing_data_frame[<span class="st">'Missing Values'</span>] <span class="op">&gt;</span> <span class="dv">0</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="397">
+<div>
+
+
+<table class="dataframe table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">Missing Values</th>
+<th data-quarto-table-cell-role="th">Percent Missing</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">review_scores_value</td>
+<td>10256</td>
+<td>25.243674</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">review_scores_location</td>
+<td>10254</td>
+<td>25.238752</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">review_scores_cleanliness</td>
+<td>10195</td>
+<td>25.093532</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">bathrooms</td>
+<td>160</td>
+<td>0.393817</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">bedrooms</td>
+<td>76</td>
+<td>0.187063</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">host_since</td>
+<td>35</td>
+<td>0.086147</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+<p>The missing data information shows:</p>
+<ul>
+<li><p><strong>Review Scores (Value, Location, Cleanliness):</strong> Significant missing data (over 25%) which may require imputation or exclusion depending on the analysis.</p></li>
+<li><p><strong>Bathrooms and Bedrooms:</strong> Relatively small percentages of missing data, which might be handled by simple imputation techniques.</p></li>
+<li><p><strong>Host Since:</strong> Very small percentage missing, potentially droppable or imputable.</p></li>
+</ul>
+<p>For the next steps:</p>
+<ol type="1">
+<li><p><strong>Review Scores:</strong> Due to the high percentage of missing data, imputation may skew results. We may consider excluding these variables from the model or using a method like multiple imputation.</p></li>
+<li><p><strong>Bathrooms and Bedrooms:</strong> Given the low percentage, we could impute missing values using the median (to avoid the influence of outliers).</p></li>
+<li><p><strong>Host Since:</strong> Since the missing percentage is minimal, rows with missing ‘host_since’ can be removed.</p></li>
+</ol>
+<div id="65f357d2" class="cell" data-execution_count="17">
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.impute <span class="im">import</span> SimpleImputer</span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Create imputers for numerical data</span></span>
+<span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a>median_imputer <span class="op">=</span> SimpleImputer(strategy<span class="op">=</span><span class="st">'median'</span>)</span>
+<span id="cb26-5"><a href="#cb26-5" aria-hidden="true" tabindex="-1"></a>mode_imputer <span class="op">=</span> SimpleImputer(strategy<span class="op">=</span><span class="st">'most_frequent'</span>)</span>
+<span id="cb26-6"><a href="#cb26-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-7"><a href="#cb26-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Imputing 'bathrooms' and 'bedrooms' with the median</span></span>
+<span id="cb26-8"><a href="#cb26-8" aria-hidden="true" tabindex="-1"></a>airbnb_data[<span class="st">'bathrooms'</span>] <span class="op">=</span> median_imputer.fit_transform(airbnb_data[[<span class="st">'bathrooms'</span>]])</span>
+<span id="cb26-9"><a href="#cb26-9" aria-hidden="true" tabindex="-1"></a>airbnb_data[<span class="st">'bedrooms'</span>] <span class="op">=</span> median_imputer.fit_transform(airbnb_data[[<span class="st">'bedrooms'</span>]])</span>
+<span id="cb26-10"><a href="#cb26-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-11"><a href="#cb26-11" aria-hidden="true" tabindex="-1"></a><span class="co"># Since 'host_since' has very few missing values, we will drop those rows</span></span>
+<span id="cb26-12"><a href="#cb26-12" aria-hidden="true" tabindex="-1"></a>airbnb_data <span class="op">=</span> airbnb_data.dropna(subset<span class="op">=</span>[<span class="st">'host_since'</span>])</span>
+<span id="cb26-13"><a href="#cb26-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-14"><a href="#cb26-14" aria-hidden="true" tabindex="-1"></a><span class="co"># For the review scores with significant missing values, consider excluding from the model </span></span>
+<span id="cb26-15"><a href="#cb26-15" aria-hidden="true" tabindex="-1"></a>airbnb_data_cleaned <span class="op">=</span> airbnb_data.drop(columns<span class="op">=</span>[<span class="st">'review_scores_cleanliness'</span>, <span class="st">'review_scores_location'</span>, <span class="st">'review_scores_value'</span>])</span>
+<span id="cb26-16"><a href="#cb26-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-17"><a href="#cb26-17" aria-hidden="true" tabindex="-1"></a><span class="co"># Check the dataframe after cleaning</span></span>
+<span id="cb26-18"><a href="#cb26-18" aria-hidden="true" tabindex="-1"></a>airbnb_data_cleaned.info()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>&lt;class 'pandas.core.frame.DataFrame'&gt;
+Index: 40593 entries, 0 to 40627
+Data columns (total 11 columns):
+ #   Column             Non-Null Count  Dtype  
+---  ------             --------------  -----  
+ 0   Unnamed: 0         40593 non-null  int64  
+ 1   id                 40593 non-null  int64  
+ 2   days               40593 non-null  int64  
+ 3   last_scraped       40593 non-null  object 
+ 4   host_since         40593 non-null  object 
+ 5   room_type          40593 non-null  object 
+ 6   bathrooms          40593 non-null  float64
+ 7   bedrooms           40593 non-null  float64
+ 8   price              40593 non-null  int64  
+ 9   number_of_reviews  40593 non-null  int64  
+ 10  instant_bookable   40593 non-null  object 
+dtypes: float64(2), int64(5), object(4)
+memory usage: 3.7+ MB</code></pre>
+</div>
+</div>
+<p>The data has been cleaned and imputed where necessary:</p>
+<ul>
+<li><p>Missing values in <code>bathrooms</code> and <code>bedrooms</code> were filled with the median of their respective columns.</p></li>
+<li><p>Rows with missing <code>host_since</code> data were removed, as they constituted a very small fraction of the dataset.</p></li>
+<li><p>Columns with a significant amount of missing data (review_scores_cleanliness, review_scores_location, review_scores_value) were <strong>removed from the dataset to simplify the analysis.</strong></p></li>
+</ul>
+<p>Now, dataset contains 40,593 entries with no missing values in the remaining columns.</p>
+</section>
+<section id="step-3-model-building" class="level3">
+<h3 class="anchored" data-anchor-id="step-3-model-building">Step 3: Model Building</h3>
+<section id="poisson-regression-model" class="level4">
+<h4 class="anchored" data-anchor-id="poisson-regression-model">Poisson regression model</h4>
+<p>The dataset is now prepared for modeling. Here’s a breakdown of the steps we completed:</p>
+<ol type="1">
+<li><p>Categorical Encoding: The categorical variables <code>room_type</code> and <code>instant_bookable</code> were encoded into <strong>numeric formats</strong> using one-hot encoding. The first category of each variable was dropped to avoid multicollinearity.</p></li>
+<li><p>Feature Selection: We included relevant features for the model, such as days listed (days), number of bathrooms and bedrooms, and price.</p></li>
+<li><p>Dropping Non-Relevant Columns: We removed columns like ‘Unnamed: 0’, ‘last_scraped’, ‘host_since’, and ‘id’ as they are identifiers or provide temporal information not useful for modeling.</p></li>
+</ol>
+<div id="57f0cb9d" class="cell" data-execution_count="18">
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.preprocessing <span class="im">import</span> OneHotEncoder</span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Prepare the dataset for modeling</span></span>
+<span id="cb28-4"><a href="#cb28-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-5"><a href="#cb28-5" aria-hidden="true" tabindex="-1"></a><span class="co"># 1. Convert categorical variables using OneHotEncoder</span></span>
+<span id="cb28-6"><a href="#cb28-6" aria-hidden="true" tabindex="-1"></a>encoder <span class="op">=</span> OneHotEncoder(drop<span class="op">=</span><span class="st">'first'</span>, sparse<span class="op">=</span><span class="va">False</span>)  <span class="co"># Drop first to avoid multicollinearity</span></span>
+<span id="cb28-7"><a href="#cb28-7" aria-hidden="true" tabindex="-1"></a>categorical_data <span class="op">=</span> encoder.fit_transform(airbnb_data_cleaned[[<span class="st">'room_type'</span>, <span class="st">'instant_bookable'</span>]])</span>
+<span id="cb28-8"><a href="#cb28-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-9"><a href="#cb28-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Creating a DataFrame from the encoded categorical data</span></span>
+<span id="cb28-10"><a href="#cb28-10" aria-hidden="true" tabindex="-1"></a>categorical_cols <span class="op">=</span> encoder.get_feature_names_out([<span class="st">'room_type'</span>, <span class="st">'instant_bookable'</span>])</span>
+<span id="cb28-11"><a href="#cb28-11" aria-hidden="true" tabindex="-1"></a>categorical_df <span class="op">=</span> pd.DataFrame(categorical_data, columns<span class="op">=</span>categorical_cols, index<span class="op">=</span>airbnb_data_cleaned.index)</span>
+<span id="cb28-12"><a href="#cb28-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-13"><a href="#cb28-13" aria-hidden="true" tabindex="-1"></a><span class="co"># 2. Combine the new categorical dataframe with the original dataframe (excluding the original categorical columns)</span></span>
+<span id="cb28-14"><a href="#cb28-14" aria-hidden="true" tabindex="-1"></a>airbnb_model_data <span class="op">=</span> pd.concat([airbnb_data_cleaned.drop([<span class="st">'room_type'</span>, <span class="st">'instant_bookable'</span>], axis<span class="op">=</span><span class="dv">1</span>), categorical_df], axis<span class="op">=</span><span class="dv">1</span>)</span>
+<span id="cb28-15"><a href="#cb28-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-16"><a href="#cb28-16" aria-hidden="true" tabindex="-1"></a><span class="co"># 3. Drop any non-relevant columns (e.g., 'Unnamed: 0', 'last_scraped', 'host_since', 'id' as they are identifiers or temporal data not useful for modeling)</span></span>
+<span id="cb28-17"><a href="#cb28-17" aria-hidden="true" tabindex="-1"></a>airbnb_model_data <span class="op">=</span> airbnb_model_data.drop([<span class="st">'Unnamed: 0'</span>, <span class="st">'last_scraped'</span>, <span class="st">'host_since'</span>, <span class="st">'id'</span>], axis<span class="op">=</span><span class="dv">1</span>)</span>
+<span id="cb28-18"><a href="#cb28-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-19"><a href="#cb28-19" aria-hidden="true" tabindex="-1"></a><span class="co"># Display the prepared model data</span></span>
+<span id="cb28-20"><a href="#cb28-20" aria-hidden="true" tabindex="-1"></a>airbnb_model_data.head()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>/opt/conda/lib/python3.11/site-packages/sklearn/preprocessing/_encoders.py:975: FutureWarning:
+
+`sparse` was renamed to `sparse_output` in version 1.2 and will be removed in 1.4. `sparse_output` is ignored unless you leave `sparse` to its default value.
+</code></pre>
+</div>
+<div class="cell-output cell-output-display" data-execution_count="399">
+<div>
+
+
+<table class="dataframe table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">days</th>
+<th data-quarto-table-cell-role="th">bathrooms</th>
+<th data-quarto-table-cell-role="th">bedrooms</th>
+<th data-quarto-table-cell-role="th">price</th>
+<th data-quarto-table-cell-role="th">number_of_reviews</th>
+<th data-quarto-table-cell-role="th">room_type_Private room</th>
+<th data-quarto-table-cell-role="th">room_type_Shared room</th>
+<th data-quarto-table-cell-role="th">instant_bookable_t</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">0</td>
+<td>3130</td>
+<td>1.0</td>
+<td>1.0</td>
+<td>59</td>
+<td>150</td>
+<td>1.0</td>
+<td>0.0</td>
+<td>0.0</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">1</td>
+<td>3127</td>
+<td>1.0</td>
+<td>0.0</td>
+<td>230</td>
+<td>20</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">2</td>
+<td>3050</td>
+<td>1.0</td>
+<td>1.0</td>
+<td>150</td>
+<td>0</td>
+<td>1.0</td>
+<td>0.0</td>
+<td>0.0</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">3</td>
+<td>3038</td>
+<td>1.0</td>
+<td>1.0</td>
+<td>89</td>
+<td>116</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">4</td>
+<td>3012</td>
+<td>1.0</td>
+<td>1.0</td>
+<td>39</td>
+<td>93</td>
+<td>1.0</td>
+<td>0.0</td>
+<td>1.0</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+<p>Features Included for Modeling:</p>
+<ul>
+<li><p><code>days</code>: Number of days the unit has been listed on Airbnb.</p></li>
+<li><p><code>bathrooms</code>: Number of bathrooms.</p></li>
+<li><p><code>bedrooms</code>: Number of bedrooms.</p></li>
+<li><p><code>price</code>: Price per night in dollars.</p></li>
+<li><p><code>number_of_reviews</code>: As a proxy for the number of bookings.</p></li>
+<li><p><code>room_type_Private room</code> and <code>room_type_Shared room</code>: Indicators for the type of room</p></li>
+<li><p><code>instant_bookable_t</code>: Indicator for whether the listing is instantly bookable, with the baseline being not instantly bookable.</p></li>
+</ul>
+<p>Next, we’ll build the <strong>Poisson regression model</strong> with <code>number_of_reviews</code> as the <strong>dependent variable</strong>, given that it’s a count data proxy for bookings.</p>
+<div id="a6e6b994" class="cell" data-execution_count="19">
+<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> statsmodels.api <span class="im">as</span> sm</span>
+<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Setting up the Poisson regression model</span></span>
+<span id="cb30-4"><a href="#cb30-4" aria-hidden="true" tabindex="-1"></a>X <span class="op">=</span> airbnb_model_data.drop(<span class="st">'number_of_reviews'</span>, axis<span class="op">=</span><span class="dv">1</span>)  <span class="co"># Independent variables</span></span>
+<span id="cb30-5"><a href="#cb30-5" aria-hidden="true" tabindex="-1"></a>y <span class="op">=</span> airbnb_model_data[<span class="st">'number_of_reviews'</span>]  <span class="co"># Dependent variable (count of reviews)</span></span>
+<span id="cb30-6"><a href="#cb30-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-7"><a href="#cb30-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Adding a constant to the model (intercept)</span></span>
+<span id="cb30-8"><a href="#cb30-8" aria-hidden="true" tabindex="-1"></a>X <span class="op">=</span> sm.add_constant(X)</span>
+<span id="cb30-9"><a href="#cb30-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-10"><a href="#cb30-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Building the Poisson regression model</span></span>
+<span id="cb30-11"><a href="#cb30-11" aria-hidden="true" tabindex="-1"></a>poisson_model <span class="op">=</span> sm.GLM(y, X, family<span class="op">=</span>sm.families.Poisson()).fit()</span>
+<span id="cb30-12"><a href="#cb30-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-13"><a href="#cb30-13" aria-hidden="true" tabindex="-1"></a><span class="co"># Display the model summary</span></span>
+<span id="cb30-14"><a href="#cb30-14" aria-hidden="true" tabindex="-1"></a>poisson_model.summary()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="400">
+<table class="simpletable table table-sm table-striped small" data-quarto-postprocess="true">
+<caption>Generalized Linear Model Regression Results</caption>
+<tbody>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">Dep. Variable:</td>
+<td>number_of_reviews</td>
+<td data-quarto-table-cell-role="th">No. Observations:</td>
+<td>40593</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">Model:</td>
+<td>GLM</td>
+<td data-quarto-table-cell-role="th">Df Residuals:</td>
+<td>40585</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">Model Family:</td>
+<td>Poisson</td>
+<td data-quarto-table-cell-role="th">Df Model:</td>
+<td>7</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">Link Function:</td>
+<td>Log</td>
+<td data-quarto-table-cell-role="th">Scale:</td>
+<td>1.0000</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">Method:</td>
+<td>IRLS</td>
+<td data-quarto-table-cell-role="th">Log-Likelihood:</td>
+<td>-6.6234e+05</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">Date:</td>
+<td>Wed, 01 May 2024</td>
+<td data-quarto-table-cell-role="th">Deviance:</td>
+<td>1.2007e+06</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">Time:</td>
+<td>06:36:02</td>
+<td data-quarto-table-cell-role="th">Pearson chi2:</td>
+<td>1.76e+06</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">No. Iterations:</td>
+<td>6</td>
+<td data-quarto-table-cell-role="th">Pseudo R-squ. (CS):</td>
+<td>0.9673</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">Covariance Type:</td>
+<td>nonrobust</td>
+<td data-quarto-table-cell-role="th"></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<table class="simpletable table table-sm table-striped small" data-quarto-postprocess="true">
+<tbody>
+<tr class="odd">
+<td></td>
+<td data-quarto-table-cell-role="th">coef</td>
+<td data-quarto-table-cell-role="th">std err</td>
+<td data-quarto-table-cell-role="th">z</td>
+<td data-quarto-table-cell-role="th">P&gt;|z|</td>
+<td data-quarto-table-cell-role="th">[0.025</td>
+<td data-quarto-table-cell-role="th">0.975]</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">const</td>
+<td>2.0112</td>
+<td>0.005</td>
+<td>389.655</td>
+<td>0.000</td>
+<td>2.001</td>
+<td>2.021</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">days</td>
+<td>0.0006</td>
+<td>1.83e-06</td>
+<td>347.040</td>
+<td>0.000</td>
+<td>0.001</td>
+<td>0.001</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">bathrooms</td>
+<td>-0.1017</td>
+<td>0.004</td>
+<td>-26.348</td>
+<td>0.000</td>
+<td>-0.109</td>
+<td>-0.094</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">bedrooms</td>
+<td>0.0966</td>
+<td>0.002</td>
+<td>47.085</td>
+<td>0.000</td>
+<td>0.093</td>
+<td>0.101</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">price</td>
+<td>-0.0005</td>
+<td>1.24e-05</td>
+<td>-38.120</td>
+<td>0.000</td>
+<td>-0.000</td>
+<td>-0.000</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">room_type_Private room</td>
+<td>-0.0935</td>
+<td>0.003</td>
+<td>-32.901</td>
+<td>0.000</td>
+<td>-0.099</td>
+<td>-0.088</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">room_type_Shared room</td>
+<td>-0.2240</td>
+<td>0.009</td>
+<td>-25.890</td>
+<td>0.000</td>
+<td>-0.241</td>
+<td>-0.207</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">instant_bookable_t</td>
+<td>0.5153</td>
+<td>0.003</td>
+<td>177.863</td>
+<td>0.000</td>
+<td>0.510</td>
+<td>0.521</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p>The Poisson regression model has been successfully estimated, and here’s a summary of the findings:</p>
+</section>
+<section id="model-coefficients-interpretation" class="level4">
+<h4 class="anchored" data-anchor-id="model-coefficients-interpretation">Model Coefficients Interpretation:</h4>
+<ul>
+<li><p><strong>Constant (Intercept):</strong> The base log-count of reviews when all other variables are zero is approximately 2.0112.</p></li>
+<li><p><strong>Days (0.0006):</strong> For each additional day a listing is on Airbnb, there is a small positive effect on the log-count of reviews, suggesting longer-listed properties tend to accumulate more reviews.</p></li>
+<li><p><strong>Bathrooms (-0.1017):</strong> Having more bathrooms is associated with a slight decrease in the number of reviews, which might indicate that properties with more bathrooms are not booked as frequently, possibly due to higher costs.</p></li>
+<li><p><strong>Bedrooms (0.0966):</strong> More bedrooms positively influence the number of reviews, consistent with the idea that larger properties can accommodate more guests and thus receive more reviews.</p></li>
+<li><p><strong>Price (-0.0005):</strong> Higher prices are associated with fewer reviews, indicating that more expensive listings might be booked less frequently.</p></li>
+<li><p><strong>Room Type (Private and Shared):</strong> Listings that are private rooms have fewer reviews compared to entire homes/apartments, and shared rooms have even fewer reviews than private rooms.</p></li>
+<li><p><strong>Instant Bookable (0.5153):</strong> Listings that are instantly bookable receive significantly more reviews, suggesting that convenience boosts bookings.</p></li>
+</ul>
+</section>
+<section id="model-fit-and-diagnostics" class="level4">
+<h4 class="anchored" data-anchor-id="model-fit-and-diagnostics">Model Fit and Diagnostics:</h4>
+<ul>
+<li><p>The model uses the log link function, suitable for count data in a Poisson model.</p></li>
+<li><p>Pseudo R-squared (Comparative Fit Index): 0.9673 suggests a good fit of the model to the data.</p></li>
+<li><p>Deviance and Pearson chi2: These statistics indicate the model’s goodness of fit, showing the deviation of the observed from the expected frequencies.</p></li>
+</ul>
+</section>
+</section>
+<section id="step-4-model-estimation" class="level3">
+<h3 class="anchored" data-anchor-id="step-4-model-estimation">Step 4: Model Estimation</h3>
+<section id="check-for-overdispersion" class="level4">
+<h4 class="anchored" data-anchor-id="check-for-overdispersion">Check for Overdispersion</h4>
+<p>The ratio of the Pearson chi2 statistic to the degrees of freedom should be checked to see if a <strong>Negative Binomial model</strong> is more appropriate due to overdispersion.</p>
+<div id="b58b8d20" class="cell" data-execution_count="20">
+<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Calculating overdispersion</span></span>
+<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a>chi_squared <span class="op">=</span> poisson_model.pearson_chi2</span>
+<span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a>degrees_of_freedom <span class="op">=</span> poisson_model.df_resid</span>
+<span id="cb31-4"><a href="#cb31-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-5"><a href="#cb31-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Overdispersion factor</span></span>
+<span id="cb31-6"><a href="#cb31-6" aria-hidden="true" tabindex="-1"></a>overdispersion_factor <span class="op">=</span> chi_squared <span class="op">/</span> degrees_of_freedom</span>
+<span id="cb31-7"><a href="#cb31-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-8"><a href="#cb31-8" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">'Overdispersion_factor of Poisson regression model is '</span>,overdispersion_factor)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Overdispersion_factor of Poisson regression model is  43.47338957827485</code></pre>
+</div>
+</div>
+<p>The calculated overdispersion factor for our Poisson regression model is approximately 43.47. This value is substantially greater than 1, <strong>indicating significant overdispersion in the data.</strong></p>
+<p><strong>Implications:</strong></p>
+<p>Overdispersion occurs when the variance of the count data is greater than the mean (a key assumption of the Poisson distribution). This discrepancy can lead to underestimated standard errors and subsequently, to inflated test statistics and narrower confidence intervals, potentially leading to erroneous conclusions.</p>
+<p>Given the presence of overdispersion, it may be more appropriate to use a <strong>Negative Binomial regression model</strong>, which can handle variability exceeding that assumed under the Poisson distribution.</p>
+</section>
+<section id="negative-binomial-model" class="level4">
+<h4 class="anchored" data-anchor-id="negative-binomial-model">Negative Binomial model</h4>
+<div id="d0cff799" class="cell" data-execution_count="21">
+<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> statsmodels.discrete.discrete_model <span class="im">import</span> NegativeBinomial</span>
+<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.preprocessing <span class="im">import</span> StandardScaler</span>
+<span id="cb33-3"><a href="#cb33-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb33-4"><a href="#cb33-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Instantiate the scaler</span></span>
+<span id="cb33-5"><a href="#cb33-5" aria-hidden="true" tabindex="-1"></a>scaler <span class="op">=</span> StandardScaler()</span>
+<span id="cb33-6"><a href="#cb33-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb33-7"><a href="#cb33-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Select numeric columns for scaling (excluding the dependent variable and one-hot encoded variables)</span></span>
+<span id="cb33-8"><a href="#cb33-8" aria-hidden="true" tabindex="-1"></a>numeric_columns <span class="op">=</span> [<span class="st">'days'</span>, <span class="st">'bathrooms'</span>, <span class="st">'bedrooms'</span>, <span class="st">'price'</span>]</span>
+<span id="cb33-9"><a href="#cb33-9" aria-hidden="true" tabindex="-1"></a>scaled_data <span class="op">=</span> scaler.fit_transform(airbnb_model_data[numeric_columns])</span>
+<span id="cb33-10"><a href="#cb33-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb33-11"><a href="#cb33-11" aria-hidden="true" tabindex="-1"></a><span class="co"># Create a DataFrame from the scaled data</span></span>
+<span id="cb33-12"><a href="#cb33-12" aria-hidden="true" tabindex="-1"></a>scaled_df <span class="op">=</span> pd.DataFrame(scaled_data, columns<span class="op">=</span>numeric_columns, index<span class="op">=</span>airbnb_model_data.index)</span>
+<span id="cb33-13"><a href="#cb33-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb33-14"><a href="#cb33-14" aria-hidden="true" tabindex="-1"></a><span class="co"># Combine scaled data with the rest of the model data (excluding the original unscaled columns)</span></span>
+<span id="cb33-15"><a href="#cb33-15" aria-hidden="true" tabindex="-1"></a>airbnb_scaled_model_data <span class="op">=</span> pd.concat([airbnb_model_data.drop(numeric_columns, axis<span class="op">=</span><span class="dv">1</span>), scaled_df], axis<span class="op">=</span><span class="dv">1</span>)</span>
+<span id="cb33-16"><a href="#cb33-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb33-17"><a href="#cb33-17" aria-hidden="true" tabindex="-1"></a><span class="co"># Re-prepare the X and y for the model</span></span>
+<span id="cb33-18"><a href="#cb33-18" aria-hidden="true" tabindex="-1"></a>X_scaled <span class="op">=</span> airbnb_scaled_model_data.drop(<span class="st">'number_of_reviews'</span>, axis<span class="op">=</span><span class="dv">1</span>)</span>
+<span id="cb33-19"><a href="#cb33-19" aria-hidden="true" tabindex="-1"></a>y_scaled <span class="op">=</span> airbnb_scaled_model_data[<span class="st">'number_of_reviews'</span>]</span>
+<span id="cb33-20"><a href="#cb33-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb33-21"><a href="#cb33-21" aria-hidden="true" tabindex="-1"></a><span class="co"># Add a constant to the model (intercept)</span></span>
+<span id="cb33-22"><a href="#cb33-22" aria-hidden="true" tabindex="-1"></a>X_scaled <span class="op">=</span> sm.add_constant(X_scaled)</span>
+<span id="cb33-23"><a href="#cb33-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb33-24"><a href="#cb33-24" aria-hidden="true" tabindex="-1"></a><span class="co"># Try fitting the Negative Binomial model again with scaled data</span></span>
+<span id="cb33-25"><a href="#cb33-25" aria-hidden="true" tabindex="-1"></a>nb_model_scaled <span class="op">=</span> NegativeBinomial(y_scaled, X_scaled).fit()</span>
+<span id="cb33-26"><a href="#cb33-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb33-27"><a href="#cb33-27" aria-hidden="true" tabindex="-1"></a><span class="co"># Display the model summary</span></span>
+<span id="cb33-28"><a href="#cb33-28" aria-hidden="true" tabindex="-1"></a>nb_model_scaled.summary()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Optimization terminated successfully.
+         Current function value: 3.437230
+         Iterations: 28
+         Function evaluations: 29
+         Gradient evaluations: 29</code></pre>
+</div>
+<div class="cell-output cell-output-display" data-execution_count="402">
+<table class="simpletable table table-sm table-striped small" data-quarto-postprocess="true">
+<caption>NegativeBinomial Regression Results</caption>
+<tbody>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">Dep. Variable:</td>
+<td>number_of_reviews</td>
+<td data-quarto-table-cell-role="th">No. Observations:</td>
+<td>40593</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">Model:</td>
+<td>NegativeBinomial</td>
+<td data-quarto-table-cell-role="th">Df Residuals:</td>
+<td>40585</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">Method:</td>
+<td>MLE</td>
+<td data-quarto-table-cell-role="th">Df Model:</td>
+<td>7</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">Date:</td>
+<td>Wed, 01 May 2024</td>
+<td data-quarto-table-cell-role="th">Pseudo R-squ.:</td>
+<td>0.01133</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">Time:</td>
+<td>06:36:02</td>
+<td data-quarto-table-cell-role="th">Log-Likelihood:</td>
+<td>-1.3953e+05</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">converged:</td>
+<td>True</td>
+<td data-quarto-table-cell-role="th">LL-Null:</td>
+<td>-1.4113e+05</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">Covariance Type:</td>
+<td>nonrobust</td>
+<td data-quarto-table-cell-role="th">LLR p-value:</td>
+<td>0.000</td>
+</tr>
+</tbody>
+</table>
+<table class="simpletable table table-sm table-striped small" data-quarto-postprocess="true">
+<tbody>
+<tr class="odd">
+<td></td>
+<td data-quarto-table-cell-role="th">coef</td>
+<td data-quarto-table-cell-role="th">std err</td>
+<td data-quarto-table-cell-role="th">z</td>
+<td data-quarto-table-cell-role="th">P&gt;|z|</td>
+<td data-quarto-table-cell-role="th">[0.025</td>
+<td data-quarto-table-cell-role="th">0.975]</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">const</td>
+<td>2.6279</td>
+<td>0.012</td>
+<td>213.190</td>
+<td>0.000</td>
+<td>2.604</td>
+<td>2.652</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">room_type_Private room</td>
+<td>-0.1245</td>
+<td>0.017</td>
+<td>-7.265</td>
+<td>0.000</td>
+<td>-0.158</td>
+<td>-0.091</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">room_type_Shared room</td>
+<td>-0.2346</td>
+<td>0.049</td>
+<td>-4.813</td>
+<td>0.000</td>
+<td>-0.330</td>
+<td>-0.139</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">instant_bookable_t</td>
+<td>0.4977</td>
+<td>0.021</td>
+<td>23.979</td>
+<td>0.000</td>
+<td>0.457</td>
+<td>0.538</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">days</td>
+<td>0.4489</td>
+<td>0.009</td>
+<td>51.265</td>
+<td>0.000</td>
+<td>0.432</td>
+<td>0.466</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">bathrooms</td>
+<td>-0.0289</td>
+<td>0.009</td>
+<td>-3.372</td>
+<td>0.001</td>
+<td>-0.046</td>
+<td>-0.012</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">bedrooms</td>
+<td>0.0653</td>
+<td>0.009</td>
+<td>7.203</td>
+<td>0.000</td>
+<td>0.048</td>
+<td>0.083</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">price</td>
+<td>-0.0560</td>
+<td>0.006</td>
+<td>-8.843</td>
+<td>0.000</td>
+<td>-0.068</td>
+<td>-0.044</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">alpha</td>
+<td>2.6011</td>
+<td>0.019</td>
+<td>139.327</td>
+<td>0.000</td>
+<td>2.565</td>
+<td>2.638</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p>The Negative Binomial regression model with scaled data has successfully converged, and here are the results:</p>
+</section>
+<section id="model-coefficients-interpretation-1" class="level4">
+<h4 class="anchored" data-anchor-id="model-coefficients-interpretation-1">Model Coefficients Interpretation:</h4>
+<ul>
+<li><p><strong>Constant (Intercept)</strong>: The base log-count of reviews when all predictors are at their mean values is approximately 2.6279.</p></li>
+<li><p><strong>Days (0.4489)</strong>: The scaled coefficient suggests a strong positive impact of the number of days listed on the number of reviews, indicating that older listings tend to have more reviews.</p></li>
+<li><p><strong>Bathrooms (-0.0289)</strong>: More bathrooms in a listing slightly decrease the expected count of reviews, potentially due to higher costs or specific types of properties.</p></li>
+<li><p><strong>Bedrooms (0.0653)</strong>: More bedrooms slightly increase the number of reviews, consistent with the capacity to host more guests.</p></li>
+<li><p><strong>Price (-0.0560)</strong>: Higher prices reduce the expected count of reviews, implying that more expensive listings may be booked less frequently.</p></li>
+<li><p><strong>Room Type (Private and Shared)</strong>: Both private and shared rooms receive fewer reviews compared to entire homes/apartments, with shared rooms experiencing a larger decrease.</p></li>
+<li><p><strong>Instant Bookable (0.4977)</strong>: Listings that are instantly bookable have significantly more reviews, reinforcing the value of convenience.</p></li>
+<li><p><strong>Alpha (2.6011)</strong>: The dispersion parameter remains high, <strong>indicating appropriate use of the Negative Binomial model due to overdispersion in the data.</strong></p></li>
+</ul>
+</section>
+<section id="diagnostic-checks" class="level4">
+<h4 class="anchored" data-anchor-id="diagnostic-checks">Diagnostic Checks:</h4>
+<p>Further diagnostic checks should be performed to ensure the model fits well and the assumptions hold.</p>
+<div id="201ce389" class="cell" data-execution_count="22">
+<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Model Diagnostics for the Negative Binomial Regression Model</span></span>
+<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> statsmodels.graphics.gofplots <span class="im">import</span> qqplot</span>
+<span id="cb35-3"><a href="#cb35-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb35-4"><a href="#cb35-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Plotting the residuals</span></span>
+<span id="cb35-5"><a href="#cb35-5" aria-hidden="true" tabindex="-1"></a>residuals <span class="op">=</span> nb_model_scaled.resid_response</span>
+<span id="cb35-6"><a href="#cb35-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb35-7"><a href="#cb35-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Creating diagnostic plots</span></span>
+<span id="cb35-8"><a href="#cb35-8" aria-hidden="true" tabindex="-1"></a>fig, ax <span class="op">=</span> plt.subplots(<span class="dv">1</span>, <span class="dv">2</span>, figsize<span class="op">=</span>(<span class="dv">6</span>, <span class="dv">8</span>))</span>
+<span id="cb35-9"><a href="#cb35-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb35-10"><a href="#cb35-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Q-Q plot for residuals to check normality</span></span>
+<span id="cb35-11"><a href="#cb35-11" aria-hidden="true" tabindex="-1"></a>qqplot(residuals, line<span class="op">=</span><span class="st">'45'</span>, ax<span class="op">=</span>ax[<span class="dv">0</span>])</span>
+<span id="cb35-12"><a href="#cb35-12" aria-hidden="true" tabindex="-1"></a>ax[<span class="dv">0</span>].set_title(<span class="st">'Q-Q Plot of Residuals'</span>)</span>
+<span id="cb35-13"><a href="#cb35-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb35-14"><a href="#cb35-14" aria-hidden="true" tabindex="-1"></a><span class="co"># Residuals plot to check homoscedasticity and outliers</span></span>
+<span id="cb35-15"><a href="#cb35-15" aria-hidden="true" tabindex="-1"></a>sns.histplot(residuals, bins<span class="op">=</span><span class="dv">50</span>, kde<span class="op">=</span><span class="va">True</span>, ax<span class="op">=</span>ax[<span class="dv">1</span>])</span>
+<span id="cb35-16"><a href="#cb35-16" aria-hidden="true" tabindex="-1"></a>ax[<span class="dv">1</span>].set_title(<span class="st">'Histogram of Residuals'</span>)</span>
+<span id="cb35-17"><a href="#cb35-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb35-18"><a href="#cb35-18" aria-hidden="true" tabindex="-1"></a>plt.show()</span>
+<span id="cb35-19"><a href="#cb35-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb35-20"><a href="#cb35-20" aria-hidden="true" tabindex="-1"></a><span class="co"># Checking for patterns in residuals</span></span>
+<span id="cb35-21"><a href="#cb35-21" aria-hidden="true" tabindex="-1"></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">8</span>, <span class="dv">6</span>))</span>
+<span id="cb35-22"><a href="#cb35-22" aria-hidden="true" tabindex="-1"></a>plt.scatter(y_scaled, residuals)</span>
+<span id="cb35-23"><a href="#cb35-23" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">'Residuals vs Fitted Values'</span>)</span>
+<span id="cb35-24"><a href="#cb35-24" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">'Fitted Values'</span>)</span>
+<span id="cb35-25"><a href="#cb35-25" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">'Residuals'</span>)</span>
+<span id="cb35-26"><a href="#cb35-26" aria-hidden="true" tabindex="-1"></a>plt.axhline(y<span class="op">=</span><span class="dv">0</span>, color<span class="op">=</span><span class="st">'red'</span>, linestyle<span class="op">=</span><span class="st">'--'</span>)</span>
+<span id="cb35-27"><a href="#cb35-27" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="hw2_questions_files/figure-html/cell-23-output-1.png" width="547" height="679" class="figure-img"></p>
+</figure>
+</div>
+</div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="hw2_questions_files/figure-html/cell-23-output-2.png" width="688" height="531" class="figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+<p><strong>Diagnostic Checks Analysis:</strong></p>
+<p>Here’s an overview of the diagnostic checks for the Negative Binomial regression model:</p>
+<ol type="1">
+<li>Q-Q Plot of Residuals:</li>
+</ol>
+<ul>
+<li>This plot helps assess the normality of residuals. Ideally, the residuals should lie along the 45-degree line if they are normally distributed. Deviations from this line suggest departures from normality, which could indicate issues with model fit or assumptions.</li>
+</ul>
+<ol start="2" type="1">
+<li>Histogram of Residuals:</li>
+</ol>
+<ul>
+<li>The histogram provides a visual representation of the distribution of residuals. It appears the residuals are not perfectly normally distributed, showing some skewness. This is not unusual for count data models, but it does suggest checking whether the model assumptions are adequately met.</li>
+</ul>
+<ol start="3" type="1">
+<li>Residuals vs.&nbsp;Fitted Values:</li>
+</ol>
+<ul>
+<li>Ideally, there should be no clear pattern or systematic structure in this plot. The presence of patterns or trends could indicate issues with model fit, such as non-linearity or omitted variables. The plot here does not show a clear pattern, which generally suggests that the model does not suffer from obvious issues like heteroscedasticity or non-linear relationships that have not been accounted for.</li>
+</ul>
+<p><strong>Conclusion:</strong></p>
+<p>The diagnostics suggest that while the residuals do not follow a perfect normal distribution (which is common in count data models), there aren’t clear signs of heteroscedasticity or problematic patterns between the residuals and fitted values. However, <strong>the slight deviation in the Q-Q plot and the distribution of residuals could indicate that further model adjustments or transformations might be beneficial</strong>, especially to better handle any underlying skewness or overdispersion not fully accounted for.</p>
+</section>
+</section>
+<section id="step-5-compared-with-two-different-models" class="level3">
+<h3 class="anchored" data-anchor-id="step-5-compared-with-two-different-models">Step 5: Compared with two different models</h3>
+<div id="36ba91ac" class="cell" data-execution_count="23">
+<div class="sourceCode cell-code" id="cb36"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Extracting AIC values for comparison</span></span>
+<span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a>poisson_aic <span class="op">=</span> poisson_model.aic</span>
+<span id="cb36-3"><a href="#cb36-3" aria-hidden="true" tabindex="-1"></a>nb_aic <span class="op">=</span> nb_model_scaled.aic</span>
+<span id="cb36-4"><a href="#cb36-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-5"><a href="#cb36-5" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">'AIC of Poisson Model is'</span>,poisson_aic) </span>
+<span id="cb36-6"><a href="#cb36-6" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">'AIC of Negative Binomial Model is'</span>,nb_aic)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>AIC of Poisson Model is 1324704.7950103276
+AIC of Negative Binomial Model is 279072.9591164948</code></pre>
+</div>
+</div>
+<section id="model-coefficients" class="level4">
+<h4 class="anchored" data-anchor-id="model-coefficients">Model Coefficients:</h4>
+<p>Both models show <strong>similar directions in the influence of predictors</strong>:</p>
+<p><code>Days</code>, <code>bedrooms</code>, and <code>instant bookable</code> status <strong>positively affect the number of reviews</strong>. <code>Price</code> and higher <code>bathrooms</code> <strong>negatively affect reviews</strong>, more so in the Poisson model.</p>
+<p><strong>Room type</strong> variations show that <strong>private</strong> and <strong>shared</strong> rooms generally receive <strong>fewer reviews</strong> compared to <strong>entire homes/apartments</strong>.</p>
+</section>
+<section id="goodness-of-fit-indicators" class="level4">
+<h4 class="anchored" data-anchor-id="goodness-of-fit-indicators">Goodness-of-Fit Indicators:</h4>
+<p>Poisson Model: Generally showed signs of underfitting due to overdispersion, indicated by high deviance.</p>
+<p>Negative Binomial Model: Improved fit, accommodating overdispersion with the inclusion of the dispersion parameter (alpha).</p>
+</section>
+<section id="predictive-performance" class="level4">
+<h4 class="anchored" data-anchor-id="predictive-performance">Predictive Performance:</h4>
+<p>A formal comparison using cross-validation or split-sample testing would be ideal to assess this aspect, but from the fitting process:</p>
+<p>Negative Binomial Model: Likely provides more reliable predictions due to better handling of data variability.</p>
+</section>
+<section id="aic-values" class="level4">
+<h4 class="anchored" data-anchor-id="aic-values">AIC Values:</h4>
+<p>The Negative Binomial model show a lower AIC when fitting count data with overdispersion, indicating a better balance of model fit and complexity.</p>
+</section>
+<section id="conclusion" class="level4">
+<h4 class="anchored" data-anchor-id="conclusion">Conclusion:</h4>
+<p>Poisson regression model:</p>
+<p>The Poisson regression model reveals several important factors influencing the number of reviews an Airbnb listing receives. The duration a listing has been posted and whether it is instantly bookable significantly increase reviews, <strong>reflecting longer exposure and user convenience. In contrast, higher prices and more bathrooms decrease the number of reviews, which may be related to the target market and affordability.</strong></p>
+<p>Negative Binomial model:</p>
+<p>The Negative Binomial model provides a <strong>robust framework for understanding factors that influence the number of reviews an Airbnb listing receives.</strong> It accounts for overdispersion in the data, making it a more reliable choice than the Poisson model for this dataset. <strong>The results indicate that practical features such as duration of listing, type of room, and instant bookability significantly affect guest interaction in terms of reviews. Listings that are more affordable, offer convenience, and cater to larger groups tend to receive more reviews.</strong></p>
+</section>
+<section id="implications" class="level4">
+<h4 class="anchored" data-anchor-id="implications">Implications:</h4>
+<p>Poisson regression model</p>
+<p>These findings can inform Airbnb hosts about optimizing their listings for more reviews and potentially more bookings. For instance, setting competitive prices and offering instant booking options could enhance a listing’s attractiveness and activity. Hosts with properties having multiple bathrooms may need to consider their pricing strategy or marketing approach, particularly if targeting larger groups or longer stays.</p>
+<p>Negative Binomial model</p>
+<p>This model can guide Airbnb hosts in optimizing their properties to attract more reviews, which can enhance visibility and booking probabilities on the platform. Showing similar implications with the Poisson regression model.</p>
+
+
+</section>
+</section>
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+    const config = {
+      allowHTML: true,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start',
+    };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    const typesetMath = (el) => {
+      if (window.MathJax) {
+        // MathJax Typeset
+        window.MathJax.typeset([el]);
+      } else if (window.katex) {
+        // KaTeX Render
+        var mathElements = el.getElementsByClassName("math");
+        var macros = [];
+        for (var i = 0; i < mathElements.length; i++) {
+          var texText = mathElements[i].firstChild;
+          if (mathElements[i].tagName == "SPAN") {
+            window.katex.render(texText.data, mathElements[i], {
+              displayMode: mathElements[i].classList.contains('display'),
+              throwOnError: false,
+              macros: macros,
+              fleqn: false
+            });
+          }
+        }
+      }
+    }
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        typesetMath(container);
+        return container.innerHTML
+      } else {
+        typesetMath(note);
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      typesetMath(note);
+      return note.innerHTML;
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            div.style.left = 0;
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>
