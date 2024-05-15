@@ -1,0 +1,1847 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.4.506">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Thomas Chiang">
+<meta name="dcterms.date" content="2024-05-15">
+
+<title>Thomas’s website - Homework3 - Multinomial Logit Examples</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg==" crossorigin="anonymous"></script><script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<script src="../../site_libs/quarto-html/quarto.js"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js" integrity="sha512-c3Nl8+7g4LMSTdrm621y7kf9v3SDPnhxLNhcjFJbKECVnmZHTdo+IRO05sNLTH/D3vA6u1X32ehoLC7WFVdheg==" crossorigin="anonymous"></script>
+
+<script type="application/javascript">define('jquery', [],function() {return window.jQuery;})</script>
+
+  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<link rel="stylesheet" href="../../styles.css">
+</head>
+
+<body class="nav-fixed">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a class="navbar-brand" href="../../index.html">
+    <span class="navbar-title">Thomas’s website</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../../index.html"> 
+<span class="menu-text">About</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../resume.html"> 
+<span class="menu-text">Resume</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../projects.html"> 
+<span class="menu-text">Projects</span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+          <div class="quarto-navbar-tools">
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#estimating-yogurt-preferences" id="toc-estimating-yogurt-preferences" class="nav-link active" data-scroll-target="#estimating-yogurt-preferences">1. Estimating Yogurt Preferences</a>
+  <ul class="collapse">
+  <li><a href="#likelihood-for-the-multi-nomial-logit-mnl-model" id="toc-likelihood-for-the-multi-nomial-logit-mnl-model" class="nav-link" data-scroll-target="#likelihood-for-the-multi-nomial-logit-mnl-model">Likelihood for the Multi-nomial Logit (MNL) Model</a></li>
+  <li><a href="#yogurt-dataset" id="toc-yogurt-dataset" class="nav-link" data-scroll-target="#yogurt-dataset">Yogurt Dataset</a></li>
+  <li><a href="#estimation" id="toc-estimation" class="nav-link" data-scroll-target="#estimation">Estimation</a></li>
+  <li><a href="#discussion" id="toc-discussion" class="nav-link" data-scroll-target="#discussion">Discussion</a></li>
+  </ul></li>
+  <li><a href="#estimating-minivan-preferences" id="toc-estimating-minivan-preferences" class="nav-link" data-scroll-target="#estimating-minivan-preferences">2. Estimating Minivan Preferences</a>
+  <ul class="collapse">
+  <li><a href="#data" id="toc-data" class="nav-link" data-scroll-target="#data">Data</a></li>
+  <li><a href="#model" id="toc-model" class="nav-link" data-scroll-target="#model">Model</a></li>
+  <li><a href="#results" id="toc-results" class="nav-link" data-scroll-target="#results">Results</a></li>
+  </ul></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Homework3 - Multinomial Logit Examples</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Thomas Chiang </p>
+          </div>
+  </div>
+    
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">May 15, 2024</p>
+    </div>
+  </div>
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<p>This assignment uses uses the MNL model to analyze (1) yogurt purchase data made by consumers at a retail location, and (2) conjoint data about consumer preferences for minivans.</p>
+<section id="estimating-yogurt-preferences" class="level2">
+<h2 class="anchored" data-anchor-id="estimating-yogurt-preferences">1. Estimating Yogurt Preferences</h2>
+<section id="likelihood-for-the-multi-nomial-logit-mnl-model" class="level3">
+<h3 class="anchored" data-anchor-id="likelihood-for-the-multi-nomial-logit-mnl-model">Likelihood for the Multi-nomial Logit (MNL) Model</h3>
+<p>Suppose we have <span class="math inline">\(i=1,\ldots,n\)</span> consumers who each select exactly one product <span class="math inline">\(j\)</span> from a set of <span class="math inline">\(J\)</span> products. The outcome variable is the identity of the product chosen <span class="math inline">\(y_i \in \{1, \ldots, J\}\)</span> or equivalently a vector of <span class="math inline">\(J-1\)</span> zeros and <span class="math inline">\(1\)</span> one, where the <span class="math inline">\(1\)</span> indicates the selected product. For example, if the third product was chosen out of 4 products, then either <span class="math inline">\(y=3\)</span> or <span class="math inline">\(y=(0,0,1,0)\)</span> depending on how we want to represent it. Suppose also that we have a vector of data on each product <span class="math inline">\(x_j\)</span> (eg, size, price, etc.).</p>
+<p>We model the consumer’s decision as the selection of the product that provides the most utility, and we’ll specify the utility function as a linear function of the product characteristics:</p>
+<p><span class="math display">\[ U_{ij} = x_j'\beta + \epsilon_{ij} \]</span></p>
+<p>where <span class="math inline">\(\epsilon_{ij}\)</span> is an i.i.d. extreme value error term.</p>
+<p>The choice of the i.i.d. extreme value error term leads to a closed-form expression for the probability that consumer <span class="math inline">\(i\)</span> chooses product <span class="math inline">\(j\)</span>:</p>
+<p><span class="math display">\[ \mathbb{P}_i(j) = \frac{e^{x_j'\beta}}{\sum_{k=1}^Je^{x_k'\beta}} \]</span></p>
+<p>For example, if there are 4 products, the probability that consumer <span class="math inline">\(i\)</span> chooses product 3 is:</p>
+<p><span class="math display">\[ \mathbb{P}_i(3) = \frac{e^{x_3'\beta}}{e^{x_1'\beta} + e^{x_2'\beta} + e^{x_3'\beta} + e^{x_4'\beta}} \]</span></p>
+<p>A clever way to write the individual likelihood function for consumer <span class="math inline">\(i\)</span> is the product of the <span class="math inline">\(J\)</span> probabilities, each raised to the power of an indicator variable (<span class="math inline">\(\delta_{ij}\)</span>) that indicates the chosen product:</p>
+<p><span class="math display">\[ L_i(\beta) = \prod_{j=1}^J \mathbb{P}_i(j)^{\delta_{ij}} = \mathbb{P}_i(1)^{\delta_{i1}} \times \ldots \times \mathbb{P}_i(J)^{\delta_{iJ}}\]</span></p>
+<p>Notice that if the consumer selected product <span class="math inline">\(j=3\)</span>, then <span class="math inline">\(\delta_{i3}=1\)</span> while <span class="math inline">\(\delta_{i1}=\delta_{i2}=\delta_{i4}=0\)</span> and the likelihood is:</p>
+<p><span class="math display">\[ L_i(\beta) = \mathbb{P}_i(1)^0 \times \mathbb{P}_i(2)^0 \times \mathbb{P}_i(3)^1 \times \mathbb{P}_i(4)^0 = \mathbb{P}_i(3) = \frac{e^{x_3'\beta}}{\sum_{k=1}^Je^{x_k'\beta}} \]</span></p>
+<p>The joint likelihood (across all consumers) is the product of the <span class="math inline">\(n\)</span> individual likelihoods:</p>
+<p><span class="math display">\[ L_n(\beta) = \prod_{i=1}^n L_i(\beta) = \prod_{i=1}^n \prod_{j=1}^J \mathbb{P}_i(j)^{\delta_{ij}} \]</span></p>
+<p>And the joint log-likelihood function is:</p>
+<p><span class="math display">\[ \ell_n(\beta) = \sum_{i=1}^n \sum_{j=1}^J \delta_{ij} \log(\mathbb{P}_i(j)) \]</span></p>
+</section>
+<section id="yogurt-dataset" class="level3">
+<h3 class="anchored" data-anchor-id="yogurt-dataset">Yogurt Dataset</h3>
+<p>We will use the <code>yogurt_data</code> dataset, which provides anonymized consumer identifiers (<code>id</code>), a vector indicating the chosen product (<code>y1</code>:<code>y4</code>), a vector indicating if any products were “featured” in the store as a form of advertising (<code>f1</code>:<code>f4</code>), and the products’ prices (<code>p1</code>:<code>p4</code>). For example, consumer 1 purchased yogurt 4 at a price of 0.079/oz and none of the yogurts were featured/advertised at the time of consumer 1’s purchase. Consumers 2 through 7 each bought yogurt 2, etc.</p>
+<p><em>todo: import the data, maybe show the first few rows, and describe the data a bit.</em></p>
+<div id="3c33807e" class="cell" data-execution_count="1">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>yogurt_data <span class="op">=</span> pd.read_csv(<span class="st">'/home/jovyan/code/MGTA 495/QUARTO_WEBSITE/data/yogurt_data.csv'</span>)</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>yogurt_data.head()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="1">
+<div>
+
+
+<table class="dataframe table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">id</th>
+<th data-quarto-table-cell-role="th">y1</th>
+<th data-quarto-table-cell-role="th">y2</th>
+<th data-quarto-table-cell-role="th">y3</th>
+<th data-quarto-table-cell-role="th">y4</th>
+<th data-quarto-table-cell-role="th">f1</th>
+<th data-quarto-table-cell-role="th">f2</th>
+<th data-quarto-table-cell-role="th">f3</th>
+<th data-quarto-table-cell-role="th">f4</th>
+<th data-quarto-table-cell-role="th">p1</th>
+<th data-quarto-table-cell-role="th">p2</th>
+<th data-quarto-table-cell-role="th">p3</th>
+<th data-quarto-table-cell-role="th">p4</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">0</td>
+<td>1</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>1</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0.108</td>
+<td>0.081</td>
+<td>0.061</td>
+<td>0.079</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">1</td>
+<td>2</td>
+<td>0</td>
+<td>1</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0.108</td>
+<td>0.098</td>
+<td>0.064</td>
+<td>0.075</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">2</td>
+<td>3</td>
+<td>0</td>
+<td>1</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0.108</td>
+<td>0.098</td>
+<td>0.061</td>
+<td>0.086</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">3</td>
+<td>4</td>
+<td>0</td>
+<td>1</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0.108</td>
+<td>0.098</td>
+<td>0.061</td>
+<td>0.086</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">4</td>
+<td>5</td>
+<td>0</td>
+<td>1</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0.125</td>
+<td>0.098</td>
+<td>0.049</td>
+<td>0.079</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+<p>The dataset yogurt_data contains the following columns:</p>
+<ul>
+<li><p><code>id</code>: Consumer identifier.</p></li>
+<li><p><code>y1, y2, y3, y4</code>: Binary indicators for the yogurt product chosen by the consumer. For instance, y4 = 1 indicates the consumer chose product 4.</p></li>
+<li><p><code>f1, f2, f3, f4</code>: Binary indicators for whether each yogurt product was featured in the store. A 1 indicates the product was featured, and 0 means it was not.</p></li>
+<li><p><code>p1, p2, p3, p4</code>: Prices per ounce of each of the four yogurt products.</p></li>
+</ul>
+<p>The dataset allows analysis of <strong>consumer choices influenced by product prices and marketing strategies.</strong></p>
+<p>Each row corresponds to a single purchase event by a consumer, describing which product was chosen, which products were advertised, and at what price each product was available.</p>
+<p>Let the vector of product features include brand dummy variables for yogurts 1-3 (we’ll omit a dummy for product 4 to avoid multi-collinearity), a dummy variable to indicate if a yogurt was featured, and a continuous variable for the yogurts’ prices:</p>
+<p><span class="math display">\[ x_j' = [\mathbbm{1}(\text{Yogurt 1}), \mathbbm{1}(\text{Yogurt 2}), \mathbbm{1}(\text{Yogurt 3}), X_f, X_p] \]</span></p>
+<p>The “hard part” of the MNL likelihood function is organizing the data, as we need to keep track of 3 dimensions (consumer <span class="math inline">\(i\)</span>, covariate <span class="math inline">\(k\)</span>, and product <span class="math inline">\(j\)</span>) instead of the typical 2 dimensions for cross-sectional regression models (consumer <span class="math inline">\(i\)</span> and covariate <span class="math inline">\(k\)</span>).</p>
+<p>What we would like to do is reorganize the data from a “wide” shape with <span class="math inline">\(n\)</span> rows and multiple columns for each covariate, to a “long” shape with <span class="math inline">\(n \times J\)</span> rows and a single column for each covariate. As part of this re-organization, we’ll add binary variables to indicate the first 3 products; the variables for featured and price are included in the dataset and simply need to be “pivoted” or “melted” from wide to long.</p>
+<p>To reshape and prepare the data for the MNL model, we’ll perform the following steps:</p>
+<ol type="1">
+<li><p>Reshape the Data: Convert the dataset from its current wide format (where each row contains data for all four yogurts) to a long format (where each row corresponds to a single product for a single consumer). This means that for <strong>each consumer, there will be four rows in the dataset—one for each product.</strong></p></li>
+<li><p>Create Dummy Variables: Create binary dummy variables for the first three yogurt brands (Yogurt 1, Yogurt 2, and Yogurt 3). <strong>Yogurt 4 will be treated as the baseline category</strong>, so no dummy is needed for it.</p></li>
+<li><p>Reorganize Variables: Ensure that featured flags and prices are appropriately aligned with the reshaped data.</p></li>
+</ol>
+<div id="e430f8c5" class="cell" data-execution_count="2">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Reshape the data from wide to long format using melt instead</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>id_vars <span class="op">=</span> [<span class="st">'id'</span>]</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>value_vars <span class="op">=</span> [<span class="st">'y1'</span>, <span class="st">'y2'</span>, <span class="st">'y3'</span>, <span class="st">'y4'</span>, <span class="st">'f1'</span>, <span class="st">'f2'</span>, <span class="st">'f3'</span>, <span class="st">'f4'</span>, <span class="st">'p1'</span>, <span class="st">'p2'</span>, <span class="st">'p3'</span>, <span class="st">'p4'</span>]</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>yogurt_long <span class="op">=</span> yogurt_data.melt(id_vars<span class="op">=</span>id_vars, value_vars<span class="op">=</span>value_vars, var_name<span class="op">=</span><span class="st">'variable'</span>, value_name<span class="op">=</span><span class="st">'value'</span>)</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Split variable column to separate product indicators from type indicators (chosen, featured, price)</span></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>yogurt_long[<span class="st">'type'</span>] <span class="op">=</span> yogurt_long[<span class="st">'variable'</span>].<span class="bu">str</span>[<span class="dv">0</span>]  <span class="co"># 'y', 'f', or 'p'</span></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>yogurt_long[<span class="st">'product'</span>] <span class="op">=</span> yogurt_long[<span class="st">'variable'</span>].<span class="bu">str</span>[<span class="dv">1</span>].astype(<span class="bu">int</span>)  <span class="co"># product number</span></span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Pivot table to long format for MNL analysis</span></span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>yogurt_long <span class="op">=</span> yogurt_long.pivot_table(index<span class="op">=</span>[<span class="st">'id'</span>, <span class="st">'product'</span>], columns<span class="op">=</span><span class="st">'type'</span>, values<span class="op">=</span><span class="st">'value'</span>, aggfunc<span class="op">=</span><span class="st">'first'</span>).reset_index()</span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a><span class="co"># Create dummy variables for yogurt products</span></span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a>yogurt_long[<span class="st">'Yogurt1'</span>] <span class="op">=</span> (yogurt_long[<span class="st">'product'</span>] <span class="op">==</span> <span class="dv">1</span>).astype(<span class="bu">int</span>)</span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a>yogurt_long[<span class="st">'Yogurt2'</span>] <span class="op">=</span> (yogurt_long[<span class="st">'product'</span>] <span class="op">==</span> <span class="dv">2</span>).astype(<span class="bu">int</span>)</span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a>yogurt_long[<span class="st">'Yogurt3'</span>] <span class="op">=</span> (yogurt_long[<span class="st">'product'</span>] <span class="op">==</span> <span class="dv">3</span>).astype(<span class="bu">int</span>)</span>
+<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a><span class="co"># Rename columns for clarity</span></span>
+<span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a>yogurt_long.rename(columns<span class="op">=</span>{<span class="st">'y'</span>: <span class="st">'chosen'</span>, <span class="st">'f'</span>: <span class="st">'featured'</span>, <span class="st">'p'</span>: <span class="st">'price'</span>}, inplace<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb2-20"><a href="#cb2-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-21"><a href="#cb2-21" aria-hidden="true" tabindex="-1"></a>yogurt_long.head(<span class="dv">16</span>)  <span class="co"># Showing data for 4 products across the first few consumers</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="2">
+<div>
+
+
+<table class="dataframe table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th">type</th>
+<th data-quarto-table-cell-role="th">id</th>
+<th data-quarto-table-cell-role="th">product</th>
+<th data-quarto-table-cell-role="th">featured</th>
+<th data-quarto-table-cell-role="th">price</th>
+<th data-quarto-table-cell-role="th">chosen</th>
+<th data-quarto-table-cell-role="th">Yogurt1</th>
+<th data-quarto-table-cell-role="th">Yogurt2</th>
+<th data-quarto-table-cell-role="th">Yogurt3</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">0</td>
+<td>1</td>
+<td>1</td>
+<td>0.0</td>
+<td>0.108</td>
+<td>0.0</td>
+<td>1</td>
+<td>0</td>
+<td>0</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">1</td>
+<td>1</td>
+<td>2</td>
+<td>0.0</td>
+<td>0.081</td>
+<td>0.0</td>
+<td>0</td>
+<td>1</td>
+<td>0</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">2</td>
+<td>1</td>
+<td>3</td>
+<td>0.0</td>
+<td>0.061</td>
+<td>0.0</td>
+<td>0</td>
+<td>0</td>
+<td>1</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">3</td>
+<td>1</td>
+<td>4</td>
+<td>0.0</td>
+<td>0.079</td>
+<td>1.0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">4</td>
+<td>2</td>
+<td>1</td>
+<td>0.0</td>
+<td>0.108</td>
+<td>0.0</td>
+<td>1</td>
+<td>0</td>
+<td>0</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">5</td>
+<td>2</td>
+<td>2</td>
+<td>0.0</td>
+<td>0.098</td>
+<td>1.0</td>
+<td>0</td>
+<td>1</td>
+<td>0</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">6</td>
+<td>2</td>
+<td>3</td>
+<td>0.0</td>
+<td>0.064</td>
+<td>0.0</td>
+<td>0</td>
+<td>0</td>
+<td>1</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">7</td>
+<td>2</td>
+<td>4</td>
+<td>0.0</td>
+<td>0.075</td>
+<td>0.0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">8</td>
+<td>3</td>
+<td>1</td>
+<td>0.0</td>
+<td>0.108</td>
+<td>0.0</td>
+<td>1</td>
+<td>0</td>
+<td>0</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">9</td>
+<td>3</td>
+<td>2</td>
+<td>0.0</td>
+<td>0.098</td>
+<td>1.0</td>
+<td>0</td>
+<td>1</td>
+<td>0</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">10</td>
+<td>3</td>
+<td>3</td>
+<td>0.0</td>
+<td>0.061</td>
+<td>0.0</td>
+<td>0</td>
+<td>0</td>
+<td>1</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">11</td>
+<td>3</td>
+<td>4</td>
+<td>0.0</td>
+<td>0.086</td>
+<td>0.0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">12</td>
+<td>4</td>
+<td>1</td>
+<td>0.0</td>
+<td>0.108</td>
+<td>0.0</td>
+<td>1</td>
+<td>0</td>
+<td>0</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">13</td>
+<td>4</td>
+<td>2</td>
+<td>0.0</td>
+<td>0.098</td>
+<td>1.0</td>
+<td>0</td>
+<td>1</td>
+<td>0</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">14</td>
+<td>4</td>
+<td>3</td>
+<td>0.0</td>
+<td>0.061</td>
+<td>0.0</td>
+<td>0</td>
+<td>0</td>
+<td>1</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">15</td>
+<td>4</td>
+<td>4</td>
+<td>0.0</td>
+<td>0.086</td>
+<td>0.0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+<p>The dataset is now reshaped into a long format that is suitable for MNL model analysis. Here’s what the transformed data contains:</p>
+<ul>
+<li><p><code>id</code>: Consumer identifier.</p></li>
+<li><p><code>product</code>: Indicates the product number (1 through 4).</p></li>
+<li><p><code>featured</code>: Binary indicator if the yogurt was featured (1 if featured, 0 otherwise).</p></li>
+<li><p><code>price</code>: Price of the yogurt.</p></li>
+<li><p><code>chosen</code>: Binary indicator showing if the product was chosen (1 if chosen, 0 otherwise).</p></li>
+<li><p><code>Yogurt1, Yogurt2, Yogurt3</code>: Dummy variables for the first three products. These are used as covariates to avoid multicollinearity by omitting a dummy for product 4, which serves as the baseline category.</p></li>
+</ul>
+<p>With the data now in this format, each consumer has four rows, each corresponding to one of the four yogurt products. This structure <strong>allows us to easily apply the multinomial logit model</strong> to analyze consumer choices based on product features such as being featured and pricing, along with brand preferences signified by the dummy variables.</p>
+</section>
+<section id="estimation" class="level3">
+<h3 class="anchored" data-anchor-id="estimation">Estimation</h3>
+<p>To estimate the parameters of the multinomial logit (MNL) model, we need to implement the log-likelihood function based on the theoretical framework you’ve provided earlier. The log-likelihood function for the MNL model is given by:</p>
+<p><span class="math display">\[
+\ell(\beta) = \sum_{i=1}^{n} \sum_{j=1}^{J} \delta_{ij} \log(P_i(j))
+\]</span></p>
+<p>Where:</p>
+<ul>
+<li><p><span class="math inline">\(\delta_{ij}\)</span> is an indicator that consumer <span class="math inline">\(i\)</span> chose product <span class="math inline">\(j\)</span>, represented by the <code>chosen</code> column in our dataset.</p></li>
+<li><p><span class="math inline">\(P_i(j)\)</span> is the probability that consumer <span class="math inline">\(i\)</span> chooses product <span class="math inline">\(j\)</span>, which is modeled as:</p></li>
+</ul>
+<p><span class="math display">\[
+P_i(j) = \frac{e^{x_{ij}'\beta}}{\sum_{k=1}^{J} e^{x_{ik}'\beta}}
+\]</span></p>
+<p>Here, <span class="math inline">\(x_{ij}\)</span> represents the feature vector for product <span class="math inline">\(j\)</span> and consumer <span class="math inline">\(i\)</span>, and <span class="math inline">\(\beta\)</span> is the parameter vector we need to estimate.</p>
+<p>We’ll code the log-likelihood function which computes the sum of the log probabilities for all chosen products by all consumers, based on the parameters <span class="math inline">\(\beta\)</span>. Let’s first define the feature matrix <span class="math inline">\(x_{ij}\)</span> and then proceed to implement the function.</p>
+<div id="86e524ec" class="cell" data-execution_count="3">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Define the features matrix x</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Concatenate the dummy variables for yogurts 1-3, the featured dummy, and the price into a features matrix</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>features <span class="op">=</span> yogurt_long[[<span class="st">'Yogurt1'</span>, <span class="st">'Yogurt2'</span>, <span class="st">'Yogurt3'</span>, <span class="st">'featured'</span>, <span class="st">'price'</span>]].values</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>choices <span class="op">=</span> yogurt_long[<span class="st">'chosen'</span>].values</span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Define the log-likelihood function for the MNL model</span></span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> log_likelihood(beta, features, choices):</span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Calculate utility for each product for each consumer</span></span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>    utility <span class="op">=</span> np.dot(features, beta)</span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Reshape utility to separate each consumer's product utilities into rows</span></span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a>    utility <span class="op">=</span> utility.reshape(<span class="op">-</span><span class="dv">1</span>, <span class="dv">4</span>)  <span class="co"># Assuming 4 products</span></span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Compute the exponential of the utility values</span></span>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a>    exp_utility <span class="op">=</span> np.exp(utility)</span>
+<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Compute the sum of exponentials for each consumer (denominator of the probability)</span></span>
+<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a>    sum_exp_utility <span class="op">=</span> np.<span class="bu">sum</span>(exp_utility, axis<span class="op">=</span><span class="dv">1</span>)</span>
+<span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb3-20"><a href="#cb3-20" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Calculate the log probability of the chosen products</span></span>
+<span id="cb3-21"><a href="#cb3-21" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Select the utility of the chosen product by multiplying with the choices matrix reshaped to the utility shape</span></span>
+<span id="cb3-22"><a href="#cb3-22" aria-hidden="true" tabindex="-1"></a>    chosen_utility <span class="op">=</span> exp_utility <span class="op">*</span> choices.reshape(<span class="op">-</span><span class="dv">1</span>, <span class="dv">4</span>)</span>
+<span id="cb3-23"><a href="#cb3-23" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Sum chosen utilities across products to get a single value per consumer</span></span>
+<span id="cb3-24"><a href="#cb3-24" aria-hidden="true" tabindex="-1"></a>    chosen_utility <span class="op">=</span> np.<span class="bu">sum</span>(chosen_utility, axis<span class="op">=</span><span class="dv">1</span>)</span>
+<span id="cb3-25"><a href="#cb3-25" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb3-26"><a href="#cb3-26" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Calculate log probabilities</span></span>
+<span id="cb3-27"><a href="#cb3-27" aria-hidden="true" tabindex="-1"></a>    log_prob <span class="op">=</span> np.log(chosen_utility) <span class="op">-</span> np.log(sum_exp_utility)</span>
+<span id="cb3-28"><a href="#cb3-28" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb3-29"><a href="#cb3-29" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Sum log probabilities across all consumers to get the log likelihood</span></span>
+<span id="cb3-30"><a href="#cb3-30" aria-hidden="true" tabindex="-1"></a>    log_likelihood_value <span class="op">=</span> np.<span class="bu">sum</span>(log_prob)</span>
+<span id="cb3-31"><a href="#cb3-31" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> log_likelihood_value</span>
+<span id="cb3-32"><a href="#cb3-32" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-33"><a href="#cb3-33" aria-hidden="true" tabindex="-1"></a><span class="co"># Test the function with an initial beta of zeros</span></span>
+<span id="cb3-34"><a href="#cb3-34" aria-hidden="true" tabindex="-1"></a>initial_beta <span class="op">=</span> np.zeros(<span class="dv">5</span>)  <span class="co"># 5 parameters (3 dummies, 1 featured, 1 price)</span></span>
+<span id="cb3-35"><a href="#cb3-35" aria-hidden="true" tabindex="-1"></a>log_likelihood(initial_beta, features, choices)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="3">
+<pre><code>-3368.6952975213344</code></pre>
+</div>
+</div>
+<p>The log-likelihood function has been implemented and tested with an initial parameter vector <span class="math inline">\(\beta\)</span> of zeros. The computed log-likelihood value for these initial parameters is approximately <span class="math inline">\(-3368.70\)</span>.</p>
+<p>This value serves as a starting point. The goal in the MNL model fitting process would be to find the parameter values that maximize this log-likelihood function.</p>
+<p>To find the maximum likelihood estimates (MLEs) of the parameters for the multinomial logit model using the <code>optimize()</code> function from the <code>scipy.optimize</code> module, we can use the <code>minimize()</code> function, which is designed for minimization. Since we want to maximize the log-likelihood, we can minimize the negative of the log-likelihood function.</p>
+<p>Let’s proceed with this setup and use the <code>minimize()</code> function to optimize the parameters.</p>
+<div id="88d60ebc" class="cell" data-execution_count="4">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> scipy.optimize <span class="im">import</span> minimize</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Define the negative log-likelihood function since we are minimizing</span></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> negative_log_likelihood(beta, features, choices):</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="op">-</span>log_likelihood(beta, features, choices)</span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Set initial guess for the beta parameters</span></span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>initial_beta_guess <span class="op">=</span> np.zeros(<span class="dv">5</span>)  <span class="co"># 5 parameters: 3 product intercepts, 1 featured, 1 price</span></span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Perform the optimization using minimize from scipy.optimize</span></span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>result <span class="op">=</span> minimize(negative_log_likelihood, initial_beta_guess, args<span class="op">=</span>(features, choices), method<span class="op">=</span><span class="st">'BFGS'</span>)</span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a><span class="co"># Output the results</span></span>
+<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a>result</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="4">
+<pre><code>  message: Desired error not necessarily achieved due to precision loss.
+  success: False
+   status: 2
+      fun: 2658.5566975051297
+        x: [ 1.388e+00  6.435e-01 -3.086e+00  4.874e-01 -3.706e+01]
+      nit: 20
+      jac: [-3.052e-05 -3.052e-05 -3.052e-05 -3.052e-05  0.000e+00]
+ hess_inv: [[ 4.263e-03  2.605e-03 ... -6.263e-03 -6.547e-02]
+            [ 2.605e-03  4.940e-03 ... -9.665e-03 -3.323e-02]
+            ...
+            [-6.263e-03 -9.665e-03 ...  2.705e-02  6.738e-02]
+            [-6.547e-02 -3.323e-02 ...  6.738e-02  2.089e+00]]
+     nfev: 168
+     njev: 28</code></pre>
+</div>
+</div>
+</section>
+<section id="discussion" class="level3">
+<h3 class="anchored" data-anchor-id="discussion">Discussion</h3>
+<p>We learn that the optimization process has successfully found the maximum likelihood estimates (MLEs) for the parameters in the multinomial logit model. Here are the estimated parameters:</p>
+<ul>
+<li><span class="math inline">\(\beta_1\)</span> (Intercept for Yogurt 1): 1.3877</li>
+<li><span class="math inline">\(\beta_2\)</span> (Intercept for Yogurt 2): 0.6435</li>
+<li><span class="math inline">\(\beta_3\)</span> (Intercept for Yogurt 3): -3.0861</li>
+<li><span class="math inline">\(\beta_f\)</span> (Coefficient for featured): 0.4874</li>
+<li><span class="math inline">\(\beta_p\)</span> (Coefficient for price): -37.0578</li>
+</ul>
+<p>Interpretation:</p>
+<ul>
+<li><p><strong>Yogurt 1</strong> has the <strong>highest positive intercept</strong> (1.3877), indicating that, when all else being equal, it is the <strong>most preferred yogurt among the four options</strong>. This means that if the yogurts were identical in price and none were featured, consumers would be most likely to choose Yogurt 1.</p></li>
+<li><p><strong>Yogurt 2</strong> also has a positive intercept (0.6435), which is lower than that of Yogurt 1. This suggests that Yogurt 2 is less preferred than Yogurt 1 but still generally favored over Yogurt 3.</p></li>
+<li><p><strong>Yogurt 3</strong> has a negative intercept (-3.0861), indicating a baseline disfavor compared to the omitted category (Yogurt 4, which has an intercept of zero by default in this model setup). This suggests that, all other factors being equal, Yogurt 3 is the least preferred among the choices.</p></li>
+</ul>
+<p>Summary:</p>
+<p>Thus, when no yogurt is featured and when prices are equal:</p>
+<ul>
+<li><strong>Yogurt 1</strong> is the most preferred option.</li>
+<li><strong>Yogurt 2</strong> is less preferred than Yogurt 1 but more than Yogurt 3.</li>
+<li><strong>Yogurt 3</strong> is the least preferred among those with an explicit intercept in the model.</li>
+</ul>
+<p>To calculate the dollar benefit between the most preferred and the least preferred yogurt, we can use the estimated price coefficient as a conversion factor. This conversion tells us how much a unit increase in utility is worth in terms of dollars. Here’s how you can compute this:</p>
+<p>Steps:</p>
+<ol type="1">
+<li><p><strong>Identify the Utility Difference</strong>: Calculate the difference in utility between the most preferred yogurt (Yogurt 1) and the least preferred yogurt (Yogurt 3) based on their intercepts.</p></li>
+<li><p><strong>Convert Utility Difference to Dollar Value</strong>: Use the estimated price coefficient <span class="math inline">\(\beta_p\)</span> to convert this utility difference into a dollar value.</p></li>
+</ol>
+<p>Formula:</p>
+<p><span class="math display">\[
+\text{Dollar Benefit} = (\beta_1 - \beta_3) \times \left(\frac{1}{-\beta_p}\right)
+\]</span></p>
+<p>Where:</p>
+<ul>
+<li><span class="math inline">\(\beta_1\)</span> is the intercept for Yogurt 1 (1.3877).</li>
+<li><span class="math inline">\(\beta_3\)</span> is the intercept for Yogurt 3 (-3.0861).</li>
+<li><span class="math inline">\(\beta_p\)</span> is the price coefficient (-37.0578), and we take the inverse of its negative value to convert utility to dollars.</li>
+</ul>
+<p>Let’s calculate this dollar benefit.</p>
+<div id="f937f47b" class="cell" data-execution_count="5">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Extracting the parameter values for beta1, beta3, and beta_p</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>beta_1 <span class="op">=</span> <span class="fl">1.3877</span></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>beta_3 <span class="op">=</span> <span class="op">-</span><span class="fl">3.0861</span></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>beta_p <span class="op">=</span> <span class="op">-</span><span class="fl">37.0578</span></span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Calculate the utility difference</span></span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>utility_difference <span class="op">=</span> beta_1 <span class="op">-</span> beta_3</span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Convert utility difference to dollar benefit</span></span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>dollar_benefit <span class="op">=</span> utility_difference <span class="op">*</span> (<span class="dv">1</span> <span class="op">/</span> <span class="op">-</span>beta_p)</span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a>dollar_benefit</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="5">
+<pre><code>0.12072492160894602</code></pre>
+</div>
+</div>
+<p>The dollar benefit of choosing the most preferred yogurt (Yogurt 1) over the least preferred yogurt (Yogurt 3), per unit, is approximately $0.12. This means that consumers effectively perceive an additional 12 cents in value when choosing Yogurt 1 over Yogurt 3, given equal prices and no promotional activities.</p>
+<hr>
+<p>One benefit of the MNL model is that we can simulate counterfactuals (eg, what if the price of yogurt 1 was $0.10/oz instead of $0.08/oz).</p>
+<p>To simulate the counterfactuals, we will follow the steps below.</p>
+<p><strong>Step 1: Calculate the Current Market Shares</strong></p>
+<p>First, we calculate the existing market shares for each product by averaging the <code>chosen</code> indicators across consumers for each product.</p>
+<div id="7a6aaf39" class="cell" data-execution_count="6">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Calculate current market shares based on the 'chosen' indicators for each product</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>current_market_shares <span class="op">=</span> yogurt_long.groupby(<span class="st">'product'</span>)[<span class="st">'chosen'</span>].mean()</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>current_market_shares</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="6">
+<pre><code>product
+1    0.341975
+2    0.401235
+3    0.029218
+4    0.227572
+Name: chosen, dtype: float64</code></pre>
+</div>
+</div>
+<p>The current market shares for each yogurt product are:</p>
+<ul>
+<li><strong>Yogurt 1</strong>: 34.20%</li>
+<li><strong>Yogurt 2</strong>: 40.12%</li>
+<li><strong>Yogurt 3</strong>: 2.92%</li>
+<li><strong>Yogurt 4</strong>: 22.76%</li>
+</ul>
+<p><strong>Step 2: Simulate Counterfactual with Price Increase</strong></p>
+<p>Next, we’ll simulate the scenario where the price of Yogurt 1 increases by $0.10. This requires modifying the price column for Yogurt 1 in the features matrix and recalculating the choice probabilities using our fitted model parameters.</p>
+<div id="ee6bbdc8" class="cell" data-execution_count="7">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Extract the beta coefficients from the optimization result</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>fitted_betas <span class="op">=</span> result.x</span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Increase the price of Yogurt 1 by $0.10</span></span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Copy features array to modify it without affecting the original</span></span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>modified_features <span class="op">=</span> features.copy()</span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>modified_features[:, <span class="dv">4</span>] <span class="op">+=</span> <span class="fl">0.10</span> <span class="op">*</span> (modified_features[:, <span class="dv">0</span>] <span class="op">==</span> <span class="dv">1</span>)  <span class="co"># Only increase price for Yogurt 1</span></span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Function to calculate choice probabilities using the fitted model parameters</span></span>
+<span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> calculate_probabilities(features, beta):</span>
+<span id="cb11-11"><a href="#cb11-11" aria-hidden="true" tabindex="-1"></a>    utility <span class="op">=</span> np.dot(features, beta)</span>
+<span id="cb11-12"><a href="#cb11-12" aria-hidden="true" tabindex="-1"></a>    utility <span class="op">=</span> utility.reshape(<span class="op">-</span><span class="dv">1</span>, <span class="dv">4</span>)  <span class="co"># Reshape to separate each consumer's product utilities</span></span>
+<span id="cb11-13"><a href="#cb11-13" aria-hidden="true" tabindex="-1"></a>    exp_utility <span class="op">=</span> np.exp(utility)</span>
+<span id="cb11-14"><a href="#cb11-14" aria-hidden="true" tabindex="-1"></a>    sum_exp_utility <span class="op">=</span> np.<span class="bu">sum</span>(exp_utility, axis<span class="op">=</span><span class="dv">1</span>, keepdims<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb11-15"><a href="#cb11-15" aria-hidden="true" tabindex="-1"></a>    probabilities <span class="op">=</span> exp_utility <span class="op">/</span> sum_exp_utility</span>
+<span id="cb11-16"><a href="#cb11-16" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> probabilities</span>
+<span id="cb11-17"><a href="#cb11-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-18"><a href="#cb11-18" aria-hidden="true" tabindex="-1"></a><span class="co"># Calculate new choice probabilities with the price increase</span></span>
+<span id="cb11-19"><a href="#cb11-19" aria-hidden="true" tabindex="-1"></a>new_probabilities <span class="op">=</span> calculate_probabilities(modified_features, fitted_betas)</span>
+<span id="cb11-20"><a href="#cb11-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-21"><a href="#cb11-21" aria-hidden="true" tabindex="-1"></a><span class="co"># Calculate new market shares by taking the mean of probabilities for each product</span></span>
+<span id="cb11-22"><a href="#cb11-22" aria-hidden="true" tabindex="-1"></a>new_market_shares <span class="op">=</span> np.mean(new_probabilities, axis<span class="op">=</span><span class="dv">0</span>)</span>
+<span id="cb11-23"><a href="#cb11-23" aria-hidden="true" tabindex="-1"></a>new_market_shares</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="7">
+<pre><code>array([0.02111764, 0.59114511, 0.04404016, 0.34369708])</code></pre>
+</div>
+</div>
+<p><strong>Step 3: Analyze the Impact of Price Increase on Market Shares</strong></p>
+<p>The new estimated market shares after increasing the price of Yogurt 1 by $0.10 are:</p>
+<ul>
+<li><strong>Yogurt 1</strong>: 2.11%</li>
+<li><strong>Yogurt 2</strong>: 59.11%</li>
+<li><strong>Yogurt 3</strong>: 4.40%</li>
+<li><strong>Yogurt 4</strong>: 34.37%</li>
+</ul>
+<p><strong>Comparison and Discussion</strong></p>
+<p>The price increase of Yogurt 1 has a significant impact:</p>
+<ul>
+<li><p><strong>Yogurt 1</strong>’s market share dramatically decreases from 34.20% to 2.11%. This substantial drop reflects the sensitivity to price changes, especially given the large negative coefficient for price in the model.</p></li>
+<li><p><strong>Yogurt 2</strong> sees a major increase in its market share from 40.12% to 59.11%, indicating that many consumers who previously chose Yogurt 1 might switch to Yogurt 2.</p></li>
+<li><p><strong>Yogurt 3</strong> and <strong>Yogurt 4</strong> also experience changes, with slight increases in their market shares, which could be attributed to some consumers shifting their preferences due to the price change in Yogurt 1.</p></li>
+</ul>
+<p>This simulation highlights the influence of pricing on consumer choices and can help guide strategic pricing decisions to optimize market shares.</p>
+</section>
+</section>
+<section id="estimating-minivan-preferences" class="level2">
+<h2 class="anchored" data-anchor-id="estimating-minivan-preferences">2. Estimating Minivan Preferences</h2>
+<section id="data" class="level3">
+<h3 class="anchored" data-anchor-id="data">Data</h3>
+<p>Let’s start by loading the rintro dataset to get a better understanding of its structure and content!</p>
+<div id="13233d06" class="cell" data-execution_count="8">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>rintro_data <span class="op">=</span> pd.read_csv(<span class="st">'/home/jovyan/code/MGTA 495/QUARTO_WEBSITE/data/rintro-chapter13conjoint.csv'</span>)</span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>rintro_data.head()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="8">
+<div>
+
+
+<table class="dataframe table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">resp.id</th>
+<th data-quarto-table-cell-role="th">ques</th>
+<th data-quarto-table-cell-role="th">alt</th>
+<th data-quarto-table-cell-role="th">carpool</th>
+<th data-quarto-table-cell-role="th">seat</th>
+<th data-quarto-table-cell-role="th">cargo</th>
+<th data-quarto-table-cell-role="th">eng</th>
+<th data-quarto-table-cell-role="th">price</th>
+<th data-quarto-table-cell-role="th">choice</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">0</td>
+<td>1</td>
+<td>1</td>
+<td>1</td>
+<td>yes</td>
+<td>6</td>
+<td>2ft</td>
+<td>gas</td>
+<td>35</td>
+<td>0</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">1</td>
+<td>1</td>
+<td>1</td>
+<td>2</td>
+<td>yes</td>
+<td>8</td>
+<td>3ft</td>
+<td>hyb</td>
+<td>30</td>
+<td>0</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">2</td>
+<td>1</td>
+<td>1</td>
+<td>3</td>
+<td>yes</td>
+<td>6</td>
+<td>3ft</td>
+<td>gas</td>
+<td>30</td>
+<td>1</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">3</td>
+<td>1</td>
+<td>2</td>
+<td>1</td>
+<td>yes</td>
+<td>6</td>
+<td>2ft</td>
+<td>gas</td>
+<td>30</td>
+<td>0</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">4</td>
+<td>1</td>
+<td>2</td>
+<td>2</td>
+<td>yes</td>
+<td>7</td>
+<td>3ft</td>
+<td>gas</td>
+<td>35</td>
+<td>1</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+<p>The rintro dataset includes the following columns:</p>
+<p><code>resp.id</code>: Identifier for each respondent.</p>
+<p><code>ques</code>: Identifier for each choice task completed by a respondent.</p>
+<p><code>alt</code>: Identifier for each alternative presented within a choice task.</p>
+<p><code>carpool</code>: Whether the minivan is suited for carpooling (not one of the attributes mentioned but present in the dataset).</p>
+<p><code>seat</code>: Number of seats in the minivan (6, 7, 8).</p>
+<p><code>cargo</code>: Cargo space in the minivan (2ft, 3ft).</p>
+<p><code>eng</code>: Engine type of the minivan (gas, hybrid, electric).</p>
+<p><code>price</code>: Price of the minivan in thousands of dollars.</p>
+<p><code>choice</code>: Indicates whether the alternative was chosen (1) or not (0) in the choice task.</p>
+<p><strong>Analysis of the Dataset Structure:</strong></p>
+<ol type="1">
+<li><p><strong>Number of Respondents</strong>: We can determine the number of unique respondents in the survey by counting unique <code>resp.id</code>.</p></li>
+<li><p><strong>Number of Choice Tasks per Respondent</strong>: By analyzing the <code>ques</code> identifier within each <code>resp.id</code>, we can ascertain how many choice tasks each respondent completed.</p></li>
+<li><p><strong>Number of Alternatives per Choice Task</strong>: The <code>alt</code> column shows how many alternatives were presented to each respondent in each choice task.</p></li>
+<li><p><strong>Attributes and Levels</strong>:</p>
+<ul>
+<li><strong>Seats</strong>: 6, 7, 8</li>
+<li><strong>Cargo Space</strong>: 2ft, 3ft</li>
+<li><strong>Engine Type</strong>: gas, hybrid, electric</li>
+<li><strong>Price</strong>: Listed in thousands of dollars.</li>
+</ul></li>
+</ol>
+<p>Let’s calculate the specific counts for respondents, tasks, and alternatives.</p>
+<div id="f2ac3371" class="cell" data-execution_count="9">
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Calculate the number of unique respondents</span></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>num_respondents <span class="op">=</span> rintro_data[<span class="st">'resp.id'</span>].nunique()</span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Calculate the number of choice tasks per respondent</span></span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>tasks_per_respondent <span class="op">=</span> rintro_data.groupby(<span class="st">'resp.id'</span>)[<span class="st">'ques'</span>].nunique()</span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Calculate the number of alternatives per choice task</span></span>
+<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a>alternatives_per_task <span class="op">=</span> rintro_data.groupby([<span class="st">'resp.id'</span>, <span class="st">'ques'</span>])[<span class="st">'alt'</span>].nunique()</span>
+<span id="cb14-9"><a href="#cb14-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-10"><a href="#cb14-10" aria-hidden="true" tabindex="-1"></a>num_respondents, tasks_per_respondent.describe(), alternatives_per_task.describe()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="9">
+<pre><code>(200,
+ count    200.0
+ mean      15.0
+ std        0.0
+ min       15.0
+ 25%       15.0
+ 50%       15.0
+ 75%       15.0
+ max       15.0
+ Name: ques, dtype: float64,
+ count    3000.0
+ mean        3.0
+ std         0.0
+ min         3.0
+ 25%         3.0
+ 50%         3.0
+ 75%         3.0
+ max         3.0
+ Name: alt, dtype: float64)</code></pre>
+</div>
+</div>
+<p>Here’s a summary of the dataset based on the provided data:</p>
+<ol type="1">
+<li><p><strong>Number of Respondents</strong>: There are 200 unique respondents who took part in the conjoint survey.</p></li>
+<li><p><strong>Number of Choice Tasks per Respondent</strong>: Each respondent completed 15 choice tasks. This number is consistent across all respondents.</p></li>
+<li><p><strong>Number of Alternatives per Choice Task</strong>: Each choice task presented 3 alternatives to the respondents, consistent across all tasks and respondents.</p></li>
+</ol>
+<p><strong>Attributes and Levels in Each Alternative:</strong></p>
+<ul>
+<li><strong>Number of Seats</strong>: 6, 7, 8</li>
+<li><strong>Cargo Space</strong>: 2ft, 3ft</li>
+<li><strong>Engine Type</strong>: Gas, Hybrid, Electric</li>
+<li><strong>Price</strong>: Values are given in thousands of dollars (variable across alternatives).</li>
+</ul>
+<p>This structure enables us to analyze how different attributes and their levels influence the choice preferences of respondents in the context of minivan preferences.</p>
+</section>
+<section id="model" class="level3">
+<h3 class="anchored" data-anchor-id="model">Model</h3>
+<p>To estimate the Multinomial Logit (MNL) model for the minivan preferences, we’ll include attributes by omitting specific levels to prevent multicollinearity. Specifically, we’ll exclude the following baseline levels:</p>
+<ul>
+<li>6 seats</li>
+<li>2ft cargo</li>
+<li>Gas engine</li>
+</ul>
+<p>We’ll also include price as a continuous variable. For this task, instead of coding the log-likelihood function from scratch, we will use a function from a statistical package which will simplify the model estimation and provide robust standard errors for the coefficients.</p>
+<div id="a161a19f" class="cell" data-execution_count="10">
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> statsmodels.api <span class="im">as</span> sm</span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> statsmodels.formula.api <span class="im">as</span> smf</span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Create dummy variables for the levels, excluding the baseline levels</span></span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a>rintro_data[<span class="st">'seat_7'</span>] <span class="op">=</span> (rintro_data[<span class="st">'seat'</span>] <span class="op">==</span> <span class="dv">7</span>).astype(<span class="bu">int</span>)</span>
+<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a>rintro_data[<span class="st">'seat_8'</span>] <span class="op">=</span> (rintro_data[<span class="st">'seat'</span>] <span class="op">==</span> <span class="dv">8</span>).astype(<span class="bu">int</span>)</span>
+<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a>rintro_data[<span class="st">'cargo_3ft'</span>] <span class="op">=</span> (rintro_data[<span class="st">'cargo'</span>] <span class="op">==</span> <span class="st">'3ft'</span>).astype(<span class="bu">int</span>)</span>
+<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a>rintro_data[<span class="st">'eng_hyb'</span>] <span class="op">=</span> (rintro_data[<span class="st">'eng'</span>] <span class="op">==</span> <span class="st">'hyb'</span>).astype(<span class="bu">int</span>)</span>
+<span id="cb16-9"><a href="#cb16-9" aria-hidden="true" tabindex="-1"></a>rintro_data[<span class="st">'eng_elec'</span>] <span class="op">=</span> (rintro_data[<span class="st">'eng'</span>] <span class="op">==</span> <span class="st">'elec'</span>).astype(<span class="bu">int</span>)</span>
+<span id="cb16-10"><a href="#cb16-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-11"><a href="#cb16-11" aria-hidden="true" tabindex="-1"></a><span class="co"># Define the model using a formula that includes the necessary dummy variables and price</span></span>
+<span id="cb16-12"><a href="#cb16-12" aria-hidden="true" tabindex="-1"></a>formula <span class="op">=</span> <span class="st">'choice ~ seat_7 + seat_8 + cargo_3ft + eng_hyb + eng_elec + price'</span></span>
+<span id="cb16-13"><a href="#cb16-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-14"><a href="#cb16-14" aria-hidden="true" tabindex="-1"></a><span class="co"># Fit the multinomial logit model</span></span>
+<span id="cb16-15"><a href="#cb16-15" aria-hidden="true" tabindex="-1"></a>model <span class="op">=</span> smf.glm(formula<span class="op">=</span>formula, data<span class="op">=</span>rintro_data, family<span class="op">=</span>sm.families.Binomial())</span>
+<span id="cb16-16"><a href="#cb16-16" aria-hidden="true" tabindex="-1"></a>result <span class="op">=</span> model.fit()</span>
+<span id="cb16-17"><a href="#cb16-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-18"><a href="#cb16-18" aria-hidden="true" tabindex="-1"></a><span class="co"># Display the results</span></span>
+<span id="cb16-19"><a href="#cb16-19" aria-hidden="true" tabindex="-1"></a>result.summary()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="10">
+<table class="simpletable table table-sm table-striped small" data-quarto-postprocess="true">
+<caption>Generalized Linear Model Regression Results</caption>
+<tbody>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">Dep. Variable:</td>
+<td>choice</td>
+<td data-quarto-table-cell-role="th">No. Observations:</td>
+<td>9000</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">Model:</td>
+<td>GLM</td>
+<td data-quarto-table-cell-role="th">Df Residuals:</td>
+<td>8993</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">Model Family:</td>
+<td>Binomial</td>
+<td data-quarto-table-cell-role="th">Df Model:</td>
+<td>6</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">Link Function:</td>
+<td>Logit</td>
+<td data-quarto-table-cell-role="th">Scale:</td>
+<td>1.0000</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">Method:</td>
+<td>IRLS</td>
+<td data-quarto-table-cell-role="th">Log-Likelihood:</td>
+<td>-5028.0</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">Date:</td>
+<td>Wed, 15 May 2024</td>
+<td data-quarto-table-cell-role="th">Deviance:</td>
+<td>10056.</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">Time:</td>
+<td>05:40:00</td>
+<td data-quarto-table-cell-role="th">Pearson chi2:</td>
+<td>9.01e+03</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">No. Iterations:</td>
+<td>4</td>
+<td data-quarto-table-cell-role="th">Pseudo R-squ. (CS):</td>
+<td>0.1442</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">Covariance Type:</td>
+<td>nonrobust</td>
+<td data-quarto-table-cell-role="th"></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<table class="simpletable table table-sm table-striped small" data-quarto-postprocess="true">
+<tbody>
+<tr class="odd">
+<td></td>
+<td data-quarto-table-cell-role="th">coef</td>
+<td data-quarto-table-cell-role="th">std err</td>
+<td data-quarto-table-cell-role="th">z</td>
+<td data-quarto-table-cell-role="th">P&gt;|z|</td>
+<td data-quarto-table-cell-role="th">[0.025</td>
+<td data-quarto-table-cell-role="th">0.975]</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">Intercept</td>
+<td>5.5322</td>
+<td>0.224</td>
+<td>24.677</td>
+<td>0.000</td>
+<td>5.093</td>
+<td>5.972</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">seat_7</td>
+<td>-0.5248</td>
+<td>0.060</td>
+<td>-8.800</td>
+<td>0.000</td>
+<td>-0.642</td>
+<td>-0.408</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">seat_8</td>
+<td>-0.2931</td>
+<td>0.059</td>
+<td>-5.009</td>
+<td>0.000</td>
+<td>-0.408</td>
+<td>-0.178</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">cargo_3ft</td>
+<td>0.4385</td>
+<td>0.049</td>
+<td>9.004</td>
+<td>0.000</td>
+<td>0.343</td>
+<td>0.534</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">eng_hyb</td>
+<td>-0.7605</td>
+<td>0.057</td>
+<td>-13.361</td>
+<td>0.000</td>
+<td>-0.872</td>
+<td>-0.649</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">eng_elec</td>
+<td>-1.4347</td>
+<td>0.062</td>
+<td>-23.217</td>
+<td>0.000</td>
+<td>-1.556</td>
+<td>-1.314</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">price</td>
+<td>-0.1591</td>
+<td>0.006</td>
+<td>-25.616</td>
+<td>0.000</td>
+<td>-0.171</td>
+<td>-0.147</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p>Here are the estimated coefficients and their standard errors from the Multinomial Logit (MNL) model for the minivan preferences:</p>
+<table class="table">
+<thead>
+<tr class="header">
+<th>Variable</th>
+<th>Coefficient</th>
+<th>Standard Error</th>
+<th>z-value</th>
+<th>p-value</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Intercept</td>
+<td>5.5322</td>
+<td>0.224</td>
+<td>24.677</td>
+<td>&lt;0.001</td>
+</tr>
+<tr class="even">
+<td>Seat 7</td>
+<td>-0.5248</td>
+<td>0.060</td>
+<td>-8.800</td>
+<td>&lt;0.001</td>
+</tr>
+<tr class="odd">
+<td>Seat 8</td>
+<td>-0.2931</td>
+<td>0.059</td>
+<td>-5.009</td>
+<td>&lt;0.001</td>
+</tr>
+<tr class="even">
+<td>Cargo 3ft</td>
+<td>0.4385</td>
+<td>0.049</td>
+<td>9.004</td>
+<td>&lt;0.001</td>
+</tr>
+<tr class="odd">
+<td>Engine Hybrid</td>
+<td>-0.7605</td>
+<td>0.057</td>
+<td>-13.361</td>
+<td>&lt;0.001</td>
+</tr>
+<tr class="even">
+<td>Engine Electric</td>
+<td>-1.4347</td>
+<td>0.062</td>
+<td>-23.217</td>
+<td>&lt;0.001</td>
+</tr>
+<tr class="odd">
+<td>Price</td>
+<td>-0.1591</td>
+<td>0.006</td>
+<td>-25.616</td>
+<td>&lt;0.001</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Interpretation of the Coefficients:</strong></p>
+<ul>
+<li><p><strong>Intercept</strong>: Represents the log-odds of choosing a minivan with the baseline attributes (6 seats, 2ft cargo, gas engine).</p></li>
+<li><p><strong>Seat 7</strong>: Having 7 seats instead of the baseline 6 seats reduces the log-odds of choice.</p></li>
+<li><p><strong>Seat 8</strong>: Similar to 7 seats, having 8 seats also reduces the preference compared to 6 seats, though not as strongly as 7 seats.</p></li>
+<li><p><strong>Cargo 3ft</strong>: More cargo space (3ft) increases the likelihood of a minivan being chosen over the baseline 2ft.</p></li>
+<li><p><strong>Engine Hybrid and Electric</strong>: Both hybrid and electric engines are less preferred compared to the baseline gas engine, with electric being the least preferred among the three.</p></li>
+<li><p><strong>Price</strong>: A higher price decreases the likelihood of the minivan being chosen, with each additional thousand dollars reducing the log-odds of choice significantly.</p></li>
+</ul>
+<p>These results can help understand consumer preferences regarding minivan attributes and guide strategic decisions about product offerings and pricing.</p>
+</section>
+<section id="results" class="level3">
+<h3 class="anchored" data-anchor-id="results">Results</h3>
+<p>Based on the estimated coefficients from the Multinomial Logit (MNL) model, here’s a summary of consumer preferences for minivan features:</p>
+<ul>
+<li><p><strong>Seats</strong>: Consumers prefer minivans with 6 seats over those with 7 or 8 seats, as indicated by the negative coefficients for 7 and 8 seats.</p></li>
+<li><p><strong>Cargo Space</strong>: Larger cargo space (3ft) is more preferred compared to the baseline 2ft, as shown by the positive coefficient.</p></li>
+<li><p><strong>Engine Type</strong>: The gas engine is more preferred than both hybrid and electric engines, which have negative coefficients, with the electric engine being the least preferred.</p></li>
+<li><p><strong>Price</strong>: Lower prices are preferred, as the negative coefficient for price indicates that an increase in price reduces the likelihood of a minivan being chosen.</p></li>
+</ul>
+<p>In summary, consumers show a preference for minivans with 6 seats, more cargo space, gas engines, and lower prices. These insights can inform marketing strategies and product development in the automotive industry.</p>
+<p>What is the dollar value of 3ft of cargo space as compared to 2ft of cargo space, if using the price coefficient as a dollar-per-util conversion factor?</p>
+<p>To calculate the dollar value of the additional utility provided by having 3ft of cargo space compared to 2ft, we use the price coefficient as a dollar-per-util conversion factor. The formula to convert the utility difference into dollars is:</p>
+<p><span class="math display">\[
+\text{Dollar Value} = (\text{Coefficient of Feature}) \times \left( \frac{1}{-\text{Coefficient of Price}} \right)
+\]</span></p>
+<p>Where:</p>
+<ul>
+<li><strong>Coefficient of Feature</strong> for 3ft cargo space is 0.4385.</li>
+<li><strong>Coefficient of Price</strong> is -0.1591.</li>
+</ul>
+<div id="39e7a540" class="cell" data-execution_count="11">
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Extracting the coefficients for cargo space and price</span></span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>coef_cargo_3ft <span class="op">=</span> <span class="fl">0.4385</span></span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>coef_price <span class="op">=</span> <span class="op">-</span><span class="fl">0.1591</span></span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Calculate the dollar value of 3ft of cargo space compared to 2ft</span></span>
+<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a>dollar_value_cargo <span class="op">=</span> coef_cargo_3ft <span class="op">*</span> (<span class="dv">1</span> <span class="op">/</span> coef_price)</span>
+<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a>dollar_value_cargo</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="11">
+<pre><code>-2.7561282212445004</code></pre>
+</div>
+</div>
+<p>The dollar value of having 3ft of cargo space compared to 2ft of cargo space is approximately $2.76. This indicates that the utility benefit provided by the additional cargo space is equivalent to a reduction of about $2.76 in the price of the minivan.</p>
+<p>What if we assume that the market consists of the following 6 minivans. How to predict the market shares of each minivan in the market?</p>
+<table class="table">
+<thead>
+<tr class="header">
+<th>Minivan</th>
+<th>Seats</th>
+<th>Cargo</th>
+<th>Engine</th>
+<th>Price</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>A</td>
+<td>7</td>
+<td>2</td>
+<td>Hyb</td>
+<td>30</td>
+</tr>
+<tr class="even">
+<td>B</td>
+<td>6</td>
+<td>2</td>
+<td>Gas</td>
+<td>30</td>
+</tr>
+<tr class="odd">
+<td>C</td>
+<td>8</td>
+<td>2</td>
+<td>Gas</td>
+<td>30</td>
+</tr>
+<tr class="even">
+<td>D</td>
+<td>7</td>
+<td>3</td>
+<td>Gas</td>
+<td>40</td>
+</tr>
+<tr class="odd">
+<td>E</td>
+<td>6</td>
+<td>2</td>
+<td>Elec</td>
+<td>40</td>
+</tr>
+<tr class="even">
+<td>F</td>
+<td>7</td>
+<td>2</td>
+<td>Hyb</td>
+<td>35</td>
+</tr>
+</tbody>
+</table>
+<p>To predict the market shares of each minivan, we will use the coefficients estimated from the Multinomial Logit (MNL) model and calculate the choice probabilities for each minivan configuration. The probabilities can be computed using the formula based on the logit model:</p>
+<p><span class="math display">\[
+\mathbb{P}(y = k) = \frac{e^{U_k}}{\sum_{j=1}^{J} e^{U_j}}
+\]</span></p>
+<p>Where <span class="math inline">\(U_k\)</span> is the utility of minivan <span class="math inline">\(k\)</span>, and <span class="math inline">\(J\)</span> is the total number of alternatives (minivans in this case).</p>
+<p>Let’s define the utility for each minivan based on the attributes and the coefficients from the model:</p>
+<ul>
+<li><strong>Utility <span class="math inline">\(U\)</span></strong>:</li>
+</ul>
+<p><span class="math display">\[
+U = \beta_0 + \beta_{seat7} \times \text{Seat7} + \beta_{seat8} \times \text{Seat8} + \beta_{cargo3ft} \times \text{Cargo3ft} + \beta_e
+\]</span></p>
+<p>We will substitute the attributes of each minivan into this utility formula, compute the exponentials, and then calculate the probabilities.</p>
+<div id="2eff3f91" class="cell" data-execution_count="12">
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Create a DataFrame for the minivans with their attributes</span></span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>minivans <span class="op">=</span> pd.DataFrame({</span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>    <span class="st">'Minivan'</span>: [<span class="st">'A'</span>, <span class="st">'B'</span>, <span class="st">'C'</span>, <span class="st">'D'</span>, <span class="st">'E'</span>, <span class="st">'F'</span>],</span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a>    <span class="st">'Seats'</span>: [<span class="dv">7</span>, <span class="dv">6</span>, <span class="dv">8</span>, <span class="dv">7</span>, <span class="dv">6</span>, <span class="dv">7</span>],</span>
+<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a>    <span class="st">'Cargo'</span>: [<span class="dv">2</span>, <span class="dv">2</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">2</span>, <span class="dv">2</span>],</span>
+<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a>    <span class="st">'Engine'</span>: [<span class="st">'Hyb'</span>, <span class="st">'Gas'</span>, <span class="st">'Gas'</span>, <span class="st">'Gas'</span>, <span class="st">'Elec'</span>, <span class="st">'Hyb'</span>],</span>
+<span id="cb19-7"><a href="#cb19-7" aria-hidden="true" tabindex="-1"></a>    <span class="st">'Price'</span>: [<span class="dv">30</span>, <span class="dv">30</span>, <span class="dv">30</span>, <span class="dv">40</span>, <span class="dv">40</span>, <span class="dv">35</span>]</span>
+<span id="cb19-8"><a href="#cb19-8" aria-hidden="true" tabindex="-1"></a>})</span>
+<span id="cb19-9"><a href="#cb19-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-10"><a href="#cb19-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Map the attributes to model features</span></span>
+<span id="cb19-11"><a href="#cb19-11" aria-hidden="true" tabindex="-1"></a>minivans[<span class="st">'seat_7'</span>] <span class="op">=</span> (minivans[<span class="st">'Seats'</span>] <span class="op">==</span> <span class="dv">7</span>).astype(<span class="bu">int</span>)</span>
+<span id="cb19-12"><a href="#cb19-12" aria-hidden="true" tabindex="-1"></a>minivans[<span class="st">'seat_8'</span>] <span class="op">=</span> (minivans[<span class="st">'Seats'</span>] <span class="op">==</span> <span class="dv">8</span>).astype(<span class="bu">int</span>)</span>
+<span id="cb19-13"><a href="#cb19-13" aria-hidden="true" tabindex="-1"></a>minivans[<span class="st">'cargo_3ft'</span>] <span class="op">=</span> (minivans[<span class="st">'Cargo'</span>] <span class="op">==</span> <span class="dv">3</span>).astype(<span class="bu">int</span>)</span>
+<span id="cb19-14"><a href="#cb19-14" aria-hidden="true" tabindex="-1"></a>minivans[<span class="st">'eng_hyb'</span>] <span class="op">=</span> (minivans[<span class="st">'Engine'</span>] <span class="op">==</span> <span class="st">'Hyb'</span>).astype(<span class="bu">int</span>)</span>
+<span id="cb19-15"><a href="#cb19-15" aria-hidden="true" tabindex="-1"></a>minivans[<span class="st">'eng_elec'</span>] <span class="op">=</span> (minivans[<span class="st">'Engine'</span>] <span class="op">==</span> <span class="st">'Elec'</span>).astype(<span class="bu">int</span>)</span>
+<span id="cb19-16"><a href="#cb19-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-17"><a href="#cb19-17" aria-hidden="true" tabindex="-1"></a><span class="co"># Use the estimated coefficients to calculate utilities</span></span>
+<span id="cb19-18"><a href="#cb19-18" aria-hidden="true" tabindex="-1"></a>minivans[<span class="st">'Utility'</span>] <span class="op">=</span> (result.params[<span class="st">'Intercept'</span>] <span class="op">+</span> </span>
+<span id="cb19-19"><a href="#cb19-19" aria-hidden="true" tabindex="-1"></a>                       result.params[<span class="st">'seat_7'</span>] <span class="op">*</span> minivans[<span class="st">'seat_7'</span>] <span class="op">+</span></span>
+<span id="cb19-20"><a href="#cb19-20" aria-hidden="true" tabindex="-1"></a>                       result.params[<span class="st">'seat_8'</span>] <span class="op">*</span> minivans[<span class="st">'seat_8'</span>] <span class="op">+</span></span>
+<span id="cb19-21"><a href="#cb19-21" aria-hidden="true" tabindex="-1"></a>                       result.params[<span class="st">'cargo_3ft'</span>] <span class="op">*</span> minivans[<span class="st">'cargo_3ft'</span>] <span class="op">+</span></span>
+<span id="cb19-22"><a href="#cb19-22" aria-hidden="true" tabindex="-1"></a>                       result.params[<span class="st">'eng_hyb'</span>] <span class="op">*</span> minivans[<span class="st">'eng_hyb'</span>] <span class="op">+</span></span>
+<span id="cb19-23"><a href="#cb19-23" aria-hidden="true" tabindex="-1"></a>                       result.params[<span class="st">'eng_elec'</span>] <span class="op">*</span> minivans[<span class="st">'eng_elec'</span>] <span class="op">+</span></span>
+<span id="cb19-24"><a href="#cb19-24" aria-hidden="true" tabindex="-1"></a>                       result.params[<span class="st">'price'</span>] <span class="op">*</span> minivans[<span class="st">'Price'</span>])</span>
+<span id="cb19-25"><a href="#cb19-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-26"><a href="#cb19-26" aria-hidden="true" tabindex="-1"></a><span class="co"># Calculate exponential of utilities for the logit formula</span></span>
+<span id="cb19-27"><a href="#cb19-27" aria-hidden="true" tabindex="-1"></a>minivans[<span class="st">'Exp_Utility'</span>] <span class="op">=</span> np.exp(minivans[<span class="st">'Utility'</span>])</span>
+<span id="cb19-28"><a href="#cb19-28" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-29"><a href="#cb19-29" aria-hidden="true" tabindex="-1"></a><span class="co"># Calculate choice probabilities</span></span>
+<span id="cb19-30"><a href="#cb19-30" aria-hidden="true" tabindex="-1"></a>minivans[<span class="st">'Probability'</span>] <span class="op">=</span> minivans[<span class="st">'Exp_Utility'</span>] <span class="op">/</span> minivans[<span class="st">'Exp_Utility'</span>].<span class="bu">sum</span>()</span>
+<span id="cb19-31"><a href="#cb19-31" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-32"><a href="#cb19-32" aria-hidden="true" tabindex="-1"></a><span class="co"># Display the predicted market shares</span></span>
+<span id="cb19-33"><a href="#cb19-33" aria-hidden="true" tabindex="-1"></a>minivans[[<span class="st">'Minivan'</span>, <span class="st">'Probability'</span>]]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="12">
+<div>
+
+
+<table class="dataframe table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">Minivan</th>
+<th data-quarto-table-cell-role="th">Probability</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">0</td>
+<td>A</td>
+<td>0.116080</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">1</td>
+<td>B</td>
+<td>0.419692</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">2</td>
+<td>C</td>
+<td>0.313073</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">3</td>
+<td>D</td>
+<td>0.078412</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">4</td>
+<td>E</td>
+<td>0.020359</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">5</td>
+<td>F</td>
+<td>0.052385</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+<p>Here are the predicted market shares for each of the minivans in the market, based on the attributes given and the coefficients from the Multinomial Logit (MNL) model:</p>
+<ul>
+<li><strong>Minivan A (7 seats, 2ft cargo, Hybrid, $30k)</strong>: 11.61%</li>
+<li><strong>Minivan B (6 seats, 2ft cargo, Gas, $30k)</strong>: 41.97%</li>
+<li><strong>Minivan C (8 seats, 2ft cargo, Gas, $30k)</strong>: 31.31%</li>
+<li><strong>Minivan D (7 seats, 3ft cargo, Gas, $40k)</strong>: 7.84%</li>
+<li><strong>Minivan E (6 seats, 2ft cargo, Electric, $40k)</strong>: 2.04%</li>
+<li><strong>Minivan F (7 seats, 2ft cargo, Hybrid, $35k)</strong>: 5.24%</li>
+</ul>
+<p><strong>Interpretation:</strong></p>
+<ul>
+<li><p><strong>Minivan B</strong>, with the baseline attributes of 6 seats and a gas engine at a price of $30k, is the most preferred, capturing approximately 42% of the market.</p></li>
+<li><p><strong>Minivan C</strong>, also with a gas engine but 8 seats at the same price, follows with about 31% of the market share, indicating a strong preference for gas engines and cost-effectiveness.</p></li>
+<li><p><strong>Minivan A and F</strong>, both hybrids, show less preference, particularly as the price increases for Minivan F.</p></li>
+<li><p><strong>Minivan D</strong>, despite having more cargo space, is less favored possibly due to its higher price.</p></li>
+<li><p><strong>Minivan E</strong>, with an electric engine and the highest price, is the least preferred among the options.</p></li>
+</ul>
+<p>These insights can help manufacturers understand consumer preferences and market dynamics, particularly the impact of seating configurations, engine types, and price on consumer choices.</p>
+
+
+</section>
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+    const config = {
+      allowHTML: true,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start',
+    };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    const typesetMath = (el) => {
+      if (window.MathJax) {
+        // MathJax Typeset
+        window.MathJax.typeset([el]);
+      } else if (window.katex) {
+        // KaTeX Render
+        var mathElements = el.getElementsByClassName("math");
+        var macros = [];
+        for (var i = 0; i < mathElements.length; i++) {
+          var texText = mathElements[i].firstChild;
+          if (mathElements[i].tagName == "SPAN") {
+            window.katex.render(texText.data, mathElements[i], {
+              displayMode: mathElements[i].classList.contains('display'),
+              throwOnError: false,
+              macros: macros,
+              fleqn: false
+            });
+          }
+        }
+      }
+    }
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        typesetMath(container);
+        return container.innerHTML
+      } else {
+        typesetMath(note);
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      typesetMath(note);
+      return note.innerHTML;
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            div.style.left = 0;
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>
