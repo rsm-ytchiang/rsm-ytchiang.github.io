@@ -2,6 +2,7 @@
 title: "Homework3 - Multinomial Logit Examples"
 author: "Thomas Chiang"
 date: today
+callout-appearance: minimal
 ---
 
 
