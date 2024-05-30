@@ -216,7 +216,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <section id="load-and-inspect-the-data" class="level3">
 <h3 class="anchored" data-anchor-id="load-and-inspect-the-data">1.Load and inspect the data:</h3>
 <p>In this step, we load the dataset from a CSV file and inspect its structure. This helps us understand the data we will be working with, including the different variables available for our analysis.</p>
-<div id="459027bd" class="cell" data-execution_count="1">
+<div id="3b7c5c85" class="cell" data-execution_count="1">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Load the data</span></span>
@@ -349,7 +349,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <section id="calculate-pearson-correlations." class="level3">
 <h3 class="anchored" data-anchor-id="calculate-pearson-correlations.">2. Calculate Pearson Correlations.</h3>
 <p>In this step, we calculate the <strong>Pearson correlation coefficients between customer satisfaction and various perceptions of the payment card.</strong> Pearson correlation coefficients measure the linear relationship between two variables. A higher absolute value of the correlation indicates a stronger relationship.</p>
-<div id="7ba17ade" class="cell" data-execution_count="2">
+<div id="2862514b" class="cell" data-execution_count="2">
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Calculate Pearson correlation coefficients</span></span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>perception_columns <span class="op">=</span> [<span class="st">'trust'</span>, <span class="st">'build'</span>, <span class="st">'differs'</span>, <span class="st">'easy'</span>, <span class="st">'appealing'</span>, <span class="st">'rewarding'</span>, <span class="st">'popular'</span>, <span class="st">'service'</span>, <span class="st">'impact'</span>]</span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>pearson_corr <span class="op">=</span> data[perception_columns <span class="op">+</span> [<span class="st">'satisfaction'</span>]].corr(method<span class="op">=</span><span class="st">'pearson'</span>)[<span class="st">'satisfaction'</span>].drop(<span class="st">'satisfaction'</span>) <span class="op">*</span> <span class="dv">100</span></span>
@@ -388,7 +388,7 @@ Name: satisfaction, dtype: float64</code></pre>
 <p>satisfaction_corr &lt;- polychoric_corr$correlations[,“satisfaction”][-10] * 100</p>
 <p>print(satisfaction_corr)</p>
 <hr>
-<div id="565b147d" class="cell" data-execution_count="3">
+<div id="55661b66" class="cell" data-execution_count="3">
 <div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Polychoric Correlations (placeholder, replace with actual values from R)</span></span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>polychoric_corr <span class="op">=</span> pd.Series({</span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>    <span class="st">'trust'</span>: <span class="fl">25.57</span>,</span>
@@ -427,7 +427,7 @@ dtype: float64</code></pre>
 <section id="perform-standardized-multiple-regression-and-extract-the-coefficients." class="level3">
 <h3 class="anchored" data-anchor-id="perform-standardized-multiple-regression-and-extract-the-coefficients.">4. Perform Standardized Multiple Regression and extract the coefficients.</h3>
 <p>In this step, we perform a standardized multiple regression analysis to understand the impact of various perception variables on customer satisfaction. Standardizing the variables ensures that the regression coefficients are comparable, as they are measured on the same scale.</p>
-<div id="b09e47e8" class="cell" data-execution_count="4">
+<div id="9b4e9ca4" class="cell" data-execution_count="4">
 <div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.linear_model <span class="im">import</span> LinearRegression</span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.preprocessing <span class="im">import</span> StandardScaler</span>
 <span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -469,7 +469,7 @@ dtype: float64</code></pre>
 <section id="calculate-shapley-values-for-a-linear-regression." class="level3">
 <h3 class="anchored" data-anchor-id="calculate-shapley-values-for-a-linear-regression.">5. Calculate Shapley values for a linear regression.</h3>
 <p>In this step, we calculate the Shapley values for a linear regression model. Shapley values, originating from cooperative game theory, provide a fair distribution of the contribution of each feature to the prediction. This helps in understanding the importance and contribution of each feature to the model’s output.</p>
-<div id="6cc1a276" class="cell" data-execution_count="5">
+<div id="e713c071" class="cell" data-execution_count="5">
 <div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> shap</span>
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
 <span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Fit the regression model</span></span>
@@ -504,7 +504,7 @@ dtype: float64</code></pre>
 <section id="calculate-johnsons-relative-weights." class="level3">
 <h3 class="anchored" data-anchor-id="calculate-johnsons-relative-weights.">6. Calculate Johnson’s relative weights.</h3>
 <p>In this step, we calculate Johnson’s relative weights for the perception variables to understand their relative importance in predicting customer satisfaction. Johnson’s relative weights provide an estimate of the proportionate contribution of each predictor variable in the presence of multicollinearity.</p>
-<div id="1b31f03d" class="cell" data-execution_count="6">
+<div id="e44a9633" class="cell" data-execution_count="6">
 <div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> statsmodels.api <span class="im">as</span> sm</span>
 <span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> calculate_relative_weights(X, y):</span>
@@ -546,7 +546,7 @@ dtype: float64</code></pre>
 <section id="calculate-the-mean-decrease-in-the-gini-coefficient-using-a-random-forest." class="level3">
 <h3 class="anchored" data-anchor-id="calculate-the-mean-decrease-in-the-gini-coefficient-using-a-random-forest.">7. Calculate the mean decrease in the Gini coefficient using a random forest.</h3>
 <p>In this step, we calculate the mean decrease in the Gini coefficient using a Random Forest model to understand the importance of each perception variable in predicting customer satisfaction. The mean decrease in the Gini coefficient indicates how much each variable contributes to the homogeneity of the nodes and leaves in the Random Forest model.</p>
-<div id="16955cd9" class="cell" data-execution_count="7">
+<div id="9a37787f" class="cell" data-execution_count="7">
 <div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.ensemble <span class="im">import</span> RandomForestClassifier</span>
 <span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Define the features and target</span></span>
@@ -588,7 +588,7 @@ dtype: float64</code></pre>
 <section id="implement-usefulness-yourself" class="level3">
 <h3 class="anchored" data-anchor-id="implement-usefulness-yourself">1. Implement “Usefulness” Yourself</h3>
 <p>In this part of the challenge, we implement the “Usefulness” metric to evaluate the contribution of each perception variable to the prediction of customer satisfaction. Usefulness is calculated by measuring the drop in the model’s performance (R-squared) when a particular feature is removed.</p>
-<div id="fd92b07c" class="cell" data-execution_count="8">
+<div id="8fa70405" class="cell" data-execution_count="8">
 <div class="sourceCode cell-code" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.linear_model <span class="im">import</span> LinearRegression</span>
 <span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
 <span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -631,7 +631,7 @@ dtype: float64</code></pre>
 <section id="add-importance-scores-from-xgboost" class="level3">
 <h3 class="anchored" data-anchor-id="add-importance-scores-from-xgboost">2. Add Importance Scores from XGBoost</h3>
 <p>In this step, we calculate the importance scores from an XGBoost model to evaluate the contribution of each perception variable to the prediction of customer satisfaction. XGBoost (Extreme Gradient Boosting) is an advanced boosting algorithm that is highly efficient and effective for various machine learning tasks.</p>
-<div id="c5e538ce" class="cell" data-execution_count="9">
+<div id="2d7e5f3b" class="cell" data-execution_count="9">
 <div class="sourceCode cell-code" id="cb16"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> xgboost <span class="im">as</span> xgb</span>
 <span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
 <span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> xgboost <span class="im">import</span> XGBClassifier</span>
@@ -669,7 +669,7 @@ dtype: float32</code></pre>
 </section>
 <section id="summary" class="level2">
 <h2 class="anchored" data-anchor-id="summary">Summary</h2>
-<div id="4c58eed7" class="cell" data-execution_count="10">
+<div id="0a7a8dc2" class="cell" data-execution_count="10">
 <div class="sourceCode cell-code" id="cb18"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> tabulate <span class="im">import</span> tabulate</span>
 <span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Combine all metrics into a single DataFrame</span></span>
 <span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>final_table <span class="op">=</span> pd.DataFrame({</span>
@@ -716,47 +716,137 @@ dtype: float32</code></pre>
 <ol type="1">
 <li>Is offered by a brand I trust:</li>
 </ol>
-<p>Pearson Correlations: 25.57 Polychoric Correlations: 25.57 Standardized Regression Coefficients: 13.56 Shapley Values: 13.66 Johnson’s Relative Weights: 88.85 Mean Decrease in RF Gini Coefficient: 8.98 XGBoost Importance: 15.06 Usefulness: 0.82</p>
+<ul>
+<li><p>Pearson Correlations: 25.57</p></li>
+<li><p>Polychoric Correlations: 25.57</p></li>
+<li><p>Standardized Regression Coefficients: 13.56</p></li>
+<li><p>Shapley Values: 13.66</p></li>
+<li><p>Johnson’s Relative Weights: 88.85</p></li>
+<li><p>Mean Decrease in RF Gini Coefficient: 8.98</p></li>
+<li><p>XGBoost Importance: 15.06</p></li>
+<li><p>Usefulness: 0.82</p></li>
+</ul>
 <p>Conclusion: Trust in the brand is one of the most significant factors influencing customer satisfaction. It consistently shows high importance across Pearson, Polychoric, Shapley values, and XGBoost importance, indicating its strong positive relationship with satisfaction.</p>
 <hr>
 <ol start="2" type="1">
 <li>Helps build credit quickly:</li>
 </ol>
-<p>Pearson Correlations: 19.19 Polychoric Correlations: 19.19 Standardized Regression Coefficients: 2.34 Shapley Values: 2.32 Johnson’s Relative Weights: 3.16 Mean Decrease in RF Gini Coefficient: 12.37 XGBoost Importance: 9.11 Usefulness: 0.03</p>
+<ul>
+<li><p>Pearson Correlations: 19.19</p></li>
+<li><p>Polychoric Correlations: 19.19</p></li>
+<li><p>Standardized Regression Coefficients: 2.34</p></li>
+<li><p>Shapley Values: 2.32</p></li>
+<li><p>Johnson’s Relative Weights: 3.16</p></li>
+<li><p>Mean Decrease in RF Gini Coefficient: 12.37</p></li>
+<li><p>XGBoost Importance: 9.11</p></li>
+<li><p>Usefulness: 0.03</p></li>
+</ul>
 <p>Conclusion: The perception that the card helps build credit quickly shows moderate importance. While it has a strong Gini importance, its regression and Shapley values are lower, indicating it has a smaller direct impact on satisfaction compared to other factors.</p>
 <hr>
 <ol start="3" type="1">
 <li>Is different from other cards:</li>
 </ol>
-<p>Pearson Correlations: 18.48 Polychoric Correlations: 18.48 Standardized Regression Coefficients: 3.26 Shapley Values: 2.89 Johnson’s Relative Weights: 3.19 Mean Decrease in RF Gini Coefficient: 11.47 XGBoost Importance: 10.96 Usefulness: 0.06</p>
+<ul>
+<li><p>Pearson Correlations: 18.48</p></li>
+<li><p>Polychoric Correlations: 18.48</p></li>
+<li><p>Standardized Regression Coefficients: 3.26</p></li>
+<li><p>Shapley Values: 2.89</p></li>
+<li><p>Johnson’s Relative Weights: 3.19</p></li>
+<li><p>Mean Decrease in RF Gini Coefficient: 11.47</p></li>
+<li><p>XGBoost Importance: 10.96</p></li>
+<li><p>Usefulness: 0.06</p></li>
+</ul>
 <p>Conclusion: Being different from other cards has moderate importance. It shows consistent but not leading importance across metrics, indicating it contributes to satisfaction but is not the primary driver.</p>
+<hr>
 <ol start="4" type="1">
 <li>Is easy to use:</li>
 </ol>
-<p>Pearson Correlations: 21.30 Polychoric Correlations: 21.30 Standardized Regression Coefficients: 2.57 Shapley Values: 2.59 Johnson’s Relative Weights: 2.42 Mean Decrease in RF Gini Coefficient: 11.25 XGBoost Importance: 9.48 Usefulness: 0.03</p>
+<ul>
+<li><p>Pearson Correlations: 21.30</p></li>
+<li><p>Polychoric Correlations: 21.30</p></li>
+<li><p>Standardized Regression Coefficients: 2.57</p></li>
+<li><p>Shapley Values: 2.59</p></li>
+<li><p>Johnson’s Relative Weights: 2.42</p></li>
+<li><p>Mean Decrease in RF Gini Coefficient: 11.25</p></li>
+<li><p>XGBoost Importance: 9.48</p></li>
+<li><p>Usefulness: 0.03</p></li>
+</ul>
 <p>Conclusion: Ease of use has a moderate impact on satisfaction. It is consistently important across correlation and Gini metrics, indicating that making the card easy to use can positively influence satisfaction.</p>
+<hr>
 <ol start="5" type="1">
 <li>Has appealing benefits or rewards:</li>
 </ol>
-<p>Pearson Correlations: 20.80 Polychoric Correlations: 20.80 Standardized Regression Coefficients: 3.96 Shapley Values: 3.91 Johnson’s Relative Weights: 0.04 Mean Decrease in RF Gini Coefficient: 10.70 XGBoost Importance: 9.90 Usefulness: 0.07</p>
+<ul>
+<li><p>Pearson Correlations: 20.80</p></li>
+<li><p>Polychoric Correlations: 20.80</p></li>
+<li><p>Standardized Regression Coefficients: 3.96</p></li>
+<li><p>Shapley Values: 3.91</p></li>
+<li><p>Johnson’s Relative Weights: 0.04</p></li>
+<li><p>Mean Decrease in RF Gini Coefficient: 10.70</p></li>
+<li><p>XGBoost Importance: 9.90</p></li>
+<li><p>Usefulness: 0.07</p></li>
+</ul>
 <p>Conclusion: Appealing benefits or rewards have moderate importance, especially highlighted in correlation and Gini metrics. This indicates that attractive rewards can influence satisfaction but are not the top priority.</p>
+<hr>
 <ol start="6" type="1">
 <li>Rewards me for responsible usage:</li>
 </ol>
-<p>Pearson Correlations: 19.46 Polychoric Correlations: 19.46 Standardized Regression Coefficients: 0.59 Shapley Values: 0.59 Johnson’s Relative Weights: 1.52 Mean Decrease in RF Gini Coefficient: 11.85 XGBoost Importance: 8.80 Usefulness: 0.00</p>
+<ul>
+<li><p>Pearson Correlations: 19.46</p></li>
+<li><p>Polychoric Correlations: 19.46</p></li>
+<li><p>Standardized Regression Coefficients: 0.59</p></li>
+<li><p>Shapley Values: 0.59</p></li>
+<li><p>Johnson’s Relative Weights: 1.52</p></li>
+<li><p>Mean Decrease in RF Gini Coefficient: 11.85</p></li>
+<li><p>XGBoost Importance: 8.80</p></li>
+<li><p>Usefulness: 0.00</p></li>
+</ul>
 <p>Conclusion: Rewarding responsible usage shows low to moderate importance. While it appears in correlation metrics, its regression and Shapley values are low, indicating it is less impactful than other factors.</p>
+<hr>
 <ol start="7" type="1">
 <li>Is used by a lot of people:</li>
 </ol>
-<p>Pearson Correlations: 17.14 Polychoric Correlations: 17.14 Standardized Regression Coefficients: 1.95 Shapley Values: 1.95 Johnson’s Relative Weights: 0.79 Mean Decrease in RF Gini Coefficient: 13.52 XGBoost Importance: 10.21 Usefulness: 0.02 Conclusion: Popularity has a moderate impact on satisfaction. It is consistently important across Gini and XGBoost metrics, indicating that the card’s popularity can influence satisfaction, but it is not the primary driver.</p>
+<ul>
+<li><p>Pearson Correlations: 17.14</p></li>
+<li><p>Polychoric Correlations: 17.14</p></li>
+<li><p>Standardized Regression Coefficients: 1.95</p></li>
+<li><p>Shapley Values: 1.95</p></li>
+<li><p>Johnson’s Relative Weights: 0.79</p></li>
+<li><p>Mean Decrease in RF Gini Coefficient: 13.52</p></li>
+<li><p>XGBoost Importance: 10.21</p></li>
+<li><p>Usefulness: 0.02</p></li>
+</ul>
+<p>Conclusion: Popularity has a moderate impact on satisfaction. It is consistently important across Gini and XGBoost metrics, indicating that the card’s popularity can influence satisfaction, but it is not the primary driver.</p>
+<hr>
 <ol start="8" type="1">
 <li>Provides outstanding customer service:</li>
 </ol>
-<p>Pearson Correlations: 25.11 Polychoric Correlations: 25.11 Standardized Regression Coefficients: 10.36 Shapley Values: 10.20 Johnson’s Relative Weights: 0.02 Mean Decrease in RF Gini Coefficient: 10.59 XGBoost Importance: 10.71 Usefulness: 0.47 Conclusion: Outstanding customer service is highly important. It shows strong importance across Pearson, Polychoric, Shapley values, and XGBoost importance, indicating its significant positive relationship with satisfaction.</p>
+<ul>
+<li><p>Pearson Correlations: 25.11</p></li>
+<li><p>Polychoric Correlations: 25.11</p></li>
+<li><p>Standardized Regression Coefficients: 10.36</p></li>
+<li><p>Shapley Values: 10.20</p></li>
+<li><p>Johnson’s Relative Weights: 0.02</p></li>
+<li><p>Mean Decrease in RF Gini Coefficient: 10.59</p></li>
+<li><p>XGBoost Importance: 10.71</p></li>
+<li><p>Usefulness: 0.47</p></li>
+</ul>
+<p>Conclusion: Outstanding customer service is highly important. It shows strong importance across Pearson, Polychoric, Shapley values, and XGBoost importance, indicating its significant positive relationship with satisfaction.</p>
+<hr>
 <ol start="9" type="1">
 <li>Makes a difference in my life:</li>
 </ol>
-<p>Pearson Correlations: 25.45 Polychoric Correlations: 25.45 Standardized Regression Coefficients: 15.05 Shapley Values: 13.07 Johnson’s Relative Weights: 0.01 Mean Decrease in RF Gini Coefficient: 9.27 XGBoost Importance: 15.75 Usefulness: 1.12 Conclusion: The perception that the card makes a difference in the customer’s life is one of the most significant factors. It consistently shows high importance across Pearson, Polychoric, regression, Shapley values, and XGBoost metrics, indicating its strong positive relationship with satisfaction.</p>
+<ul>
+<li><p>Pearson Correlations: 25.45</p></li>
+<li><p>Polychoric Correlations: 25.45</p></li>
+<li><p>Standardized Regression Coefficients: 15.05</p></li>
+<li><p>Shapley Values: 13.07</p></li>
+<li><p>Johnson’s Relative Weights: 0.01</p></li>
+<li><p>Mean Decrease in RF Gini Coefficient: 9.27</p></li>
+<li><p>XGBoost Importance: 15.75</p></li>
+<li><p>Usefulness: 1.12</p></li>
+</ul>
+<p>Conclusion: The perception that the card makes a difference in the customer’s life is one of the most significant factors. It consistently shows high importance across Pearson, Polychoric, regression, Shapley values, and XGBoost metrics, indicating its strong positive relationship with satisfaction.</p>
 <section id="final-conclusion" class="level3">
 <h3 class="anchored" data-anchor-id="final-conclusion">Final Conclusion</h3>
 <p>The analysis reveals that the following variables are most strongly related to customer satisfaction:</p>
