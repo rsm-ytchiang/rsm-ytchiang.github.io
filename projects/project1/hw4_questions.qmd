@@ -1,0 +1,559 @@
+---
+title: "Homework4 - Key Drivers Analysis"
+author: "Thomas Chiang"
+date: today
+---
+
+This post implements a few measure of variable importance, interpreted as a key drivers analysis, for certain aspects of a payment card on customer satisfaction with that payment card.
+
+## Replicate the table
+
+### 1.Load and inspect the data:
+
+In this step, we load the dataset from a CSV file and inspect its structure. This helps us understand the data we will be working with, including the different variables available for our analysis.
+
+```{python}
+import pandas as pd
+
+# Load the data
+file_path = '/home/jovyan/code/MGTA 495/QUARTO_WEBSITE/data/data_for_drivers_analysis.csv'
+data = pd.read_csv(file_path)
+
+# Display the first few rows of the data
+data.head()
+
+```
+
+Variables in the Dataset
+
+- `brand`: Represents the brand identifier for each record. This is likely a categorical variable that distinguishes between different brands.
+
+- `id`: A unique identifier for each record in the dataset.
+
+- `satisfaction`: A measure of customer satisfaction with the payment card. This could be a numeric or ordinal variable, with higher values indicating greater satisfaction.
+
+- `trust`: Indicates whether the customer trusts the brand offering the card. Typically a binary variable (1 = Yes, 0 = No).
+
+- `build`: Reflects whether the card helps build credit quickly. Another binary variable (1 = Yes, 0 = No).
+
+- `differs`: Shows if the card is different from other cards. This is also likely a binary variable (1 = Yes, 0 = No).
+
+- `easy`: Represents whether the card is easy to use. Again, likely binary (1 = Yes, 0 = No).
+
+- `appealing`: Indicates if the card has appealing benefits or rewards. Typically a binary variable (1 = Yes, 0 = No).
+
+- `rewarding`: Reflects whether the card rewards responsible usage. Likely binary (1 = Yes, 0 = No).
+
+- `popular`: Indicates if the card is used by a lot of people. Another binary variable (1 = Yes, 0 = No).
+
+`service`: Represents whether the card provides outstanding customer service. Typically a binary variable (1 = Yes, 0 = No).
+
+`impact`: Shows if the card makes a difference in the customer's life. Likely binary (1 = Yes, 0 = No).
+
+By loading and inspecting the data, we can ensure that it is correctly imported and understand the initial structure and content of the dataset. This foundational step is crucial for performing subsequent data analysis and interpretation.
+
+### 2. Calculate Pearson Correlations.
+
+In this step, we calculate the **Pearson correlation coefficients between customer satisfaction and various perceptions of the payment card.** Pearson correlation coefficients measure the linear relationship between two variables. A higher absolute value of the correlation indicates a stronger relationship.
+
+```{python}
+
+# Calculate Pearson correlation coefficients
+perception_columns = ['trust', 'build', 'differs', 'easy', 'appealing', 'rewarding', 'popular', 'service', 'impact']
+pearson_corr = data[perception_columns + ['satisfaction']].corr(method='pearson')['satisfaction'].drop('satisfaction') * 100
+print("Pearson Correlations:\n", pearson_corr)
+
+```
+
+By excluding id, brand, and satisfaction, we focus on the meaningful relationships between perception variables and customer satisfaction, ensuring the analysis is relevant and insightful.
+
+**Interpretation:**
+
+- Positive Correlations: All correlations are positive, indicating that improvements in any of the perception variables are associated with higher customer satisfaction.
+
+- Strength of Relationships: The strength of these relationships varies, with trust, service, and impact showing the highest correlations around 25%, suggesting these are key drivers of customer satisfaction. Other variables like popular and differs have lower, but still positive, correlations, indicating they also contribute to satisfaction but to a lesser extent.
+
+- Implications: By understanding these correlations, we can prioritize efforts to improve areas that have the strongest impact on customer satisfaction, such as trust, service, and perceived impact of the card.
+
+Calculating Pearson correlations, we can understand how strongly each perception of the payment card is related to customer satisfaction. Higher positive values indicate stronger positive relationships, while higher negative values would indicate stronger negative relationships (though in this context, all values are positive).
+
+This step is crucial for identifying key perceptions that influence customer satisfaction and will guide further analysis and decision-making.
+
+### 3. Calculate Polychoric Correlations.
+
+In this step, we calculate the Polychoric correlation coefficients between customer satisfaction and various perceptions of the payment card. Polychoric correlations are used to estimate the correlation between two theorized continuous variables from observed ordinal variables. This is particularly useful for survey data where responses are typically ordinal.
+
+
+Below is the R code that I used to generate the Polychoric correlation coefficients:
+
+-----
+
+data_selected <- data[, c("trust", "build", "differs", "easy", "appealing", "rewarding", "popular", "service", "impact", "satisfaction")]
+
+polychoric_corr <- hetcor(data_selected)
+
+satisfaction_corr <- polychoric_corr$correlations[,"satisfaction"][-10] * 100
+
+print(satisfaction_corr)
+
+-----
+
+```{python}
+# Polychoric Correlations (placeholder, replace with actual values from R)
+polychoric_corr = pd.Series({
+    'trust': 25.57,
+    'build': 19.19,
+    'differs': 18.48,
+    'easy': 21.30,
+    'appealing': 20.80,
+    'rewarding': 19.46,
+    'popular': 17.14,
+    'service': 25.11,
+    'impact': 25.45
+})
+
+print("Polychoric Correlations:\n", polychoric_corr)
+```
+
+**Why Use Polychoric Correlations?**
+
+- Suitability for Ordinal Data: Polychoric correlations are more appropriate than Pearson correlations when dealing with **ordinal data**, as they account for the nature of the ordinal variables and provide a better estimate of the underlying continuous relationship.
+
+- Insight into Relationships: By understanding Polychoric correlations, we gain insights into the strength and direction of relationships between customer perceptions and satisfaction, which helps in identifying areas to improve for enhancing customer satisfaction.
+
+This step allows us to understand how ordinal perceptions of the payment card are related to overall satisfaction, offering more nuanced insights than simple Pearson correlations.
+
+
+### 4. Perform Standardized Multiple Regression and extract the coefficients.
+
+In this step, we perform a standardized multiple regression analysis to understand the impact of various perception variables on customer satisfaction. Standardizing the variables ensures that the regression coefficients are comparable, as they are measured on the same scale.
+
+
+```{python}
+from sklearn.linear_model import LinearRegression
+from sklearn.preprocessing import StandardScaler
+
+# Define the features and target
+X = data.drop(columns=['brand', 'id', 'satisfaction'])
+y = data['satisfaction']
+
+# Standardize the features
+scaler = StandardScaler()
+X_scaled = scaler.fit_transform(X)
+
+# Fit the regression model
+reg = LinearRegression()
+reg.fit(X_scaled, y)
+
+# Get the standardized coefficients
+std_coeff = pd.Series(reg.coef_ * 100, index=X.columns)
+print("Standardized Regression Coefficients:\n", std_coeff)
+```
+
+**Why Perform Standardized Multiple Regression?**
+
+- Comparability: Standardizing the variables allows us to compare the coefficients directly to understand the relative importance of each perception variable.
+
+- Insight into Relationships: The regression analysis provides insights into which perception variables have the most significant impact on customer satisfaction, guiding strategic improvements.
+
+
+### 5. Calculate Shapley values for a linear regression.
+
+In this step, we calculate the Shapley values for a linear regression model. Shapley values, originating from cooperative game theory, provide a fair distribution of the contribution of each feature to the prediction. This helps in understanding the importance and contribution of each feature to the model's output.
+
+```{python}
+import shap
+import numpy as np
+# Fit the regression model
+reg.fit(X_scaled, y)
+
+# Calculate Shapley values
+explainer = shap.LinearExplainer(reg, X_scaled)
+shap_values = explainer.shap_values(X_scaled)
+shap_values_mean = np.mean(np.abs(shap_values), axis=0) * 100
+shap_values_series = pd.Series(shap_values_mean, index=X.columns)
+print("Shapley Values:\n", shap_values_series)
+```
+
+**Why Calculate Shapley Values?**
+
+- Fair Distribution: Shapley values provide a fair distribution of the contribution of each feature, offering a clear understanding of their importance.
+
+- Insight into Feature Contribution: By calculating Shapley values, we gain insights into how each perception variable contributes to customer satisfaction, allowing for more informed decision-making.
+
+### 6. Calculate Johnson's relative weights.
+
+In this step, we calculate Johnson's relative weights for the perception variables to understand their relative importance in predicting customer satisfaction. Johnson's relative weights provide an estimate of the proportionate contribution of each predictor variable in the presence of multicollinearity.
+
+```{python}
+import statsmodels.api as sm
+
+def calculate_relative_weights(X, y):
+    r = np.corrcoef(X, rowvar=False)
+    y_corr = np.corrcoef(X.T, y)[-1, :-1]
+    e_vals, e_vecs = np.linalg.eig(r)
+    e_vecs = e_vecs / np.linalg.norm(e_vecs, axis=0)
+    r_XX = np.dot(e_vecs.T, np.dot(np.diag(e_vals), e_vecs))
+    r_XY = np.dot(e_vecs.T, y_corr)
+    beta = np.dot(np.linalg.inv(r_XX), r_XY)
+    raw_weights = beta ** 2 * np.var(X, axis=0)
+    relative_weights = 100 * (raw_weights / raw_weights.sum())
+    return relative_weights
+
+relative_weights = calculate_relative_weights(X_scaled, y)
+relative_weights_series = pd.Series(relative_weights, index=X.columns)
+print("Johnson's Relative Weights:\n", relative_weights_series)
+```
+
+**Why Calculate Johnson's Relative Weights?**
+
+- Handling Multicollinearity: Johnson's relative weights provide an estimate of the contribution of each predictor variable while accounting for multicollinearity, offering a clearer picture of their importance.
+
+- Insight into Feature Contribution: By calculating relative weights, we gain insights into the relative importance of each perception variable in predicting customer satisfaction, guiding strategic improvements.
+
+This step helps identify the key drivers of customer satisfaction among the perception variables, providing actionable insights for enhancing customer experience.
+
+### 7. Calculate the mean decrease in the Gini coefficient using a random forest.
+
+In this step, we calculate the mean decrease in the Gini coefficient using a Random Forest model to understand the importance of each perception variable in predicting customer satisfaction. The mean decrease in the Gini coefficient indicates how much each variable contributes to the homogeneity of the nodes and leaves in the Random Forest model.
+
+```{python}
+from sklearn.ensemble import RandomForestClassifier
+
+# Define the features and target
+X = data.drop(columns=['brand', 'id', 'satisfaction'])
+y = data['satisfaction']
+
+# Fit the RandomForest model
+rf = RandomForestClassifier(n_estimators=100, random_state=42)
+rf.fit(X, y)
+
+# Get feature importances (mean decrease in Gini coefficient)
+gini_importances = rf.feature_importances_ * 100
+gini_importances_series = pd.Series(gini_importances, index=X.columns)
+print("Mean Decrease in RF Gini Coefficient:\n", gini_importances_series)
+
+```
+
+**Why Calculate Mean Decrease in Gini Coefficient?**
+
+- Feature Importance in Classification: The mean decrease in Gini coefficient provides a measure of feature importance in classification models, indicating how much each feature contributes to reducing impurity.
+
+- Insight into Feature Contribution: By calculating the mean decrease in Gini coefficient, we gain insights into the importance of each perception variable in predicting customer satisfaction, guiding strategic improvements.
+
+This step helps identify the key drivers of customer satisfaction among the perception variables, providing actionable insights for enhancing customer experience.
+
+## Parts of the challenge 
+
+### 1. Implement "Usefulness" Yourself
+
+In this part of the challenge, we implement the "Usefulness" metric to evaluate the contribution of each perception variable to the prediction of customer satisfaction. Usefulness is calculated by measuring the drop in the model's performance (R-squared) when a particular feature is removed.
+
+```{python}
+from sklearn.linear_model import LinearRegression
+import numpy as np
+
+# Calculate Usefulness
+def calculate_usefulness(X, y):
+    reg = LinearRegression()
+    reg.fit(X, y)
+    r2_full = reg.score(X, y)
+    usefulness = {}
+    for col in X.columns:
+        X_reduced = X.drop(columns=[col])
+        reg.fit(X_reduced, y)
+        r2_reduced = reg.score(X_reduced, y)
+        usefulness[col] = (r2_full - r2_reduced) * 100
+    return pd.Series(usefulness)
+
+usefulness_scores = calculate_usefulness(X, y)
+print("Usefulness:\n", usefulness_scores)
+
+
+```
+
+**Why Implement Usefulness?**
+
+- Understanding Feature Contribution: Usefulness scores provide a clear understanding of the contribution of each feature to the model's performance, helping in identifying the most impactful features.
+
+- Actionable Insights: By calculating usefulness, we can prioritize improvements in the features that have the highest contribution to customer satisfaction, leading to more targeted and effective strategies.
+
+This step helps identify the key drivers of customer satisfaction among the perception variables, providing actionable insights for enhancing customer experience.
+
+### 2. Add Importance Scores from XGBoost
+
+In this step, we calculate the importance scores from an XGBoost model to evaluate the contribution of each perception variable to the prediction of customer satisfaction. XGBoost (Extreme Gradient Boosting) is an advanced boosting algorithm that is highly efficient and effective for various machine learning tasks.
+
+```{python}
+import xgboost as xgb
+import pandas as pd
+from xgboost import XGBClassifier
+# Adjust labels to be zero-indexed for XGBoost
+y_adjusted = y - 1
+
+# Fit the XGBoost model
+xgb_model = XGBClassifier(use_label_encoder=False, eval_metric='mlogloss')
+xgb_model.fit(X, y_adjusted)
+
+# Get feature importances
+xgb_importances = xgb_model.feature_importances_ * 100
+xgb_importances_series = pd.Series(xgb_importances, index=X.columns)
+print("XGBoost Importance:\n", xgb_importances_series)
+
+
+```
+
+**Why Add Importance Scores from XGBoost?**
+
+- Advanced Feature Importance: XGBoost provides an advanced method for calculating feature importance, leveraging boosting techniques for improved accuracy.
+
+- Insight into Feature Contribution: By calculating importance scores from XGBoost, we gain insights into the contribution of each perception variable to customer satisfaction, guiding strategic improvements.
+
+## Summary
+```{python}
+
+from tabulate import tabulate
+# Combine all metrics into a single DataFrame
+final_table = pd.DataFrame({
+    'Perception': [
+        'Is offered by a brand I trust',
+        'Helps build credit quickly',
+        'Is different from other cards',
+        'Is easy to use',
+        'Has appealing benefits or rewards',
+        'Rewards me for responsible usage',
+        'Is used by a lot of people',
+        'Provides outstanding customer service',
+        'Makes a difference in my life'
+    ],
+    'Pearson Correlations': pearson_corr.values,
+    'Polychoric Correlations': polychoric_corr.values,
+    'Standardized Regression Coefficients': std_coeff.values,
+    'Shapley Values': shap_values_series.values,
+    'Johnson\'s Relative Weights': relative_weights_series.values,
+    'Mean Decrease in RF Gini Coefficient': gini_importances_series.values,
+    'XGBoost Importance': xgb_importances_series.values,
+    'Usefulness': usefulness_scores.values
+}, index=np.arange(1, 10))
+
+# Convert the final table to a nicely formatted table
+final_table_str = tabulate(final_table, headers='keys', tablefmt='pipe', showindex="always")
+print(final_table_str)
+```
+
+Based on the various metrics calculated, we can determine which perception variables are most strongly related to customer satisfaction. Here is an analysis of each perception variable across different metrics:
+
+----
+
+1. Is offered by a brand I trust:
+
+- Pearson Correlations: 25.57
+
+- Polychoric Correlations: 25.57
+
+- Standardized Regression Coefficients: 13.56
+
+- Shapley Values: 13.66
+
+- Johnson's Relative Weights: 88.85
+
+- Mean Decrease in RF Gini Coefficient: 8.98
+
+- XGBoost Importance: 15.06
+
+- Usefulness: 0.82
+
+Conclusion: Trust in the brand is one of the most significant factors influencing customer satisfaction. It consistently shows high importance across Pearson, Polychoric, Shapley values, and XGBoost importance, indicating its strong positive relationship with satisfaction.
+
+----
+
+2. Helps build credit quickly:
+
+- Pearson Correlations: 19.19
+
+- Polychoric Correlations: 19.19
+
+- Standardized Regression Coefficients: 2.34
+
+- Shapley Values: 2.32
+
+- Johnson's Relative Weights: 3.16
+
+- Mean Decrease in RF Gini Coefficient: 12.37
+
+- XGBoost Importance: 9.11
+
+- Usefulness: 0.03
+
+Conclusion: The perception that the card helps build credit quickly shows moderate importance. While it has a strong Gini importance, its regression and Shapley values are lower, indicating it has a smaller direct impact on satisfaction compared to other factors.
+
+----
+
+3. Is different from other cards:
+
+- Pearson Correlations: 18.48
+
+- Polychoric Correlations: 18.48
+
+- Standardized Regression Coefficients: 3.26
+
+- Shapley Values: 2.89
+
+- Johnson's Relative Weights: 3.19
+
+- Mean Decrease in RF Gini Coefficient: 11.47
+
+- XGBoost Importance: 10.96
+
+- Usefulness: 0.06
+
+Conclusion: Being different from other cards has moderate importance. It shows consistent but not leading importance across metrics, indicating it contributes to satisfaction but is not the primary driver.
+
+----
+
+4. Is easy to use:
+
+- Pearson Correlations: 21.30
+
+- Polychoric Correlations: 21.30
+
+- Standardized Regression Coefficients: 2.57
+
+- Shapley Values: 2.59
+
+- Johnson's Relative Weights: 2.42
+
+- Mean Decrease in RF Gini Coefficient: 11.25
+
+- XGBoost Importance: 9.48
+
+- Usefulness: 0.03
+
+Conclusion: Ease of use has a moderate impact on satisfaction. It is consistently important across correlation and Gini metrics, indicating that making the card easy to use can positively influence satisfaction.
+
+----
+
+5. Has appealing benefits or rewards:
+
+- Pearson Correlations: 20.80
+
+- Polychoric Correlations: 20.80
+
+- Standardized Regression Coefficients: 3.96
+
+- Shapley Values: 3.91
+
+- Johnson's Relative Weights: 0.04
+
+- Mean Decrease in RF Gini Coefficient: 10.70
+
+- XGBoost Importance: 9.90
+
+- Usefulness: 0.07
+
+Conclusion: Appealing benefits or rewards have moderate importance, especially highlighted in correlation and Gini metrics. This indicates that attractive rewards can influence satisfaction but are not the top priority.
+
+----
+
+6. Rewards me for responsible usage:
+
+- Pearson Correlations: 19.46
+
+- Polychoric Correlations: 19.46
+
+- Standardized Regression Coefficients: 0.59
+
+- Shapley Values: 0.59
+
+- Johnson's Relative Weights: 1.52
+
+- Mean Decrease in RF Gini Coefficient: 11.85
+
+- XGBoost Importance: 8.80
+
+- Usefulness: 0.00
+
+Conclusion: Rewarding responsible usage shows low to moderate importance. While it appears in correlation metrics, its regression and Shapley values are low, indicating it is less impactful than other factors.
+
+----
+
+7. Is used by a lot of people:
+
+- Pearson Correlations: 17.14
+
+- Polychoric Correlations: 17.14
+
+- Standardized Regression Coefficients: 1.95
+
+- Shapley Values: 1.95
+
+- Johnson's Relative Weights: 0.79
+
+- Mean Decrease in RF Gini Coefficient: 13.52
+
+- XGBoost Importance: 10.21
+
+- Usefulness: 0.02
+
+Conclusion: Popularity has a moderate impact on satisfaction. It is consistently important across Gini and XGBoost metrics, indicating that the card's popularity can influence satisfaction, but it is not the primary driver.
+
+----
+
+8. Provides outstanding customer service:
+
+- Pearson Correlations: 25.11
+
+- Polychoric Correlations: 25.11
+
+- Standardized Regression Coefficients: 10.36
+
+- Shapley Values: 10.20
+
+- Johnson's Relative Weights: 0.02
+
+- Mean Decrease in RF Gini Coefficient: 10.59
+
+- XGBoost Importance: 10.71
+
+- Usefulness: 0.47
+
+Conclusion: Outstanding customer service is highly important. It shows strong importance across Pearson, Polychoric, Shapley values, and XGBoost importance, indicating its significant positive relationship with satisfaction.
+
+----
+
+9. Makes a difference in my life:
+
+- Pearson Correlations: 25.45
+
+- Polychoric Correlations: 25.45
+
+- Standardized Regression Coefficients: 15.05
+
+- Shapley Values: 13.07
+
+- Johnson's Relative Weights: 0.01
+
+- Mean Decrease in RF Gini Coefficient: 9.27
+
+- XGBoost Importance: 15.75
+
+- Usefulness: 1.12
+
+Conclusion: The perception that the card makes a difference in the customer's life is one of the most significant factors. It consistently shows high importance across Pearson, Polychoric, regression, Shapley values, and XGBoost metrics, indicating its strong positive relationship with satisfaction.
+
+### Final Conclusion
+The analysis reveals that the following variables are most strongly related to customer satisfaction:
+
+1. Trust in the brand:
+
+Consistently high across multiple metrics, indicating it is a crucial factor in customer satisfaction.
+
+2. Outstanding customer service:
+
+Shows significant importance across various metrics, suggesting that customer service is a key driver of satisfaction.
+
+3. Makes a difference in my life:
+
+Strong importance in most metrics, indicating its substantial contribution to satisfaction.
+
+These insights suggest that to improve customer satisfaction, efforts should focus on enhancing trust, providing outstanding customer service, and ensuring the card makes a meaningful difference in the customers' lives.

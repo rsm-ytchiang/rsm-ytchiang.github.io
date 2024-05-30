@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="Thomas Chiang">
-<meta name="dcterms.date" content="2024-05-15">
+<meta name="dcterms.date" content="2024-05-30">
 
 <title>Thomas’s website - Homework3 - Multinomial Logit Examples</title>
 <style>
@@ -194,7 +194,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <div>
     <div class="quarto-title-meta-heading">Published</div>
     <div class="quarto-title-meta-contents">
-      <p class="date">May 15, 2024</p>
+      <p class="date">May 30, 2024</p>
     </div>
   </div>
   
@@ -232,7 +232,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <h3 class="anchored" data-anchor-id="yogurt-dataset">Yogurt Dataset</h3>
 <p>We will use the <code>yogurt_data</code> dataset, which provides anonymized consumer identifiers (<code>id</code>), a vector indicating the chosen product (<code>y1</code>:<code>y4</code>), a vector indicating if any products were “featured” in the store as a form of advertising (<code>f1</code>:<code>f4</code>), and the products’ prices (<code>p1</code>:<code>p4</code>). For example, consumer 1 purchased yogurt 4 at a price of 0.079/oz and none of the yogurts were featured/advertised at the time of consumer 1’s purchase. Consumers 2 through 7 each bought yogurt 2, etc.</p>
 <p><em>todo: import the data, maybe show the first few rows, and describe the data a bit.</em></p>
-<div id="3c33807e" class="cell" data-execution_count="1">
+<div id="f5b7d0bf" class="cell" data-execution_count="1">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>yogurt_data <span class="op">=</span> pd.read_csv(<span class="st">'/home/jovyan/code/MGTA 495/QUARTO_WEBSITE/data/yogurt_data.csv'</span>)</span>
@@ -367,7 +367,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <li><p>Create Dummy Variables: Create binary dummy variables for the first three yogurt brands (Yogurt 1, Yogurt 2, and Yogurt 3). <strong>Yogurt 4 will be treated as the baseline category</strong>, so no dummy is needed for it.</p></li>
 <li><p>Reorganize Variables: Ensure that featured flags and prices are appropriately aligned with the reshaped data.</p></li>
 </ol>
-<div id="e430f8c5" class="cell" data-execution_count="2">
+<div id="64793f57" class="cell" data-execution_count="2">
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Reshape the data from wide to long format using melt instead</span></span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>id_vars <span class="op">=</span> [<span class="st">'id'</span>]</span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>value_vars <span class="op">=</span> [<span class="st">'y1'</span>, <span class="st">'y2'</span>, <span class="st">'y3'</span>, <span class="st">'y4'</span>, <span class="st">'f1'</span>, <span class="st">'f2'</span>, <span class="st">'f3'</span>, <span class="st">'f4'</span>, <span class="st">'p1'</span>, <span class="st">'p2'</span>, <span class="st">'p3'</span>, <span class="st">'p4'</span>]</span>
@@ -617,7 +617,7 @@ P_i(j) = \frac{e^{x_{ij}'\beta}}{\sum_{k=1}^{J} e^{x_{ik}'\beta}}
 \]</span></p>
 <p>Here, <span class="math inline">\(x_{ij}\)</span> represents the feature vector for product <span class="math inline">\(j\)</span> and consumer <span class="math inline">\(i\)</span>, and <span class="math inline">\(\beta\)</span> is the parameter vector we need to estimate.</p>
 <p>We’ll code the log-likelihood function which computes the sum of the log probabilities for all chosen products by all consumers, based on the parameters <span class="math inline">\(\beta\)</span>. Let’s first define the feature matrix <span class="math inline">\(x_{ij}\)</span> and then proceed to implement the function.</p>
-<div id="86e524ec" class="cell" data-execution_count="3">
+<div id="66829ffc" class="cell" data-execution_count="3">
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Define the features matrix x</span></span>
@@ -661,7 +661,7 @@ P_i(j) = \frac{e^{x_{ij}'\beta}}{\sum_{k=1}^{J} e^{x_{ik}'\beta}}
 <p>This value serves as a starting point. The goal in the MNL model fitting process would be to find the parameter values that maximize this log-likelihood function.</p>
 <p>To find the maximum likelihood estimates (MLEs) of the parameters for the multinomial logit model using the <code>optimize()</code> function from the <code>scipy.optimize</code> module, we can use the <code>minimize()</code> function, which is designed for minimization. Since we want to maximize the log-likelihood, we can minimize the negative of the log-likelihood function.</p>
 <p>Let’s proceed with this setup and use the <code>minimize()</code> function to optimize the parameters.</p>
-<div id="88d60ebc" class="cell" data-execution_count="4">
+<div id="e712f0cd" class="cell" data-execution_count="4">
 <div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> scipy.optimize <span class="im">import</span> minimize</span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Define the negative log-likelihood function since we are minimizing</span></span>
@@ -734,7 +734,7 @@ P_i(j) = \frac{e^{x_{ij}'\beta}}{\sum_{k=1}^{J} e^{x_{ik}'\beta}}
 <li><span class="math inline">\(\beta_p\)</span> is the price coefficient (-37.0578), and we take the inverse of its negative value to convert utility to dollars.</li>
 </ul>
 <p>Let’s calculate this dollar benefit.</p>
-<div id="f937f47b" class="cell" data-execution_count="5">
+<div id="1c106086" class="cell" data-execution_count="5">
 <div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Extracting the parameter values for beta1, beta3, and beta_p</span></span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>beta_1 <span class="op">=</span> <span class="fl">1.3877</span></span>
 <span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>beta_3 <span class="op">=</span> <span class="op">-</span><span class="fl">3.0861</span></span>
@@ -757,7 +757,7 @@ P_i(j) = \frac{e^{x_{ij}'\beta}}{\sum_{k=1}^{J} e^{x_{ik}'\beta}}
 <p>To simulate the counterfactuals, we will follow the steps below.</p>
 <p><strong>Step 1: Calculate the Current Market Shares</strong></p>
 <p>First, we calculate the existing market shares for each product by averaging the <code>chosen</code> indicators across consumers for each product.</p>
-<div id="7a6aaf39" class="cell" data-execution_count="6">
+<div id="50fe9a0b" class="cell" data-execution_count="6">
 <div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Calculate current market shares based on the 'chosen' indicators for each product</span></span>
 <span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>current_market_shares <span class="op">=</span> yogurt_long.groupby(<span class="st">'product'</span>)[<span class="st">'chosen'</span>].mean()</span>
 <span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>current_market_shares</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -779,7 +779,7 @@ Name: chosen, dtype: float64</code></pre>
 </ul>
 <p><strong>Step 2: Simulate Counterfactual with Price Increase</strong></p>
 <p>Next, we’ll simulate the scenario where the price of Yogurt 1 increases by $0.10. This requires modifying the price column for Yogurt 1 in the features matrix and recalculating the choice probabilities using our fitted model parameters.</p>
-<div id="ee6bbdc8" class="cell" data-execution_count="7">
+<div id="070e03af" class="cell" data-execution_count="7">
 <div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Extract the beta coefficients from the optimization result</span></span>
 <span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>fitted_betas <span class="op">=</span> result.x</span>
 <span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -830,7 +830,7 @@ Name: chosen, dtype: float64</code></pre>
 <section id="data" class="level3">
 <h3 class="anchored" data-anchor-id="data">Data</h3>
 <p>Let’s start by loading the rintro dataset to get a better understanding of its structure and content!</p>
-<div id="13233d06" class="cell" data-execution_count="8">
+<div id="c6c28dea" class="cell" data-execution_count="8">
 <div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>rintro_data <span class="op">=</span> pd.read_csv(<span class="st">'/home/jovyan/code/MGTA 495/QUARTO_WEBSITE/data/rintro-chapter13conjoint.csv'</span>)</span>
 <span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>rintro_data.head()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -944,7 +944,7 @@ Name: chosen, dtype: float64</code></pre>
 </ul></li>
 </ol>
 <p>Let’s calculate the specific counts for respondents, tasks, and alternatives.</p>
-<div id="f2ac3371" class="cell" data-execution_count="9">
+<div id="3a784163" class="cell" data-execution_count="9">
 <div class="sourceCode cell-code" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Calculate the number of unique respondents</span></span>
 <span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>num_respondents <span class="op">=</span> rintro_data[<span class="st">'resp.id'</span>].nunique()</span>
 <span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -1001,7 +1001,7 @@ Name: chosen, dtype: float64</code></pre>
 <li>Gas engine</li>
 </ul>
 <p>We’ll also include price as a continuous variable. For this task, instead of coding the log-likelihood function from scratch, we will use a function from a statistical package which will simplify the model estimation and provide robust standard errors for the coefficients.</p>
-<div id="a161a19f" class="cell" data-execution_count="10">
+<div id="cbcfd182" class="cell" data-execution_count="10">
 <div class="sourceCode cell-code" id="cb16"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> statsmodels.api <span class="im">as</span> sm</span>
 <span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> statsmodels.formula.api <span class="im">as</span> smf</span>
 <span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -1057,13 +1057,13 @@ Name: chosen, dtype: float64</code></pre>
 </tr>
 <tr class="even">
 <td data-quarto-table-cell-role="th">Date:</td>
-<td>Wed, 15 May 2024</td>
+<td>Thu, 30 May 2024</td>
 <td data-quarto-table-cell-role="th">Deviance:</td>
 <td>10056.</td>
 </tr>
 <tr class="odd">
 <td data-quarto-table-cell-role="th">Time:</td>
-<td>05:40:00</td>
+<td>01:09:44</td>
 <td data-quarto-table-cell-role="th">Pearson chi2:</td>
 <td>9.01e+03</td>
 </tr>
@@ -1159,69 +1159,7 @@ Name: chosen, dtype: float64</code></pre>
 </table>
 </div>
 </div>
-<p>Here are the estimated coefficients and their standard errors from the Multinomial Logit (MNL) model for the minivan preferences:</p>
-<table class="table">
-<thead>
-<tr class="header">
-<th>Variable</th>
-<th>Coefficient</th>
-<th>Standard Error</th>
-<th>z-value</th>
-<th>p-value</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td>Intercept</td>
-<td>5.5322</td>
-<td>0.224</td>
-<td>24.677</td>
-<td>&lt;0.001</td>
-</tr>
-<tr class="even">
-<td>Seat 7</td>
-<td>-0.5248</td>
-<td>0.060</td>
-<td>-8.800</td>
-<td>&lt;0.001</td>
-</tr>
-<tr class="odd">
-<td>Seat 8</td>
-<td>-0.2931</td>
-<td>0.059</td>
-<td>-5.009</td>
-<td>&lt;0.001</td>
-</tr>
-<tr class="even">
-<td>Cargo 3ft</td>
-<td>0.4385</td>
-<td>0.049</td>
-<td>9.004</td>
-<td>&lt;0.001</td>
-</tr>
-<tr class="odd">
-<td>Engine Hybrid</td>
-<td>-0.7605</td>
-<td>0.057</td>
-<td>-13.361</td>
-<td>&lt;0.001</td>
-</tr>
-<tr class="even">
-<td>Engine Electric</td>
-<td>-1.4347</td>
-<td>0.062</td>
-<td>-23.217</td>
-<td>&lt;0.001</td>
-</tr>
-<tr class="odd">
-<td>Price</td>
-<td>-0.1591</td>
-<td>0.006</td>
-<td>-25.616</td>
-<td>&lt;0.001</td>
-</tr>
-</tbody>
-</table>
+<p>Above are the estimated coefficients and their standard errors from the Multinomial Logit (MNL) model for the minivan preferences</p>
 <p><strong>Interpretation of the Coefficients:</strong></p>
 <ul>
 <li><p><strong>Intercept</strong>: Represents the log-odds of choosing a minivan with the baseline attributes (6 seats, 2ft cargo, gas engine).</p></li>
@@ -1253,7 +1191,7 @@ Name: chosen, dtype: float64</code></pre>
 <li><strong>Coefficient of Feature</strong> for 3ft cargo space is 0.4385.</li>
 <li><strong>Coefficient of Price</strong> is -0.1591.</li>
 </ul>
-<div id="39e7a540" class="cell" data-execution_count="11">
+<div id="c4d43a2c" class="cell" data-execution_count="11">
 <div class="sourceCode cell-code" id="cb17"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Extracting the coefficients for cargo space and price</span></span>
 <span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>coef_cargo_3ft <span class="op">=</span> <span class="fl">0.4385</span></span>
 <span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>coef_price <span class="op">=</span> <span class="op">-</span><span class="fl">0.1591</span></span>
@@ -1335,7 +1273,7 @@ Name: chosen, dtype: float64</code></pre>
 U = \beta_0 + \beta_{seat7} \times \text{Seat7} + \beta_{seat8} \times \text{Seat8} + \beta_{cargo3ft} \times \text{Cargo3ft} + \beta_e
 \]</span></p>
 <p>We will substitute the attributes of each minivan into this utility formula, compute the exponentials, and then calculate the probabilities.</p>
-<div id="2eff3f91" class="cell" data-execution_count="12">
+<div id="77fa5dfa" class="cell" data-execution_count="12">
 <div class="sourceCode cell-code" id="cb19"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Create a DataFrame for the minivans with their attributes</span></span>
 <span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>minivans <span class="op">=</span> pd.DataFrame({</span>
 <span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>    <span class="st">'Minivan'</span>: [<span class="st">'A'</span>, <span class="st">'B'</span>, <span class="st">'C'</span>, <span class="st">'D'</span>, <span class="st">'E'</span>, <span class="st">'F'</span>],</span>
