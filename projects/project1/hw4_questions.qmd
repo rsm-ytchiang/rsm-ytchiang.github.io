@@ -612,6 +612,7 @@ Conclusion: Outstanding customer service is highly important. It shows strong im
 Conclusion: The perception that the card makes a difference in the customer's life is one of the most significant factors. It consistently shows high importance across Pearson, Polychoric, regression, Shapley values, and XGBoost metrics, indicating its strong positive relationship with satisfaction.
 
 ### Final Conclusion
+
 The analysis reveals that the following variables are most strongly related to customer satisfaction:
 
 1. Trust in the brand:
