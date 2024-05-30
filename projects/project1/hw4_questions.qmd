@@ -156,6 +156,17 @@ print("Standardized Regression Coefficients:\n", std_coeff)
 
 - Insight into Relationships: The regression analysis provides insights into which perception variables have the most significant impact on customer satisfaction, guiding strategic improvements.
 
+**Interpretation:**
+
+- Relative Importance: Standardized regression coefficients indicate the relative importance of each perception variable in predicting customer satisfaction. Higher values suggest greater importance.
+
+- Key Drivers: `Trust` (13.56), `service` (10.36), and `impact` (15.05) are the most important predictors, highlighting their significant contributions to satisfaction.
+
+- Smaller Contributions: Variables like `build` (2.34), `differs` (3.26), and `appealing` (3.96) have smaller coefficients, indicating they contribute to satisfaction but are **less influential compared to trust and impact.**
+
+- Implications: Focusing on enhancing trust, providing outstanding customer service, and ensuring the card makes a meaningful difference in customers' lives can lead to higher satisfaction.
+
+Standardized regression coefficients provide a clear view of the relative impact of each perception variable, guiding strategic improvements.
 
 ### 5. Calculate Shapley values for a linear regression.
 
@@ -180,6 +191,18 @@ print("Shapley Values:\n", shap_values_series)
 - Fair Distribution: Shapley values provide a fair distribution of the contribution of each feature, offering a clear understanding of their importance.
 
 - Insight into Feature Contribution: By calculating Shapley values, we gain insights into how each perception variable contributes to customer satisfaction, allowing for more informed decision-making.
+
+**Interpretation:**
+
+- Fair Contribution: Shapley values provide a fair distribution of the contribution of each perception variable to the prediction of customer satisfaction.
+
+- Key Drivers: `Trust` (13.66), `service` (10.20), and `impact` (13.07) have the highest Shapley values, indicating their substantial contributions to satisfaction.
+
+- Smaller Contributions: Variables like `rewarding` (0.59), `popular` (1.95), and `build` (2.32) have lower Shapley values, suggesting they are **less impactful but still contribute to overall satisfaction.**
+
+- Implications: Prioritizing improvements in trust, customer service, and perceived impact can significantly enhance customer satisfaction.
+
+Shapley values offer a fair and comprehensive measure of feature importance, providing actionable insights for improving customer satisfaction.
 
 ### 6. Calculate Johnson's relative weights.
 
@@ -211,7 +234,17 @@ print("Johnson's Relative Weights:\n", relative_weights_series)
 
 - Insight into Feature Contribution: By calculating relative weights, we gain insights into the relative importance of each perception variable in predicting customer satisfaction, guiding strategic improvements.
 
-This step helps identify the key drivers of customer satisfaction among the perception variables, providing actionable insights for enhancing customer experience.
+**Interpretation:**
+
+- Handling Multicollinearity: Johnson's relative weights account for multicollinearity, offering a clearer picture of the importance of each perception variable.
+
+- Key Drivers: `Trust` (88.85) is overwhelmingly **the most important factor**, followed by build (3.16) and differs (3.19).
+
+- Lesser Importance: Variables like service (0.02), impact (0.01), and appealing (0.04) have very low relative weights, indicating they contribute minimally when multicollinearity is considered.
+
+- Implications: Efforts to build and maintain trust in the brand are crucial for customer satisfaction. Other factors have much lower relative weights and may be less critical.
+
+Johnson's relative weights help identify the most important drivers of satisfaction, even in the presence of multicollinearity.
 
 ### 7. Calculate the mean decrease in the Gini coefficient using a random forest.
 
@@ -241,7 +274,17 @@ print("Mean Decrease in RF Gini Coefficient:\n", gini_importances_series)
 
 - Insight into Feature Contribution: By calculating the mean decrease in Gini coefficient, we gain insights into the importance of each perception variable in predicting customer satisfaction, guiding strategic improvements.
 
-This step helps identify the key drivers of customer satisfaction among the perception variables, providing actionable insights for enhancing customer experience.
+**Interpretation:**
+
+- Feature Importance: The mean decrease in Gini coefficient indicates how much each perception variable contributes to reducing impurity in the Random Forest model, highlighting its importance.
+
+- Key Drivers: `Popular` (13.52), `build` (12.37), and `rewarding` (11.85) are important predictors, suggesting their significant contributions to customer satisfaction.
+
+- Consistent Contributions: Variables like `trust` (8.98), `service` (10.59), and `impact` (9.27) also show considerable importance, reinforcing their roles in satisfaction.
+
+- Implications: Enhancing the card's popularity, credit-building features, and rewards for responsible usage can positively impact customer satisfaction.
+
+The mean decrease in Gini coefficient provides a robust measure of feature importance in classification models, guiding efforts to improve key drivers of satisfaction.
 
 ## Parts of the challenge 
 
@@ -278,7 +321,19 @@ print("Usefulness:\n", usefulness_scores)
 
 - Actionable Insights: By calculating usefulness, we can prioritize improvements in the features that have the highest contribution to customer satisfaction, leading to more targeted and effective strategies.
 
-This step helps identify the key drivers of customer satisfaction among the perception variables, providing actionable insights for enhancing customer experience.
+**Interpretation:**
+
+- Drop in R-squared: Usefulness scores measure the drop in the model's performance (R-squared) when each perception variable is removed, indicating its contribution to predicting customer satisfaction.
+
+- Key Drivers: Impact (1.12) and trust (0.82) have the highest usefulness scores, suggesting they are critical for maintaining the model's predictive power.
+
+- Moderate Contributions: Service (0.47) also has a relatively high usefulness score, indicating its significant contribution to customer satisfaction.
+
+- Lesser Importance: Variables like rewarding (0.00), popular (0.02), and build (0.03) have very low usefulness scores, suggesting they contribute minimally to the model's performance.
+
+- Implications: Focusing on enhancing the perceived impact of the card, building trust, and improving customer service can significantly improve customer satisfaction.
+
+Usefulness scores provide a practical measure of each feature's contribution to the model's accuracy, highlighting the most impactful areas for strategic improvements.
 
 ### 2. Add Importance Scores from XGBoost
 
@@ -309,10 +364,25 @@ print("XGBoost Importance:\n", xgb_importances_series)
 
 - Insight into Feature Contribution: By calculating importance scores from XGBoost, we gain insights into the contribution of each perception variable to customer satisfaction, guiding strategic improvements.
 
-## Summary
-```{python}
+**Interpretation:**
 
+- Advanced Importance Scores: XGBoost importance scores provide an advanced measure of feature importance using boosting techniques.
+
+- Key Drivers: Impact (15.75), trust (15.06), and service (10.71) have the highest importance scores, indicating their substantial contributions to satisfaction.
+
+- Moderate Importance: Variables like differs (10.96) and popular (10.21) also show significant importance, suggesting they play crucial roles in satisfaction.
+
+- Implications: Prioritizing enhancements in trust, customer service, and perceived impact of the card can lead to higher customer satisfaction.
+
+XGBoost importance scores offer detailed insights into feature contributions, enabling targeted improvements to enhance customer satisfaction.
+
+## Summary
+
+### Analysis of the metrics
+
+```{python}
 from tabulate import tabulate
+
 # Combine all metrics into a single DataFrame
 final_table = pd.DataFrame({
     'Perception': [
@@ -546,14 +616,28 @@ The analysis reveals that the following variables are most strongly related to c
 
 1. Trust in the brand:
 
-Consistently high across multiple metrics, indicating it is a crucial factor in customer satisfaction.
+    - Consistently high importance across multiple metrics (Pearson, Polychoric, Shapley values, XGBoost importance, and Usefulness).
 
-2. Outstanding customer service:
+    - A key driver of customer satisfaction.
 
-Shows significant importance across various metrics, suggesting that customer service is a key driver of satisfaction.
+2. Impact on customer's life:
 
-3. Makes a difference in my life:
+    - High scores in Standardized Regression Coefficients, Shapley values, XGBoost importance, and Usefulness.
 
-Strong importance in most metrics, indicating its substantial contribution to satisfaction.
+    - A significant factor in customer satisfaction.
 
-These insights suggest that to improve customer satisfaction, efforts should focus on enhancing trust, providing outstanding customer service, and ensuring the card makes a meaningful difference in the customers' lives.
+3. Outstanding customer service:
+
+    - Strong importance in Pearson, Polychoric, Shapley values, XGBoost importance, and Usefulness.
+
+    - A critical aspect of enhancing customer satisfaction.
+
+4. Popularity and credit-building features:
+
+    - Notable contributions in Gini importance and XGBoost importance.
+
+    - Important but secondary to trust, impact, and service.
+
+Efforts to improve customer satisfaction should prioritize enhancing trust in the brand, ensuring the card makes a meaningful difference in customers' lives, and providing outstanding customer service. While other factors like popularity and credit-building features also contribute, they are less critical than the primary drivers identified.
+
+By focusing on these key areas, organizations can significantly boost customer satisfaction and loyalty.
